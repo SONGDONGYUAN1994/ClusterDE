@@ -1,0 +1,41 @@
+Package: ClusterDE
+Title: A Post-clustering Differential Expression (DE) Method For Solving Double Dipping
+Version: 0.99.0
+Authors@R:
+    c(person("Dongyuan", "Song", , "dongyuansong@ucla.edu", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-1114-1215")),
+    person("Kexin", "Li", , "aileenlikexin@outlook.com",  role = c("aut"),
+           comment = c(ORCID = "0000-0002-4955-3832")))
+Description: ClusterDE is a post-clustering DE method for controlling the false discovery rate (FDR) of identified DE genes regardless of clustering quality. The core idea of ClusterDE is to generate real-data-based synthetic null data with only one cluster, as a counterfactual in contrast to the real data, for evaluating the whole procedure of clustering followed by a DE test.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: false
+Depends: R (>= 4.2.0)
+Imports: SummarizedExperiment,
+         SingleCellExperiment,
+         scDesign3,
+         dplyr,
+         PairedData,
+         MASS
+Suggests: Seurat,
+         parallel,
+         ggplot2,
+         knitr,
+         rmarkdown,
+         testthat (>= 3.0.0),
+         RefManageR,
+         sessioninfo,
+         BiocStyle,
+         patchwork,
+         SeuratData,
+         Matrix,
+         tools
+biocViews:
+         Software,
+         SingleCell,
+         Clustering
+URL: https://github.com/SONGDONGYUAN1994/ClusterDE, https://songdongyuan1994.github.io/ClusterDE/
+BugReports: https://github.com/SONGDONGYUAN1994/ClusterDE/issues
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+VignetteBuilder: knitr
