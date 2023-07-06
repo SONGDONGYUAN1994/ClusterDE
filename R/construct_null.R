@@ -37,6 +37,7 @@ constructNull <- function(mat,
                                   pseudotime = NULL,
                                   spatial = NULL,
                                   other_covariates = NULL,
+                                  empirical_quantile = FALSE,
                                   mu_formula = "1",
                                   sigma_formula = "1",
                                   corr_formula = "1",
@@ -44,10 +45,10 @@ constructNull <- function(mat,
                                   nonzerovar = FALSE,
                                   n_cores = nCores,
                                   parallelization = parallelization,
-                                  important_feature = "auto",
+                                  #important_feature = "auto",
                                   nonnegative = FALSE,
                                   copula = "gaussian",
-                                  fastmvn = TRUE)
+                                  fastmvn = FALSE)
   newMat <- newData$new_count
   return(newMat)
 }
