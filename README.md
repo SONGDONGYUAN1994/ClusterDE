@@ -20,7 +20,7 @@ devtools::install_github("SONGDONGYUAN1994/scDesign3")
 devtools::install_github("SONGDONGYUAN1994/ClusterDE")
 ```
 
-Please note that ClusterDE is actually a wrapper of ClusterDE. Therefore, you can also directly use scDesign3 to generate the synthetic null data. To better understand **ClusterDE**, you can check out our manuscript on Nature Biotechnology:
+Please note that ClusterDE is actually a wrapper of ClusterDE. Therefore, you can also directly use scDesign3 to generate the synthetic null data. To better understand **scDesign3**, you can check out our manuscript on Nature Biotechnology:
 
 [Song, D., Wang, Q., Yan, G. et al. scDesign3 generates realistic in silico data for multimodal single-cell and spatial omics. <em>Nat Biotechnol</em> (2023).](https://www.nature.com/articles/s41587-023-01772-1)
 
@@ -30,24 +30,24 @@ The following code is a quick example of how to generate the synthetic null data
 
 ``` r
 data(exampleCounts)
-#' nullData <- constructNull(mat = exampleCounts,
-                             family = "nb",
-                             nCores = 1,
-                             parallelization = "pbmcmapply",
-                             BPPARAM = NULL)
+nullData <- constructNull(mat = exampleCounts,
+                          family = "nb",
+                          nCores = 1,
+                          parallelization = "pbmcmapply",
+                          BPPARAM = NULL)
 ```
 
 The parameters of `constructNull()` are:
 
 - `mat`: The input gene by cell matrix. It can be a sparse matrix.
-- `famil`: A string of the distribution you want to use when fitting the model. Must be one of 'poisson', 'nb', 'zip', 'zinb' or 'gaussian'.
+- `family`: A string of the distribution you want to use when fitting the model. Must be one of 'poisson', 'nb', 'zip', 'zinb' or 'gaussian'.
 - `nCores`: An integer. The number of cores to use. Increasing the cores will greatly speed up the computaion.
 - `parallelization`: A string indicating the specific parallelization function to use. Must be one of 'mcmapply', 'bpmapply', or 'pbmcmapply', which corresponds to the parallelization function in the package 'parallel', 'BiocParallel', and 'pbmcapply' respectively. The default value is 'pbmcmapply'.
 - `BPPARAM`: A MulticoreParam object or NULL. When the parameter parallelization = 'mcmapply' or 'pbmcmapply', this parameter must be NULL. When the parameter parallelization = 'bpmapply', this parameter must be one of the MulticoreParam object offered by the package 'BiocParallel'. The default value is NULL.
 
 The output of `constructNull()` is the new gene by cell matrix in the same format as your input.
 
-After obtaining the synthetic null data, you should perform the same clustering procedure to get the DE p-values (`nullPvalues`). Finally, we compare the p-values from the null and p-values from the target data (real data) by `callDE()`. For illustration, here we use the random numbers as the p-values.
+After obtaining the synthetic null data, you should *perform the same clustering procedure as you have done on your real data* to get the DE p-values (`nullPvalues`). Finally, we compare the p-values from the null and p-values from the target data (real data) by `callDE()`. For illustration, here we use the Uniform random numbers as the p-values.
 
 ```{r}
 set.seed(123)
