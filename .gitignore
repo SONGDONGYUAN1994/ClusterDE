@@ -3,7 +3,8 @@
 .RData
 .Ruserdata
 inst/doc
-docs
+#docs
 *.orig
 .env
 *.tex
+docs
