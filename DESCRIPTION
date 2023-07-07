@@ -27,7 +27,6 @@ Suggests: parallel,
           sessioninfo,
           BiocStyle,
           patchwork,
-          SeuratData,
           seurat-data,
           Matrix,
           tools
