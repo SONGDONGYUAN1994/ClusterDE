@@ -28,7 +28,8 @@ Suggests: parallel,
           BiocStyle,
           patchwork,
           Matrix,
-          tools
+          tools,
+          ape
 Remotes: SONGDONGYUAN1994/scDesign3
 biocViews:
          Software,
