@@ -27,11 +27,9 @@ Suggests: parallel,
           sessioninfo,
           BiocStyle,
           patchwork,
-          seurat-data,
           Matrix,
           tools
-Remotes: SONGDONGYUAN1994/scDesign3, 
-         satijalab/seurat-data
+Remotes: SONGDONGYUAN1994/scDesign3satijalab/seurat-data
 biocViews:
          Software,
          SingleCell,

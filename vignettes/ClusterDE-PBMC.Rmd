@@ -34,18 +34,20 @@ library(Seurat)
 library(SingleCellExperiment)
 library(ggplot2)
 library(patchwork)
-library(SeuratData)
+#library(SeuratData)
 library(Matrix)
 ```
 
 ## Download data
-The PBMC datasets are from `SeuratData`. We use one of them (10x Chromium (v3) from PBMC1 replicate). We filtered out some lowly epxressed genes to save computational time here.
+The PBMC datasets are originally from `SeuratData`. We use one of them (10x Chromium (v3) from PBMC1 replicate). We filtered out some lowly epxressed genes to save computational time here.
 ```{r, cache=TRUE}
-InstallData("pbmcsca")
-data("pbmcsca")
-pbmc <- pbmcsca[, pbmcsca@meta.data$Method=="10x Chromium (v3)" & pbmcsca@meta.data$Experiment == "pbmc1"]
+# InstallData("pbmcsca")
+# data("pbmcsca")
+# pbmc <- pbmcsca[, pbmcsca@meta.data$Method=="10x Chromium (v3)" & pbmcsca@meta.data$Experiment == "pbmc1"]
+# 
+# pbmc <- pbmc[Matrix::rowSums(pbmc@assays$RNA@counts) > 100, ]
 
-pbmc <- pbmc[Matrix::rowSums(pbmc@assays$RNA@counts) > 100, ]
+pbmc <- readRDS(url("https://figshare.com/ndownloader/files/41486283"))
 ```
 
 ## Run the regular Seurat pipeline
