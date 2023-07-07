@@ -28,6 +28,7 @@ Suggests: parallel,
           BiocStyle,
           patchwork,
           SeuratData,
+          seurat-data,
           Matrix,
           tools
 Remotes: SONGDONGYUAN1994/scDesign3, 
