@@ -28,7 +28,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup, message=FALSE, warning=FALSE, results='hide'}
-tools::R_user_dir("ClusterDE", which="cache")
+#tools::R_user_dir("ClusterDE", which="cache")
 library(ClusterDE)
 library(Seurat)
 library(SingleCellExperiment)
