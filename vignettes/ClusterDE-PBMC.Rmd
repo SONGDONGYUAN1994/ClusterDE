@@ -40,7 +40,7 @@ library(Matrix)
 
 ## Download data
 The PBMC datasets are originally from `SeuratData`. We use one of them (10x Chromium (v3) from PBMC1 replicate). We filtered out some lowly epxressed genes to save computational time here.
-```{r, cache=TRUE}
+```{r}
 # InstallData("pbmcsca")
 # data("pbmcsca")
 # pbmc <- pbmcsca[, pbmcsca@meta.data$Method=="10x Chromium (v3)" & pbmcsca@meta.data$Experiment == "pbmc1"]
@@ -54,7 +54,7 @@ pbmc <- readRDS(url("https://figshare.com/ndownloader/files/41486283"))
 
 We perform the default Seurat clustering. Note that in real data analysis, the cell type label is usually unknown.
 
-```{r, fig.width=12, fig.height=6, cache=TRUE}
+```{r, fig.width=12, fig.height=6}
 RNGkind("L'Ecuyer-CMRG")
 set.seed(123)
 pbmc <- NormalizeData(object = pbmc)
@@ -87,14 +87,14 @@ original_markers <- FindMarkers(pbmc_sub,
 ## Generate synthetic null data
 
 We first generate the synthetic null data based on the target data (real subset data, `pbmc_sub`, which contains the two clusters you are interested in). You can increase the number of cores to speed it up.
-```{r, cache=TRUE}
+```{r}
 count_mat <- GetAssayData(object = pbmc_sub, slot = "counts")
 set.seed(123)
 synthetic_null <- ClusterDE::constructNull(count_mat, nCores = 2)
 ```
 
 We perform the same pipeline as we did for target data. Please note we need two clusters here, too. This is straightforward for clustering method with predefined cluster numbers, e.g., K-means. For louvain clustering used in Seurat you may manually adjust the resolution parameter so that we still get two clusters.
-```{r, cache=TRUE}
+```{r}
 pbmc_null <- CreateSeuratObject(counts = synthetic_null)
 
 set.seed(123)

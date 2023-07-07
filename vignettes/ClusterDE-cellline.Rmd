@@ -38,7 +38,7 @@ library(ggplot2)
 ## Download data
 
 We download the a cell line data set H2228. The original data is from [Tian et al., Nature Methods 2019](https://github.com/LuyiTian/sc_mixology). Since the data is from the pure cell line, it should not have cell types, and, of course, between cell type DE genes.
-```{r, cache=TRUE}
+```{r}
 sce <- readRDS(url("https://figshare.com/ndownloader/files/41395260"))
 cellline <- Seurat::as.Seurat(sce)
 ```
@@ -46,7 +46,7 @@ cellline <- Seurat::as.Seurat(sce)
 ## Run the regular Seurat pipeline
 
 We perform the default Seurat clustering. Please note that ClusterDE is designed for 1 vs 1 comparison; therefore, we set the resolution as 0.2 here to obtain two clusters for illustration purpose.
-```{r, cache=TRUE}
+```{r}
 RNGkind("L'Ecuyer-CMRG")
 set.seed(123)
 cellline <- NormalizeData(object = cellline)
@@ -72,14 +72,14 @@ print(sum(original_markers$p_val_adj < 0.05))
 ## Generate synthetic null data
 
 We first generate the synthetic null data based on the target data (real data). You can increase the number of cores to speed it up.
-```{r, cache=TRUE}
+```{r}
 count_mat <- GetAssayData(object = cellline, slot = "counts")
 set.seed(123)
 synthetic_null <- ClusterDE::constructNull(count_mat, nCores = 2)
 ```
 
 We perform the same pipeline as we did for target data. Please note we need two clusters here, too. This is straightforward for clustering method with predefined cluster numbers, e.g., K-means. For louvain clustering used in Seurat you may manually adjust the resolution parameter so that we still get two clusters.
-```{r, cache=TRUE}
+```{r}
 cellline_null <- CreateSeuratObject(counts = synthetic_null)
 
 set.seed(123)
