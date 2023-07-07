@@ -17,6 +17,9 @@ callDE(targetScores, nullScores, nlogTrans = TRUE, FDR = 0.05, correct = FALSE)
 
 \item{correct}{A logical value. If TRUE, perform the correction to make the distribution of contrast scores approximately symmetric. Default is FALSE.}
 }
+\value{
+A list of target FDR, DE genes, and the detailed summary table.
+}
 \description{
 \code{callDE} takes two vectors representing each gene's significance. They are usually p-values from the target data and synthetic null data.
 }
