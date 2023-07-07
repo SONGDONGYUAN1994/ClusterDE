@@ -29,7 +29,7 @@ Suggests: parallel,
           patchwork,
           Matrix,
           tools
-Remotes: SONGDONGYUAN1994/scDesign3satijalab/seurat-data
+Remotes: SONGDONGYUAN1994/scDesign3
 biocViews:
          Software,
          SingleCell,
