@@ -16,9 +16,9 @@ Imports: SummarizedExperiment,
          scDesign3,
          dplyr,
          PairedData,
-         MASS
-Suggests: Seurat,
-          parallel,
+         MASS,
+         Seurat
+Suggests: parallel,
           ggplot2,
           knitr,
           rmarkdown,
@@ -30,6 +30,8 @@ Suggests: Seurat,
           SeuratData,
           Matrix,
           tools
+Remotes: SONGDONGYUAN1994/scDesign3, 
+         satijalab/seurat-data
 biocViews:
          Software,
          SingleCell,
