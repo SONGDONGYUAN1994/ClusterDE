@@ -2,7 +2,7 @@
 
 ------------------------------------------------------------------------
 
-The R package **ClusterDE** a post-clustering DE method for controlling the false discovery rate (FDR) of identified DE genes regardless of clustering quality. The core idea of ClusterDE is to generate real-data-based synthetic null data with only one cluster, as a counterfactual in contrast to the real data, for evaluating the whole procedure of clustering followed by a DE test. <span style="color:blue"> **Detailed tutorials that illustrate various functionalities of ClusterDE are available at this [website](https://songdongyuan1994.github.io/ClusterDE/docs/index.html)**</span>. The following illustration figure summarizes the usage of ClusterDE:
+The R package **ClusterDE** is a post-clustering DE method for controlling the false discovery rate (FDR) of identified DE genes regardless of clustering quality. The core idea of ClusterDE is to generate real-data-based synthetic null data with only one cluster, as a counterfactual in contrast to the real data, for evaluating the whole procedure of clustering followed by a DE test. <span style="color:blue"> **Detailed tutorials that illustrate various functionalities of ClusterDE are available at this [website](https://songdongyuan1994.github.io/ClusterDE/docs/index.html)**</span>. The following illustration figure summarizes the usage of ClusterDE:
 
 <img src="man/figures/ClusterDE_illustration.png" width="600"/>
 
@@ -20,13 +20,13 @@ devtools::install_github("SONGDONGYUAN1994/scDesign3")
 devtools::install_github("SONGDONGYUAN1994/ClusterDE")
 ```
 
-Please note that ClusterDE is actually a wrapper of ClusterDE. Therefore, you can also directly use scDesign3 to generate the synthetic null data. To better understand **scDesign3**, you can check out our manuscript on Nature Biotechnology:
+Please note that ClusterDE is actually a wrapper of **scDesign3**. Therefore, you can also directly use scDesign3 to generate the synthetic null data. To better understand scDesign3, you can check out our manuscript on Nature Biotechnology:
 
 [Song, D., Wang, Q., Yan, G. et al. scDesign3 generates realistic in silico data for multimodal single-cell and spatial omics. <em>Nat Biotechnol</em> (2023).](https://www.nature.com/articles/s41587-023-01772-1)
 
 ## Quick Start<a name="quick-start"></a>
 
-The following code is a quick example of how to generate the synthetic null data. The input data should be a gene by cell matrix containing the two clusters you want to compare. If your input matrix is count data, the `nb` (Negative Binomial) is usually the appropriate choice. For log-transformed data, please try `gaussian`.
+The following code is a quick example of how to generate the synthetic null data. The input data should be a gene by cell matrix containing the two clusters you want to compare. If your input matrix is count data, `nb` (Negative Binomial) is usually the appropriate choice. For log-transformed data, please try `gaussian`.
 
 ``` r
 data(exampleCounts)
@@ -76,8 +76,8 @@ The output of `callDE` is a list of target FDR, DE genes, and the detailed summa
 
 For all detailed tutorials, please check the [website](https://songdongyuan1994.github.io/ClusterDE/docs/index.html). The tutorials will demonstrate the applications of **ClusterDE** in two cases: a cell line dataset (no cell type exists) and a PBMC dataset.
 
--   [Perform ClusterDE on a cell line dataset](https://songdongyuan1994.github.io/ClusterDE/docs/articles/ClusterDE-cellline-vignette.html)
--   [Perform ClusterDE on a PBMC dataset](https://songdongyuan1994.github.io/ClusterDE/docs/articles/ClusterDE-PBMC-vignette.html)
+-   [Perform ClusterDE on a cell line dataset](https://songdongyuan1994.github.io/ClusterDE/docs/articles/ClusterDE-cellline.html)
+-   [Perform ClusterDE on a PBMC dataset](https://songdongyuan1994.github.io/ClusterDE/docs/articles/ClusterDE-PBMC.html)
 
 
 ## Contact<a name="contact"></a>
