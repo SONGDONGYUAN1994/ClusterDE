@@ -2,12 +2,12 @@
 
 ------------------------------------------------------------------------
 
-The R package **ClusterDE** is a post-clustering DE method for controlling the false discovery rate (FDR) of identified DE genes regardless of clustering quality. The core idea of ClusterDE is to generate real-data-based synthetic null data with only one cluster, as a counterfactual in contrast to the real data, for evaluating the whole procedure of clustering followed by a DE test. <span style="color:blue"> **Detailed tutorials that illustrate various functionalities of ClusterDE are available at this [website](https://songdongyuan1994.github.io/ClusterDE/docs/index.html)**</span>. The following illustration figure summarizes the usage of ClusterDE:
+The R package **ClusterDE** is a post-clustering DE method for controlling the false discovery rate (FDR) of identified DE genes regardless of clustering quality. The core idea of ClusterDE is to generate real-data-based synthetic null data with only one cluster, as contrast to the real data, for evaluating the whole procedure of clustering followed by a DE test. <span style="color:blue"> **Detailed tutorials that illustrate various functionalities of ClusterDE are available at this [website](https://songdongyuan1994.github.io/ClusterDE/docs/index.html)**</span>. The following illustration figure summarizes the usage of ClusterDE:
 
 <img src="man/figures/ClusterDE_illustration.png" width="600"/>
 
 
-To find out more details about **ClusterDE**, you can check out our manuscript on bioRxiv.
+Instead of a new pipeline, ClusterDE actually works as an add-on to popular pipelines such as Seurat. To find out more details about **ClusterDE**, you can check out our manuscript on bioRxiv.
 
 ## Installation<a name="installation-"></a>
 
@@ -20,7 +20,7 @@ devtools::install_github("SONGDONGYUAN1994/scDesign3")
 devtools::install_github("SONGDONGYUAN1994/ClusterDE")
 ```
 
-Please note that ClusterDE is actually a wrapper of **scDesign3**. Therefore, you can also directly use scDesign3 to generate the synthetic null data. To better understand scDesign3, you can check out our manuscript on Nature Biotechnology:
+Please note that ClusterDE is actually a wrapper of **scDesign3**. Therefore, you can also directly use scDesign3 to "design" your own synthetic null data. To better understand scDesign3, you can check out our manuscript on Nature Biotechnology:
 
 [Song, D., Wang, Q., Yan, G. et al. scDesign3 generates realistic in silico data for multimodal single-cell and spatial omics. <em>Nat Biotechnol</em> (2023).](https://www.nature.com/articles/s41587-023-01772-1)
 
@@ -46,6 +46,10 @@ The parameters of `constructNull()` are:
 - `BPPARAM`: A MulticoreParam object or NULL. When the parameter parallelization = 'mcmapply' or 'pbmcmapply', this parameter must be NULL. When the parameter parallelization = 'bpmapply', this parameter must be one of the MulticoreParam object offered by the package 'BiocParallel'. The default value is NULL.
 
 The output of `constructNull()` is the new gene by cell matrix in the same format as your input.
+
+The following figure briefly describes how ClusterDE generates the synthetic null data:
+
+<img src="man/figures/ClusterDE_supp_null_generation.png" width="800"/>
 
 After obtaining the synthetic null data, you should *perform the same clustering procedure as you have done on your real data* to get the DE p-values (`nullPvalues`). Finally, we compare the p-values from the null and p-values from the target data (real data) by `callDE()`. For illustration, here we use the Uniform random numbers as the p-values.
 
