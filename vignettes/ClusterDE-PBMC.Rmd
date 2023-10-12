@@ -91,7 +91,7 @@ original_markers <- FindMarkers(pbmc_sub,
 We first generate the synthetic null data based on the target data (real subset data, `pbmc_sub`, which contains the two clusters you are interested in). You can increase the number of cores to speed it up.
 ```{r}
 count_mat <- GetAssayData(object = pbmc_sub, slot = "counts")
-set.seed(123)
+set.seed(1234)
 system.time(synthetic_null <- ClusterDE::constructNull(count_mat, nCores = 2, fastVersion = TRUE))
 ```
 
