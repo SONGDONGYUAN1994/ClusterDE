@@ -174,20 +174,20 @@ analysis, the cell type label is usually unknown.</p>
 <span><span class="co">#&gt; Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric</span></span>
 <span><span class="co">#&gt; To use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to 'correlation'</span></span>
 <span><span class="co">#&gt; This message will be shown once per session</span></span>
-<span><span class="co">#&gt; 02:08:07 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
-<span><span class="co">#&gt; 02:08:07 Read 3222 rows and found 10 numeric columns</span></span>
-<span><span class="co">#&gt; 02:08:07 Using Annoy for neighbor search, n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 02:08:07 Building Annoy index with metric = cosine, n_trees = 50</span></span>
+<span><span class="co">#&gt; 18:15:41 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
+<span><span class="co">#&gt; 18:15:41 Read 3222 rows and found 10 numeric columns</span></span>
+<span><span class="co">#&gt; 18:15:41 Using Annoy for neighbor search, n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 18:15:41 Building Annoy index with metric = cosine, n_trees = 50</span></span>
 <span><span class="co">#&gt; 0%   10   20   30   40   50   60   70   80   90   100%</span></span>
 <span><span class="co">#&gt; [----|----|----|----|----|----|----|----|----|----|</span></span>
 <span><span class="co">#&gt; **************************************************|</span></span>
-<span><span class="co">#&gt; 02:08:08 Writing NN index file to temp file /tmp/RtmpmukMvW/file256f18db7b5a</span></span>
-<span><span class="co">#&gt; 02:08:08 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">#&gt; 02:08:09 Annoy recall = 100%</span></span>
-<span><span class="co">#&gt; 02:08:10 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 02:08:11 Initializing from normalized Laplacian + noise (using irlba)</span></span>
-<span><span class="co">#&gt; 02:08:11 Commencing optimization for 500 epochs, with 126446 positive edges</span></span>
-<span><span class="co">#&gt; 02:08:16 Optimization finished</span></span>
+<span><span class="co">#&gt; 18:15:41 Writing NN index file to temp file /tmp/RtmptRhvxT/file1b9617566ccd</span></span>
+<span><span class="co">#&gt; 18:15:41 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">#&gt; 18:15:42 Annoy recall = 100%</span></span>
+<span><span class="co">#&gt; 18:15:43 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 18:15:44 Initializing from normalized Laplacian + noise (using irlba)</span></span>
+<span><span class="co">#&gt; 18:15:45 Commencing optimization for 500 epochs, with 126446 positive edges</span></span>
+<span><span class="co">#&gt; 18:15:49 Optimization finished</span></span>
 <span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, label <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Clustering result"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span> <span class="st">"CellType"</span>, label <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span></span></code></pre></div>
@@ -230,10 +230,10 @@ clusters you are interested in). You can increase the number of cores to
 speed it up.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">count_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AssayData.html" class="external-link">GetAssayData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc_sub</span>, slot <span class="op">=</span> <span class="st">"counts"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">synthetic_null</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/constructNull.html">constructNull</a></span><span class="op">(</span><span class="va">count_mat</span>, nCores <span class="op">=</span> <span class="fl">2</span>, fastVersion <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt; 118.593  39.441  83.517</span></span></code></pre></div>
+<span><span class="co">#&gt; 107.129  35.044  74.955</span></span></code></pre></div>
 <p>We perform the same pipeline as we did for target data. Please note
 we need two clusters here, too. This is straightforward for clustering
 method with predefined cluster numbers, e.g., K-means. For louvain
@@ -249,40 +249,40 @@ parameter so that we still get two clusters.</p>
 <span><span class="co">#&gt; Centering and scaling data matrix</span></span>
 <span><span class="va">pbmc_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc_null</span><span class="op">)</span></span>
 <span><span class="co">#&gt; PC_ 1 </span></span>
-<span><span class="co">#&gt; Positive:  VCAN, S100A8, SLC2A3, FOS, S100A9, S100A12, CD14, LYZ, RGS2, DUSP6 </span></span>
-<span><span class="co">#&gt;     FOSB, GPX1, IRF2BP2, SGK1, ZFP36L1, SELL, ARHGAP26, RNASE6, NCF1, EGR1 </span></span>
-<span><span class="co">#&gt;     CEBPD, IER3, CH17-373J23.1, NR4A2, MS4A6A, PPIF, CXCL8, CSF2RA, CD93, THBS1 </span></span>
-<span><span class="co">#&gt; Negative:  RPS19, RPS27, RPL8, PFN1, YBX1, AIF1, RPL10, FTL, LST1, RPL41 </span></span>
-<span><span class="co">#&gt;     NACA, EEF1A1, RPL19, TMSB10, COTL1, RPL11, FTH1, B2M, IFITM3, ARPC3 </span></span>
-<span><span class="co">#&gt;     RPL15, HLA-C, HLA-B, RPL7A, FCER1G, TMSB4X, RPS2, RPS3, IFITM2, RPL12 </span></span>
+<span><span class="co">#&gt; Positive:  RPS19, RPS27, RPL41, AIF1, LST1, B2M, RPL10, COTL1, FTH1, RPL19 </span></span>
+<span><span class="co">#&gt;     RPL8, RPL11, PFN1, HLA-C, NACA, YBX1, EEF1A1, FTL, FCER1G, HLA-B </span></span>
+<span><span class="co">#&gt;     RPL7A, TMSB10, IFITM3, RPL14, RPL15, FAU, CORO1A, RPS2, TMSB4X, RNASET2 </span></span>
+<span><span class="co">#&gt; Negative:  VCAN, S100A8, SLC2A3, FOS, S100A9, S100A12, CD14, LYZ, ITGAM, CSF3R </span></span>
+<span><span class="co">#&gt;     CD36, SELL, NCF1, MS4A6A, RGS2, DUSP6, GPX1, IRF2BP2, FPR1, FOSB </span></span>
+<span><span class="co">#&gt;     NR4A2, THBS1, ALOX5AP, CCR1, RNASE6, RP11-1143G9.4, ZFP36L1, NRGN, CYP1B1, CLEC4E </span></span>
 <span><span class="co">#&gt; PC_ 2 </span></span>
-<span><span class="co">#&gt; Positive:  KLF2, PECAM1, CDKN1C, MTSS1, FCGR3A, HES4, SOD1, FAM110A, GNG2, PIK3CG </span></span>
-<span><span class="co">#&gt;     SLC2A6, PAG1, RHOC, UNC119, ZNF703, BCL2A1, SNX9, PTPN6, IFITM2, RRAS </span></span>
-<span><span class="co">#&gt;     TBCB, BID, RASGRP2, LRRC25, SAT1, PHTF2, MS4A7, LINC01272, HN1, NAP1L1 </span></span>
-<span><span class="co">#&gt; Negative:  TPT1, LYZ, VIM, GPX1, HLA-DRA, RPS3A, GAPDH, GRN, RPL3, RPS18 </span></span>
-<span><span class="co">#&gt;     RPS23, RPL23A, HLA-DRB1, RPS6, RPS8, S100A10, FCN1, CPVL, RPL18A, MS4A6A </span></span>
-<span><span class="co">#&gt;     LGALS3, RPLP0, RPS2, S100A9, RPL34, RPL37A, CD99, CD14, EEF1A1, RPS27A </span></span>
+<span><span class="co">#&gt; Positive:  CDKN1C, RHOC, IFITM2, FCGR3A, KLF2, POU2F2, PAG1, HES4, MS4A7, SLC2A6 </span></span>
+<span><span class="co">#&gt;     LRRC25, PECAM1, RRAS, FAM110A, CYTIP, LYST, SSH2, DRAP1, LYL1, CSF1R </span></span>
+<span><span class="co">#&gt;     IFITM3, MTSS1, SPN, HN1, UNC119, SSBP4, SIGLEC10, SNX9, SOD1, BID </span></span>
+<span><span class="co">#&gt; Negative:  TPT1, RPS13, GAPDH, LYZ, GPX1, RPS18, RPS3A, RPL18A, VIM, RPL32 </span></span>
+<span><span class="co">#&gt;     RPL3, S100A10, RPS23, RPS6, RPL6, S100A9, RPS8, GRN, EEF1A1, RPLP0 </span></span>
+<span><span class="co">#&gt;     CD14, LGALS3, RPL34, RPL30, AP1S2, FCN1, FOS, RPL23A, RPS12, RPS4X </span></span>
 <span><span class="co">#&gt; PC_ 3 </span></span>
-<span><span class="co">#&gt; Positive:  RPL34, IRS2, LDHB, RPS15A, RPS3A, SARAF, RPS12, RPL30, HMGB2, RPL14 </span></span>
-<span><span class="co">#&gt;     ATM, LEPROTL1, ALOX5AP, RPS14, RPS3, RGS2, WIPF1, ZFP36L2, RPL26, RPS8 </span></span>
-<span><span class="co">#&gt;     SORL1, RNF144B, PYGL, BIN2, RPS4X, RPS27A, RPS6, CNTRL, RPL28, AES </span></span>
-<span><span class="co">#&gt; Negative:  HLA-DPB1, HLA-DRA, CST3, HLA-DPA1, APOBEC3A, HLA-DRB1, CD74, HLA-DQB1, EMP3, LIPA </span></span>
-<span><span class="co">#&gt;     S100A6, S100A11, DUSP6, HLA-DMA, ADAP2, LGALS3, COTL1, MARCKS, CD63, GRN </span></span>
-<span><span class="co">#&gt;     CPVL, PSME2, MARCKSL1, HLA-DMB, CTSH, ACTB, ID2, IL7R, SPARC, FGL2 </span></span>
+<span><span class="co">#&gt; Positive:  HMGB2, RGS2, RPS26, IRS2, TNFSF10, RNF144B, S100A12, CBX4, RPL34, RPL14 </span></span>
+<span><span class="co">#&gt;     S100A9, SOD2, S100A8, ACSL1, SELL, SOX4, ALOX5AP, EXOC1, EGR1, RPL30 </span></span>
+<span><span class="co">#&gt;     RPS3, RPS12, VCAN, CD48, FAM53C, CLEC2B, RPL12, GNG2, SARAF, SERTAD1 </span></span>
+<span><span class="co">#&gt; Negative:  HLA-DRA, CPVL, HLA-DPA1, HLA-DPB1, MAP3K8, HLA-DRB1, MARCKS, CD74, XYLT1, EZR </span></span>
+<span><span class="co">#&gt;     CST3, HLA-DQB1, HMOX1, CD300E, NAAA, BHLHE40, CD63, DUSP6, CDKN1A, RGCC </span></span>
+<span><span class="co">#&gt;     MAFB, APOBEC3A, HLA-DMA, DOK2, EMP3, RUNX3, ID2, ZMIZ1, LGALS3, CD93 </span></span>
 <span><span class="co">#&gt; PC_ 4 </span></span>
-<span><span class="co">#&gt; Positive:  S100A4, S100A8, S100A9, S100A6, S100A12, S100A11, GAPDH, CKAP4, G0S2, FTL </span></span>
-<span><span class="co">#&gt;     ACTB, FPR1, RBP7, SELL, PLBD1, FTH1, MGST3, CD14, FCN1, BCL6 </span></span>
-<span><span class="co">#&gt;     BCL2A1, LDHA, CD93, SOD2, ANXA1, SNX18, FCER1G, ARPC3, RNF144B, RGS2 </span></span>
-<span><span class="co">#&gt; Negative:  ARL4C, DDIT4, MALAT1, DDHD1, POLR2J3, LITAF, NKG7, HLA-DPA1, RUNX3, DDX6 </span></span>
-<span><span class="co">#&gt;     PSMA3-AS1, HLA-DPB1, RBBP7, IFI44, ASB8, IRF1, GADD45B, NPLOC4, APOL6, PID1 </span></span>
-<span><span class="co">#&gt;     RHOF, PPP2R5C, CD74, UTRN, SCFD1, UHMK1, PARP8, HBEGF, HLA-DMA, MIS18BP1 </span></span>
+<span><span class="co">#&gt; Positive:  PLBD1, PLAC8, S100A8, S100A9, CES1, SLA, S100A12, PARP14, SELL, PPP3R1 </span></span>
+<span><span class="co">#&gt;     SOD2, MAFB, FCN1, IRF7, BCL2A1, LY86, SPTLC2, OSM, VCAN, LYN </span></span>
+<span><span class="co">#&gt;     TUBA4A, AP1S2, LYZ, MBD2, OAS1, BLOC1S1, FPR1, APOBEC3A, RP11-1143G9.4, CD14 </span></span>
+<span><span class="co">#&gt; Negative:  RPL34, CDC123, RPS23, RPL12, HLA-DMB, RPL32, ANKRD36C, RPL14, RPL30, LPAR6 </span></span>
+<span><span class="co">#&gt;     EEF1B2, AHR, RPS4X, UBE2D4, TNNI2, HLA-DPB1, HIST1H1C, RSPRY1, HLA-DPA1, SNTB1 </span></span>
+<span><span class="co">#&gt;     HMGN1, RPS3A, MGAT4B, RPS12, FAM78A, RPS18, ICOSLG, CKS1B, B9D2, DTYMK </span></span>
 <span><span class="co">#&gt; PC_ 5 </span></span>
-<span><span class="co">#&gt; Positive:  MX1, OASL, FAM53C, IFIT3, LPP, LYL1, EIF2AK2, GRN, MX2, SPG11 </span></span>
-<span><span class="co">#&gt;     PLSCR1, PLBD1, ISG15, TBL1X, FCN1, CMPK2, SBF2, INSIG1, IFI44L, ATXN1 </span></span>
-<span><span class="co">#&gt;     SOCS3, STAT1, IRS2, PARP14, CORO1C, LINC01420, DNAJA2, USF2, ADGRE5, XAF1 </span></span>
-<span><span class="co">#&gt; Negative:  RPL30, FTH1, RPS27A, HLA-DRA, RECK, CYP1B1, SART3, RPL34, BTF3, SS18 </span></span>
-<span><span class="co">#&gt;     GTPBP10, DUSP6, TIPARP, RGS18, SIKE1, ICOSLG, RPS23, FBXO25, TSEN54, RFXAP </span></span>
-<span><span class="co">#&gt;     RPL8, MPP7, FAM73B, HIST2H2BE, LINC00528, PPID, ARPC2, RCAN1, H1F0, RPS12</span></span>
+<span><span class="co">#&gt; Positive:  S100A11, ACTB, GALNS, PLPPR2, FTH1, FTL, B3GALT6, TFAP4, ARPC3, DUSP10 </span></span>
+<span><span class="co">#&gt;     LCK, RALGDS, ZNF281, TYROBP, COTL1, ACTG1, GAPDH, S100A12, PLAUR, CXCL8 </span></span>
+<span><span class="co">#&gt;     BCL2A1, S100A4, NSFL1C, LILRB2, PLBD1, IL1RAP, CES1, PDE4B, FCER1G, APH1B </span></span>
+<span><span class="co">#&gt; Negative:  IFI44, STOM, ZC3HAV1, ARL4C, ATM, IFI44L, APOL6, MYLIP, MX1, AKNA </span></span>
+<span><span class="co">#&gt;     TNFAIP3, PARP14, STAT1, C5orf24, CCPG1, ZCCHC2, SNRNP200, MZT2B, DDX6, MGAT1 </span></span>
+<span><span class="co">#&gt;     CMPK2, PRAM1, SHISA5, UTRN, TMEM70, FBXO7, DNAJC8, MIS18BP1, B2M, MECP2</span></span>
 <span><span class="va">pbmc_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc_null</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing nearest neighbor graph</span></span>
 <span><span class="co">#&gt; Computing SNN</span></span>
@@ -290,27 +290,27 @@ parameter so that we still get two clusters.</p>
 <span><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Number of nodes: 453</span></span>
-<span><span class="co">#&gt; Number of edges: 17601</span></span>
+<span><span class="co">#&gt; Number of edges: 17874</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Running Louvain algorithm...</span></span>
-<span><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7504</span></span>
+<span><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7632</span></span>
 <span><span class="co">#&gt; Number of communities: 2</span></span>
 <span><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
 <span><span class="va">pbmc_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc_null</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 02:10:34 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
-<span><span class="co">#&gt; 02:10:34 Read 453 rows and found 10 numeric columns</span></span>
-<span><span class="co">#&gt; 02:10:34 Using Annoy for neighbor search, n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 02:10:34 Building Annoy index with metric = cosine, n_trees = 50</span></span>
+<span><span class="co">#&gt; 18:17:52 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
+<span><span class="co">#&gt; 18:17:52 Read 453 rows and found 10 numeric columns</span></span>
+<span><span class="co">#&gt; 18:17:52 Using Annoy for neighbor search, n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 18:17:52 Building Annoy index with metric = cosine, n_trees = 50</span></span>
 <span><span class="co">#&gt; 0%   10   20   30   40   50   60   70   80   90   100%</span></span>
 <span><span class="co">#&gt; [----|----|----|----|----|----|----|----|----|----|</span></span>
 <span><span class="co">#&gt; **************************************************|</span></span>
-<span><span class="co">#&gt; 02:10:34 Writing NN index file to temp file /tmp/RtmpmukMvW/file256f4b3c0496</span></span>
-<span><span class="co">#&gt; 02:10:34 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">#&gt; 02:10:34 Annoy recall = 100%</span></span>
-<span><span class="co">#&gt; 02:10:35 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 02:10:36 Initializing from normalized Laplacian + noise (using irlba)</span></span>
-<span><span class="co">#&gt; 02:10:36 Commencing optimization for 500 epochs, with 17928 positive edges</span></span>
-<span><span class="co">#&gt; 02:10:37 Optimization finished</span></span>
+<span><span class="co">#&gt; 18:17:52 Writing NN index file to temp file /tmp/RtmptRhvxT/file1b962d300176</span></span>
+<span><span class="co">#&gt; 18:17:52 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">#&gt; 18:17:52 Annoy recall = 100%</span></span>
+<span><span class="co">#&gt; 18:17:53 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 18:17:54 Initializing from normalized Laplacian + noise (using irlba)</span></span>
+<span><span class="co">#&gt; 18:17:54 Commencing optimization for 500 epochs, with 18194 positive edges</span></span>
+<span><span class="co">#&gt; 18:17:55 Optimization finished</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc_null</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ClusterDE-PBMC_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>We perform the DE test on synthetic null data.</p>
@@ -337,12 +337,12 @@ score (cs)”.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 5</span></span></span>
 <span><span class="co">#&gt;   Gene   target    null    cs      q</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CD79B    53.1  0.704   52.4 0.010<span style="text-decoration: underline;">3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> CKB      44.6  0.147   44.4 0.010<span style="text-decoration: underline;">3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> PLD4     36.2  1.06    35.1 0.010<span style="text-decoration: underline;">3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> CDKN1C   67.5 35.7     31.8 0.010<span style="text-decoration: underline;">3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> FCGR3A   79.0 48.8     30.2 0.010<span style="text-decoration: underline;">3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> ADA      29.5  0.028<span style="text-decoration: underline;">8</span>  29.5 0.010<span style="text-decoration: underline;">3</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CDKN1C   67.5 12.9     54.6 0.047<span style="text-decoration: underline;">6</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> CD79B    53.1  0.080<span style="text-decoration: underline;">2</span>  53.1 0.047<span style="text-decoration: underline;">6</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> FCGR3A   79.0 27.1     51.9 0.047<span style="text-decoration: underline;">6</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> CKB      44.6  0.916   43.6 0.047<span style="text-decoration: underline;">6</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> RHOC     65.8 23.0     42.8 0.047<span style="text-decoration: underline;">6</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> PLD4     36.2  0.942   35.2 0.047<span style="text-decoration: underline;">6</span></span></span></code></pre></div>
 <p>To compare the result from the naive Seurat pipeline and ClusterDE,
 we first visualize the top 6 DE genes from Seurat. Genes <em>LST1</em>
 and <em>RPS19</em> are both highly expressed in two clusters. In

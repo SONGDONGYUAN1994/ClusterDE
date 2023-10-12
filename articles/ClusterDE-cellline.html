@@ -174,20 +174,20 @@ is designed for 1 vs 1 comparison; therefore, we set the resolution as
 <span><span class="co">#&gt; Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric</span></span>
 <span><span class="co">#&gt; To use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to 'correlation'</span></span>
 <span><span class="co">#&gt; This message will be shown once per session</span></span>
-<span><span class="co">#&gt; 02:11:57 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
-<span><span class="co">#&gt; 02:11:57 Read 758 rows and found 10 numeric columns</span></span>
-<span><span class="co">#&gt; 02:11:57 Using Annoy for neighbor search, n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 02:11:57 Building Annoy index with metric = cosine, n_trees = 50</span></span>
+<span><span class="co">#&gt; 18:19:21 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
+<span><span class="co">#&gt; 18:19:21 Read 758 rows and found 10 numeric columns</span></span>
+<span><span class="co">#&gt; 18:19:21 Using Annoy for neighbor search, n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 18:19:21 Building Annoy index with metric = cosine, n_trees = 50</span></span>
 <span><span class="co">#&gt; 0%   10   20   30   40   50   60   70   80   90   100%</span></span>
 <span><span class="co">#&gt; [----|----|----|----|----|----|----|----|----|----|</span></span>
 <span><span class="co">#&gt; **************************************************|</span></span>
-<span><span class="co">#&gt; 02:11:57 Writing NN index file to temp file /tmp/RtmpQzZQGf/file26bb6aa181c2</span></span>
-<span><span class="co">#&gt; 02:11:57 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">#&gt; 02:11:58 Annoy recall = 100%</span></span>
-<span><span class="co">#&gt; 02:11:58 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 02:11:59 Initializing from normalized Laplacian + noise (using irlba)</span></span>
-<span><span class="co">#&gt; 02:11:59 Commencing optimization for 500 epochs, with 27914 positive edges</span></span>
-<span><span class="co">#&gt; 02:12:01 Optimization finished</span></span>
+<span><span class="co">#&gt; 18:19:21 Writing NN index file to temp file /tmp/RtmpQZhLJn/file1cad3127b870</span></span>
+<span><span class="co">#&gt; 18:19:21 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">#&gt; 18:19:21 Annoy recall = 100%</span></span>
+<span><span class="co">#&gt; 18:19:22 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 18:19:23 Initializing from normalized Laplacian + noise (using irlba)</span></span>
+<span><span class="co">#&gt; 18:19:23 Commencing optimization for 500 epochs, with 27914 positive edges</span></span>
+<span><span class="co">#&gt; 18:19:24 Optimization finished</span></span>
 <span><span class="co">#&gt; Warning: Cannot add objects with duplicate keys (offending key: UMAP_), setting</span></span>
 <span><span class="co">#&gt; key to 'umap_'</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Clustering result"</span><span class="op">)</span></span></code></pre></div>
@@ -225,7 +225,7 @@ discoveries.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">synthetic_null</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/constructNull.html">constructNull</a></span><span class="op">(</span><span class="va">count_mat</span>, nCores <span class="op">=</span> <span class="fl">2</span>, fastVersion <span class="op">=</span> <span class="cn">TRUE</span>, family <span class="op">=</span> <span class="st">"nb"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt; 214.179  54.965 142.877</span></span></code></pre></div>
+<span><span class="co">#&gt; 182.637  45.973 121.183</span></span></code></pre></div>
 <p>We perform the same pipeline as we did for target data. Please note
 we need two clusters here, too. This is straightforward for clustering
 method with predefined cluster numbers, e.g., K-means. For louvain
@@ -289,20 +289,20 @@ parameter so that we still get two clusters.</p>
 <span><span class="co">#&gt; Number of communities: 2</span></span>
 <span><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
 <span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 02:16:04 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
-<span><span class="co">#&gt; 02:16:04 Read 758 rows and found 10 numeric columns</span></span>
-<span><span class="co">#&gt; 02:16:04 Using Annoy for neighbor search, n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 02:16:04 Building Annoy index with metric = cosine, n_trees = 50</span></span>
+<span><span class="co">#&gt; 18:22:58 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
+<span><span class="co">#&gt; 18:22:58 Read 758 rows and found 10 numeric columns</span></span>
+<span><span class="co">#&gt; 18:22:58 Using Annoy for neighbor search, n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 18:22:58 Building Annoy index with metric = cosine, n_trees = 50</span></span>
 <span><span class="co">#&gt; 0%   10   20   30   40   50   60   70   80   90   100%</span></span>
 <span><span class="co">#&gt; [----|----|----|----|----|----|----|----|----|----|</span></span>
 <span><span class="co">#&gt; **************************************************|</span></span>
-<span><span class="co">#&gt; 02:16:04 Writing NN index file to temp file /tmp/RtmpQzZQGf/file26bb83dfb3c</span></span>
-<span><span class="co">#&gt; 02:16:04 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">#&gt; 02:16:04 Annoy recall = 100%</span></span>
-<span><span class="co">#&gt; 02:16:05 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 02:16:06 Initializing from normalized Laplacian + noise (using irlba)</span></span>
-<span><span class="co">#&gt; 02:16:06 Commencing optimization for 500 epochs, with 28370 positive edges</span></span>
-<span><span class="co">#&gt; 02:16:08 Optimization finished</span></span>
+<span><span class="co">#&gt; 18:22:58 Writing NN index file to temp file /tmp/RtmpQZhLJn/file1cad32d5eb34</span></span>
+<span><span class="co">#&gt; 18:22:58 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">#&gt; 18:22:58 Annoy recall = 100%</span></span>
+<span><span class="co">#&gt; 18:22:59 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 18:23:00 Initializing from normalized Laplacian + noise (using irlba)</span></span>
+<span><span class="co">#&gt; 18:23:00 Commencing optimization for 500 epochs, with 28370 positive edges</span></span>
+<span><span class="co">#&gt; 18:23:02 Optimization finished</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ClusterDE-cellline_files/figure-html/unnamed-chunk-6-1.png" width="700">
 We perform the DE test on synthetic null data.</p>
