@@ -9,6 +9,8 @@ constructNull(
   family = "nb",
   nCores = 1,
   parallelization = "pbmcmapply",
+  fastVersion = FALSE,
+  corrCut = 0.2,
   BPPARAM = NULL
 )
 }
@@ -25,6 +27,10 @@ and 'gaussian distribution' respectively. For UMI-counts data, we usually use 'n
 \item{parallelization}{A string indicating the specific parallelization function to use.
 Must be one of 'mcmapply', 'bpmapply', or 'pbmcmapply', which corresponds to the parallelization function in the package
 \code{parallel},\code{BiocParallel}, and \code{pbmcapply} respectively. The default value is 'pbmcmapply'.}
+
+\item{fastVersion}{A logic value. If TRUE, the fast approximation is used. Default is FALSE.}
+
+\item{corrCut}{A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation.}
 
 \item{BPPARAM}{A \code{MulticoreParam} object or NULL. When the parameter parallelization = 'mcmapply' or 'pbmcmapply',
 this parameter must be NULL. When the parameter parallelization = 'bpmapply',  this parameter must be one of the

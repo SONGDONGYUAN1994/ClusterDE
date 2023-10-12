@@ -2,12 +2,16 @@
 
 ------------------------------------------------------------------------
 
-The R package **ClusterDE** is a post-clustering DE method for controlling the false discovery rate (FDR) of identified DE genes regardless of clustering quality. The core idea of ClusterDE is to generate real-data-based synthetic null data with only one cluster, as contrast to the real data, for evaluating the whole procedure of clustering followed by a DE test. <span style="color:blue"> **Detailed tutorials that illustrate various functionalities of ClusterDE are available at this [website](https://songdongyuan1994.github.io/ClusterDE/docs/index.html)**</span>. The following illustration figure summarizes the usage of ClusterDE:
+The R package **ClusterDE** is a post-clustering DE method for controlling the false discovery rate (FDR) of identified between cell-type DE genes regardless of clustering quality. The core idea of ClusterDE is to generate real-data-based synthetic null data with only one cell type, as contrast to the real data, for evaluating the whole procedure of clustering followed by a DE test. <span style="color:blue"> **Detailed tutorials that illustrate various functionalities of ClusterDE are available at this [website](https://songdongyuan1994.github.io/ClusterDE/docs/index.html)**</span>. The following illustration figure summarizes the usage of ClusterDE:
 
 <img src="man/figures/ClusterDE_illustration.png" width="600"/>
 
-
 Instead of a new pipeline, ClusterDE actually works as an add-on to popular pipelines such as Seurat. To find out more details about **ClusterDE**, you can check out our manuscript on bioRxiv.
+
+**The motivation and application of ClusterDE**: 
+In Seurat function `findMarkers`, the authors pointed out: *"p-values should be interpreted cautiously, as the genes used for clustering are the same genes tested for differential expression."* This is the "double-dipping" issue. If your clustering results are inaccurate and since the clustering has used your expression data already, the discovered DE genes may not represent the discrete cell type separation, but other variations in your data.
+
+ClusterDE is for correcting the double-dipping issue for comparing two dubious clusters, which you are not sure if they are two discrete cell types or just an artifact of your clustering algorithm based on conventional DE analysis. ClusterDE controls the false discoveries in DE and prioritizes the true cell type markers. 
 
 ## Installation<a name="installation-"></a>
 
@@ -26,7 +30,7 @@ Please note that ClusterDE is actually a wrapper of **scDesign3**. Therefore, yo
 
 ## Quick Start<a name="quick-start"></a>
 
-The following code is a quick example of how to generate the synthetic null data. The input data should be a gene by cell matrix containing the two clusters you want to compare. If your input matrix is count data, `nb` (Negative Binomial) is usually the appropriate choice. For log-transformed data, please try `gaussian`.
+The following code is a quick example of how to generate the synthetic null data. The input data should be a gene by cell matrix containing the two clusters you want to compare. If your input matrix is count data (especially UMI counts), `nb` (Negative Binomial) is usually the appropriate choice. The synthetic null data generation is relatively time-consuming; you may use the fast version (`fastVersion = TRUE`).
 
 ``` r
 data(exampleCounts)
@@ -34,6 +38,8 @@ nullData <- constructNull(mat = exampleCounts,
                           family = "nb",
                           nCores = 1,
                           parallelization = "pbmcmapply",
+                          fastVersion = FALSE,
+                          corrCut = 0.2,
                           BPPARAM = NULL)
 ```
 
@@ -43,6 +49,8 @@ The parameters of `constructNull()` are:
 - `family`: A string of the distribution you want to use when fitting the model. Must be one of 'poisson', 'nb', 'zip', 'zinb' or 'gaussian'.
 - `nCores`: An integer. The number of cores to use. Increasing the cores will greatly speed up the computaion.
 - `parallelization`: A string indicating the specific parallelization function to use. Must be one of 'mcmapply', 'bpmapply', or 'pbmcmapply', which corresponds to the parallelization function in the package 'parallel', 'BiocParallel', and 'pbmcapply' respectively. The default value is 'pbmcmapply'.
+- `fastVersion`: A logic value. If TRUE, the fast approximation is used.
+- `corrCut`: A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation.
 - `BPPARAM`: A MulticoreParam object or NULL. When the parameter parallelization = 'mcmapply' or 'pbmcmapply', this parameter must be NULL. When the parameter parallelization = 'bpmapply', this parameter must be one of the MulticoreParam object offered by the package 'BiocParallel'. The default value is NULL.
 
 The output of `constructNull()` is the new gene by cell matrix in the same format as your input.
@@ -74,7 +82,6 @@ The parameters of `callDE` are:
 - `correct`: A logical value. If TRUE, perform the correction to make the distribution of contrast scores approximately symmetric. Default is FALSE.
 
 The output of `callDE` is a list of target FDR, DE genes, and the detailed summary table.
-
 
 ## Tutorials<a name="tutorials"></a>
 

@@ -25,6 +25,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+tools::R_user_dir("ClusterDE", which="cache")
 ```
 
 ```{r setup, message=FALSE, warning=FALSE, results='hide'}
@@ -64,8 +65,9 @@ pbmc <- RunPCA(object = pbmc)
 pbmc <- FindNeighbors(object = pbmc)
 pbmc <- FindClusters(object = pbmc, resolution = 0.3)
 pbmc <- RunUMAP(object = pbmc, dims = 1:10)
-DimPlot(object = pbmc, reduction = "umap") + ggtitle("Clustering result") +
-DimPlot(object = pbmc, reduction = "umap", group.by = "CellType")
+p1 <- DimPlot(object = pbmc, reduction = "umap", label = TRUE) + ggtitle("Clustering result") + NoLegend()
+p2 <- DimPlot(object = pbmc, reduction = "umap", group.by = "CellType", label = TRUE) + NoLegend()
+p1 + p2
 ```
 
 In this vignette, we are interested in cluster 2 vs 8, which approximately represent CD14+/CD16+ monocytes. Please note that ClusterDE is designed for 1 vs 1 comparison. Therefore, users may (1) choose the two interested clusters manually based on their knowledge or (2) use the two closest clusters from computation (e.g., `BuildClusterTree` in `Seurat`).
@@ -90,7 +92,7 @@ We first generate the synthetic null data based on the target data (real subset 
 ```{r}
 count_mat <- GetAssayData(object = pbmc_sub, slot = "counts")
 set.seed(123)
-synthetic_null <- ClusterDE::constructNull(count_mat, nCores = 2)
+system.time(synthetic_null <- ClusterDE::constructNull(count_mat, nCores = 2, fastVersion = TRUE))
 ```
 
 We perform the same pipeline as we did for target data. Please note we need two clusters here, too. This is straightforward for clustering method with predefined cluster numbers, e.g., K-means. For louvain clustering used in Seurat you may manually adjust the resolution parameter so that we still get two clusters.
@@ -133,13 +135,13 @@ You can check the summary table. The genes are ranked by "contrast score (cs)".
 head(res$summaryTable)
 ```
 
-To compare the result from the naive Seurat pipeline and ClusterDE, we first visualize the top 6 DE genes from Seurat. Genes *LST1* and *RPS19* are both highly expressed in two clusters. In addition, *RPS19* is reported as a stable housekeeping genes in several studies. 
+To compare the result from the naive Seurat pipeline and ClusterDE, we first visualize the top 6 DE genes from Seurat. Genes *LST1* and *RPS19* are both highly expressed in two clusters. In addition, *RPS19* is reported as a stable housekeeping genes in several studies. Note that it does not mean the expression levels of *LST1* and *RPS19* are the same between the two cell types. It means that they are not good cell type markers. Philosophically speaking, it means that **conditional on the two clusters are obtained by clustering algorithm, LST1 and RPS19 are less likely to be the cell type markers between the two cell types**.
 ```{r, fig.width=10, fig.height=6}
-FeaturePlot(pbmc, features = c(rownames(original_markers)[1:6]), ncol = 3)
+FeaturePlot(pbmc[ , pbmc$seurat_clusters %in% c(2, 8)], features = c(rownames(original_markers)[1:6]), ncol = 3)
 ```
 In contrast, the genes from ClusterDE do not have *LST1* and *RPS19* anymore.
 ```{r, fig.width=10, fig.height=6}
-FeaturePlot(pbmc, features = c(res$summaryTable$Gene[1:6]), ncol = 3)
+FeaturePlot(pbmc[, pbmc$seurat_clusters %in% c(2, 8)], features = c(res$summaryTable$Gene[1:6]), ncol = 3)
 ```
 
 ## Session information

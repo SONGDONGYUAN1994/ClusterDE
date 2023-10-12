@@ -9,6 +9,7 @@
 #' @param nlogTrans A logical value. If the input scores are p-values, take the \code{-log10} transformation since Clipper require larger scores represent more significant DE. Default is TRUE.
 #' @param FDR A numeric value of the target False Discovery Rate (FDR). Default is 0.05.
 #' @param correct A logical value. If TRUE, perform the correction to make the distribution of contrast scores approximately symmetric. Default is FALSE.
+#' @param threshold A string value of the threshold method. Must be 'BC' or 'DS'.
 #'
 #' @return A list of target FDR, DE genes, and the detailed summary table.
 #'
@@ -23,7 +24,8 @@ callDE <- function(targetScores,
                    nullScores,
                    nlogTrans = TRUE,
                    FDR = 0.05,
-                   correct = FALSE) {
+                   correct = FALSE,
+                   threshold = "BC") {
   value <- null <- target <- cs <- NULL
 
   if(is.null(names(targetScores))|is.null(names(nullScores))) {
@@ -48,14 +50,16 @@ callDE <- function(targetScores,
     }
   }
 
-  tbl_merge <- dplyr::mutate(tbl_merge, q = cs2q(contrastScore = tbl_merge$cs))
+  tbl_merge <- dplyr::mutate(tbl_merge, q = cs2q(contrastScore = tbl_merge$cs, threshold = threshold))
   tbl_merge <- dplyr::arrange(tbl_merge, dplyr::desc(cs))
 
   DEgenes <- as.vector(dplyr::filter(tbl_merge, q <= FDR)$Gene)
   return(list(targetFDR = FDR, DEgenes = DEgenes, summaryTable = tbl_merge))
 }
 
-cs2q <- function(contrastScore, nnull = 1){
+cs2q <- function(contrastScore, nnull = 1, threshold = "BC"){
+  stopifnot(threshold == "BC" | threshold == "DS")
+
   contrastScore[is.na(contrastScore)] = 0 # impute missing contrast scores with 0
   c_abs = abs(contrastScore[contrastScore != 0])
   c_abs  = sort(unique(c_abs))
@@ -63,14 +67,28 @@ cs2q <- function(contrastScore, nnull = 1){
   i = 1
   emp_fdp = rep(NA, length(c_abs))
   emp_fdp[1] = 1
-  while(i <= length(c_abs)){
-    # print(i)
-    t = c_abs[i]
-    emp_fdp[i] = min((1/nnull + 1/nnull * sum(contrastScore <= -t))/ sum(contrastScore >= t),1)
 
-    if (i >=2){emp_fdp[i] = min(emp_fdp[i], emp_fdp[i-1])}
-    i = i + 1
-  }
+  if(threshold == "BC") {
+    while(i <= length(c_abs)){
+      # print(i)
+      t = c_abs[i]
+      emp_fdp[i] = min((1/nnull + 1/nnull * sum(contrastScore <= -t))/ sum(contrastScore >= t),1)
+
+      if (i >=2){emp_fdp[i] = min(emp_fdp[i], emp_fdp[i-1])}
+      i = i + 1
+    }
+  } else if (threshold == "DS") {
+    while(i <= length(c_abs)){
+      # print(i)
+      t = c_abs[i]
+      emp_fdp[i] = min((1/nnull * sum(contrastScore <= -t))/ sum(contrastScore >= t),1)
+
+      if (i >=2){emp_fdp[i] = min(emp_fdp[i], emp_fdp[i-1])}
+      i = i + 1
+    }
+  } else {stop("Method must be BC or DS!")}
+
+
 
   c_abs = c_abs[!is.na(emp_fdp)]
   emp_fdp = emp_fdp[!is.na(emp_fdp)]

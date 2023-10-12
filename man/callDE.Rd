@@ -4,7 +4,14 @@
 \alias{callDE}
 \title{Call differentially expressed (DE) genes by Clipper algorithm}
 \usage{
-callDE(targetScores, nullScores, nlogTrans = TRUE, FDR = 0.05, correct = FALSE)
+callDE(
+  targetScores,
+  nullScores,
+  nlogTrans = TRUE,
+  FDR = 0.05,
+  correct = FALSE,
+  threshold = "BC"
+)
 }
 \arguments{
 \item{targetScores}{A named numeric vector of the DE scores from the target data, e.g., the p-values between two clusters from the real data.}
@@ -16,6 +23,8 @@ callDE(targetScores, nullScores, nlogTrans = TRUE, FDR = 0.05, correct = FALSE)
 \item{FDR}{A numeric value of the target False Discovery Rate (FDR). Default is 0.05.}
 
 \item{correct}{A logical value. If TRUE, perform the correction to make the distribution of contrast scores approximately symmetric. Default is FALSE.}
+
+\item{threshold}{A string value of the threshold method. Must be 'BC' or 'DS'.}
 }
 \value{
 A list of target FDR, DE genes, and the detailed summary table.

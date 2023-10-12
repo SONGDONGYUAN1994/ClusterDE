@@ -1,6 +1,6 @@
 Package: ClusterDE
 Title: A Post-clustering Differential Expression (DE) Method For Solving Double Dipping
-Version: 0.99.0
+Version: 0.99.1
 Authors@R:
     c(person("Dongyuan", "Song", , "dongyuansong@ucla.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-1114-1215")),
@@ -11,13 +11,18 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: false
 Depends: R (>= 4.2.0)
-Imports: SummarizedExperiment,
+Imports: scDesign3,
+         SummarizedExperiment,
          SingleCellExperiment,
-         scDesign3,
          dplyr,
          PairedData,
          MASS,
-         Seurat
+         fitdistrplus,
+         rvinecopulib,
+         Matrix,
+         mvnfast,
+         matrixStats,
+         methods
 Suggests: parallel,
           ggplot2,
           knitr,
@@ -27,8 +32,8 @@ Suggests: parallel,
           sessioninfo,
           BiocStyle,
           patchwork,
-          Matrix,
           tools,
+          Seurat,
           ape
 Remotes: SONGDONGYUAN1994/scDesign3
 biocViews:
