@@ -6,12 +6,14 @@ The R package **ClusterDE** is a post-clustering DE method for controlling the f
 
 <img src="man/figures/ClusterDE_illustration.png" width="600"/>
 
-Instead of a new pipeline, ClusterDE actually works as an add-on to popular pipelines such as Seurat. To find out more details about **ClusterDE**, you can check out our manuscript on bioRxiv.
+Instead of a new pipeline, ClusterDE actually works as an add-on to popular pipelines such as Seurat. To find out more details about **ClusterDE**, you can check out our manuscript on [bioRxiv](https://www.biorxiv.org/content/10.1101/2023.07.21.550107v1).
 
 **The motivation and application of ClusterDE**: 
-In Seurat function `findMarkers`, the authors pointed out: *"p-values should be interpreted cautiously, as the genes used for clustering are the same genes tested for differential expression."* This is the "double-dipping" issue. If your clustering results are inaccurate and since the clustering has used your expression data already, the discovered DE genes may not represent the discrete cell type separation, but other variations in your data.
+In Seurat function `findMarkers`, the authors pointed out: *"p-values should be interpreted cautiously, as the genes used for clustering are the same genes tested for differential expression."* This is the "double-dipping" issue. If your clustering results are inaccurate and since the clustering has used your expression data already, the discovered DE genes may not represent the discrete cell type separation, but other variation in your data (e.g., cell cycle, total UMI, or other variation you are not clear. These are still biological variation but do not define discrete status).
 
-ClusterDE is for correcting the double-dipping issue for comparing two dubious clusters, which you are not sure if they are two discrete cell types or just an artifact of your clustering algorithm based on conventional DE analysis. ClusterDE controls the false discoveries in DE and prioritizes the true cell type markers. 
+ClusterDE aims at correcting the double-dipping issue for comparing two dubious clusters, which you are not sure if they are two discrete cell types or just an artifact of your clustering algorithm based on conventional DE analysis. ClusterDE controls the false discoveries in DE and prioritizes the true cell type markers.
+
+Note: current version is focusing on one vs one comparison.
 
 ## Installation<a name="installation-"></a>
 
@@ -50,7 +52,7 @@ The parameters of `constructNull()` are:
 - `nCores`: An integer. The number of cores to use. Increasing the cores will greatly speed up the computaion.
 - `parallelization`: A string indicating the specific parallelization function to use. Must be one of 'mcmapply', 'bpmapply', or 'pbmcmapply', which corresponds to the parallelization function in the package 'parallel', 'BiocParallel', and 'pbmcapply' respectively. The default value is 'pbmcmapply'.
 - `fastVersion`: A logic value. If TRUE, the fast approximation is used.
-- `corrCut`: A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation.
+- `corrCut`: A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation. The reason is that lowly expressed genes are hard to calculate correlation.
 - `BPPARAM`: A MulticoreParam object or NULL. When the parameter parallelization = 'mcmapply' or 'pbmcmapply', this parameter must be NULL. When the parameter parallelization = 'bpmapply', this parameter must be one of the MulticoreParam object offered by the package 'BiocParallel'. The default value is NULL.
 
 The output of `constructNull()` is the new gene by cell matrix in the same format as your input.
@@ -95,7 +97,11 @@ For all detailed tutorials, please check the [website](https://songdongyuan1994.
 
 Any questions or suggestions on `ClusterDE` are welcomed! Please report it on [issues](https://github.com/SONGDONGYUAN1994/ClusterDE/issues), or contact Dongyuan Song ([dongyuansong\@ucla.edu](mailto:dongyuansong@ucla.edu){.email}).
 
-## Related Manuscripts<a name="related-manuscripts"></a>
+## Related Papers<a name="related-manuscripts"></a>
 
 -   **scDesign3**: [Song, D., Wang, Q., Yan, G. et al. scDesign3 generates realistic in silico data for multimodal single-cell and spatial omics. <em>Nat Biotechnol</em> (2023).](https://www.nature.com/articles/s41587-023-01772-1)
 -   **Clipper**: [Ge, X., Chen, Y.E., Song, D. et al. Clipper: p-value-free FDR control on high-throughput data from two conditions. <em>Genome Biology</em> 22, 288 (2021).](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-021-02506-9)
+
+## Other methods for double dipping problem
+- **TN test**: [Zhang, J.M., Kamath, G.M., David, N.T. Valid post-clustering differential analysis for single-cell rna-seq. <em>Cell Systems</em>, 2019](https://www.sciencedirect.com/science/article/pii/S2405471219302698)
+- **count split**: [Neufeld, A., Gao, L.L., Popp, J., Battle, A., Witten, D. Inference after latent variable estimation for single-cell RNA sequencing data. <em>Biostatistics</em>, 2022](https://academic.oup.com/biostatistics/advance-article/doi/10.1093/biostatistics/kxac047/6893953?login=true)

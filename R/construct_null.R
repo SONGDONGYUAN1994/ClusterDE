@@ -89,10 +89,10 @@ constructNull <- function(mat,
                                      res <- fitdistrplus::fitdist(mat_filtered[x, ], "nbinom", method = "mle")$estimate
                                      res},
                                      error = function(cond) {
-                                       message(paste0(x, "is problematic with NB MLE; using NB MME instead."))
-                                       fit_para <- fitdistrplus::fitdist(mat_filtered[x, ], "nbinom", method = "mme")$estimate
-                                       #res <- c(NA, mu = fit_para)
-                                       #names(res) <- c("size", "mu")
+                                       message(paste0(x, "is problematic with NB MLE; using Poisson MME instead."))
+                                       fit_para <- fitdistrplus::fitdist(mat_filtered[x, ], "pois", method = "mme")$estimate
+                                       res <- c(NA, fit_para)
+                                       names(res) <- c("size", "mu")
                                        res
                                      })
                                  },
@@ -147,6 +147,11 @@ constructNull <- function(mat,
     if(length(unimportant_feature) > 0) {
         unimportant_mat <- parallel::mclapply(unimportant_feature, function(x) {
           if(family == "nb") {
+            if(is.na(para[x, 1])) {
+              stats::rpois(n = n_cell, lambda = para[x, 2])
+            } else {
+              stats::rnbinom(n = n_cell, size = para[x, 1], mu = para[x, 2])
+            }
             stats::rnbinom(n = n_cell, size = para[x, 1], mu = para[x, 2])
           } else {
             stats::rpois(n = n_cell, lambda = para[x])
