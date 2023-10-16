@@ -70,9 +70,10 @@
 <hr>
 <p>The R package <strong>ClusterDE</strong> is a post-clustering DE method for controlling the false discovery rate (FDR) of identified between cell-type DE genes regardless of clustering quality. The core idea of ClusterDE is to generate real-data-based synthetic null data with only one cell type, as contrast to the real data, for evaluating the whole procedure of clustering followed by a DE test. <span style="color:blue"> <strong>Detailed tutorials that illustrate various functionalities of ClusterDE are available at this <a href="https://songdongyuan1994.github.io/ClusterDE/docs/index.html">website</a></strong></span>. The following illustration figure summarizes the usage of ClusterDE:</p>
 <p><img src="reference/figures/ClusterDE_illustration.png" width="600"></p>
-<p>Instead of a new pipeline, ClusterDE actually works as an add-on to popular pipelines such as Seurat. To find out more details about <strong>ClusterDE</strong>, you can check out our manuscript on bioRxiv.</p>
-<p><strong>The motivation and application of ClusterDE</strong>: In Seurat function <code>findMarkers</code>, the authors pointed out: <em>“p-values should be interpreted cautiously, as the genes used for clustering are the same genes tested for differential expression.”</em> This is the “double-dipping” issue. If your clustering results are inaccurate and since the clustering has used your expression data already, the discovered DE genes may not represent the discrete cell type separation, but other variations in your data.</p>
-<p>ClusterDE is for correcting the double-dipping issue for comparing two dubious clusters, which you are not sure if they are two discrete cell types or just an artifact of your clustering algorithm based on conventional DE analysis. ClusterDE controls the false discoveries in DE and prioritizes the true cell type markers.</p>
+<p>Instead of a new pipeline, ClusterDE actually works as an add-on to popular pipelines such as Seurat. To find out more details about <strong>ClusterDE</strong>, you can check out our manuscript on <a href="https://www.biorxiv.org/content/10.1101/2023.07.21.550107v1" class="external-link">bioRxiv</a>.</p>
+<p><strong>The motivation and application of ClusterDE</strong>: In Seurat function <code>findMarkers</code>, the authors pointed out: <em>“p-values should be interpreted cautiously, as the genes used for clustering are the same genes tested for differential expression.”</em> This is the “double-dipping” issue. If your clustering results are inaccurate and since the clustering has used your expression data already, the discovered DE genes may not represent the discrete cell type separation, but other variation in your data (e.g., cell cycle, total UMI, or other variation you are not clear. These are still biological variation but do not define discrete status).</p>
+<p>ClusterDE aims at correcting the double-dipping issue for comparing two dubious clusters, which you are not sure if they are two discrete cell types or just an artifact of your clustering algorithm based on conventional DE analysis. ClusterDE controls the false discoveries in DE and prioritizes the true cell type markers.</p>
+<p>Note: current version is focusing on one vs one comparison.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a name="installation-"></a>
@@ -114,7 +115,7 @@
 <li>
 <code>fastVersion</code>: A logic value. If TRUE, the fast approximation is used.</li>
 <li>
-<code>corrCut</code>: A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation.</li>
+<code>corrCut</code>: A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation. The reason is that lowly expressed genes are hard to calculate correlation.</li>
 <li>
 <code>BPPARAM</code>: A MulticoreParam object or NULL. When the parameter parallelization = ‘mcmapply’ or ‘pbmcmapply’, this parameter must be NULL. When the parameter parallelization = ‘bpmapply’, this parameter must be one of the MulticoreParam object offered by the package ‘BiocParallel’. The default value is NULL.</li>
 </ul>
@@ -163,8 +164,8 @@
 <p>Any questions or suggestions on <code>ClusterDE</code> are welcomed! Please report it on <a href="https://github.com/SONGDONGYUAN1994/ClusterDE/issues" class="external-link">issues</a>, or contact Dongyuan Song (<a href="mailto:dongyuansong@ucla.edu" class="email">dongyuansong@ucla.edu</a>).</p>
 </div>
 <div class="section level2">
-<h2 id="related-manuscripts">Related Manuscripts<a name="related-manuscripts"></a>
-<a class="anchor" aria-label="anchor" href="#related-manuscripts"></a>
+<h2 id="related-papers">Related Papers<a name="related-manuscripts"></a>
+<a class="anchor" aria-label="anchor" href="#related-papers"></a>
 </h2>
 <ul>
 <li>
@@ -172,6 +173,18 @@
 </li>
 <li>
 <strong>Clipper</strong>: <a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-021-02506-9" class="external-link">Ge, X., Chen, Y.E., Song, D. et al. Clipper: p-value-free FDR control on high-throughput data from two conditions. <em>Genome Biology</em> 22, 288 (2021).</a>
+</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="other-methods-for-double-dipping-problem">Other methods for double dipping problem<a class="anchor" aria-label="anchor" href="#other-methods-for-double-dipping-problem"></a>
+</h2>
+<ul>
+<li>
+<strong>TN test</strong>: <a href="https://www.sciencedirect.com/science/article/pii/S2405471219302698" class="external-link">Zhang, J.M., Kamath, G.M., David, N.T. Valid post-clustering differential analysis for single-cell rna-seq. <em>Cell Systems</em>, 2019</a>
+</li>
+<li>
+<strong>count split</strong>: <a href="https://academic.oup.com/biostatistics/advance-article/doi/10.1093/biostatistics/kxac047/6893953?login=true" class="external-link">Neufeld, A., Gao, L.L., Popp, J., Battle, A., Witten, D. Inference after latent variable estimation for single-cell RNA sequencing data. <em>Biostatistics</em>, 2022</a>
 </li>
 </ul>
 </div>

@@ -77,7 +77,7 @@ Song</h4>
 Angeles<br><a class="author_email" href="mailto:#"></a><a href="mailto:dongyuansong@ucla.edu" class="email">dongyuansong@ucla.edu</a>
       </address>
                   
-            <h4 data-toc-skip class="date">12 October 2023</h4>
+            <h4 data-toc-skip class="date">16 October 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SONGDONGYUAN1994/ClusterDE/blob/HEAD/vignettes/ClusterDE-cellline.Rmd" class="external-link"><code>vignettes/ClusterDE-cellline.Rmd</code></a></small>
       <div class="d-none name"><code>ClusterDE-cellline.Rmd</code></div>
@@ -174,20 +174,20 @@ is designed for 1 vs 1 comparison; therefore, we set the resolution as
 <span><span class="co">#&gt; Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric</span></span>
 <span><span class="co">#&gt; To use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to 'correlation'</span></span>
 <span><span class="co">#&gt; This message will be shown once per session</span></span>
-<span><span class="co">#&gt; 18:19:21 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
-<span><span class="co">#&gt; 18:19:21 Read 758 rows and found 10 numeric columns</span></span>
-<span><span class="co">#&gt; 18:19:21 Using Annoy for neighbor search, n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 18:19:21 Building Annoy index with metric = cosine, n_trees = 50</span></span>
+<span><span class="co">#&gt; 01:08:39 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
+<span><span class="co">#&gt; 01:08:39 Read 758 rows and found 10 numeric columns</span></span>
+<span><span class="co">#&gt; 01:08:39 Using Annoy for neighbor search, n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 01:08:39 Building Annoy index with metric = cosine, n_trees = 50</span></span>
 <span><span class="co">#&gt; 0%   10   20   30   40   50   60   70   80   90   100%</span></span>
 <span><span class="co">#&gt; [----|----|----|----|----|----|----|----|----|----|</span></span>
 <span><span class="co">#&gt; **************************************************|</span></span>
-<span><span class="co">#&gt; 18:19:21 Writing NN index file to temp file /tmp/RtmpQZhLJn/file1cad3127b870</span></span>
-<span><span class="co">#&gt; 18:19:21 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">#&gt; 18:19:21 Annoy recall = 100%</span></span>
-<span><span class="co">#&gt; 18:19:22 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 18:19:23 Initializing from normalized Laplacian + noise (using irlba)</span></span>
-<span><span class="co">#&gt; 18:19:23 Commencing optimization for 500 epochs, with 27914 positive edges</span></span>
-<span><span class="co">#&gt; 18:19:24 Optimization finished</span></span>
+<span><span class="co">#&gt; 01:08:39 Writing NN index file to temp file /tmp/RtmpKj5gZZ/file1cc72b97d744</span></span>
+<span><span class="co">#&gt; 01:08:39 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">#&gt; 01:08:39 Annoy recall = 100%</span></span>
+<span><span class="co">#&gt; 01:08:40 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 01:08:41 Initializing from normalized Laplacian + noise (using irlba)</span></span>
+<span><span class="co">#&gt; 01:08:41 Commencing optimization for 500 epochs, with 27914 positive edges</span></span>
+<span><span class="co">#&gt; 01:08:42 Optimization finished</span></span>
 <span><span class="co">#&gt; Warning: Cannot add objects with duplicate keys (offending key: UMAP_), setting</span></span>
 <span><span class="co">#&gt; key to 'umap_'</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Clustering result"</span><span class="op">)</span></span></code></pre></div>
@@ -225,7 +225,7 @@ discoveries.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">synthetic_null</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/constructNull.html">constructNull</a></span><span class="op">(</span><span class="va">count_mat</span>, nCores <span class="op">=</span> <span class="fl">2</span>, fastVersion <span class="op">=</span> <span class="cn">TRUE</span>, family <span class="op">=</span> <span class="st">"nb"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt; 182.637  45.973 121.183</span></span></code></pre></div>
+<span><span class="co">#&gt; 173.531  44.039 115.019</span></span></code></pre></div>
 <p>We perform the same pipeline as we did for target data. Please note
 we need two clusters here, too. This is straightforward for clustering
 method with predefined cluster numbers, e.g., K-means. For louvain
@@ -242,39 +242,39 @@ parameter so that we still get two clusters.</p>
 <span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span><span class="op">)</span></span>
 <span><span class="co">#&gt; PC_ 1 </span></span>
 <span><span class="co">#&gt; Positive:  PSMB2, PSMC5, PSMA7, XRCC5, SKP1, PSMD8, NUDC, PSME2P2, U2AF1, VPS29 </span></span>
-<span><span class="co">#&gt;     CALM1, MGST1, MRPL47, CLIC1, CNIH4, SSBP1, RBM8A, TAGLN2, RPA3, COX5A </span></span>
-<span><span class="co">#&gt;     PSME2, U2AF1L5, SNRPF, ARPC3, PPIA, S100A11, MYL12B, ATP5PD, RBM8B, ATP5PO </span></span>
+<span><span class="co">#&gt;     CALM1, MRPL47, MGST1, CLIC1, CNIH4, SSBP1, RBM8A, TAGLN2, RPA3, COX5A </span></span>
+<span><span class="co">#&gt;     PSME2, U2AF1L5, SNRPF, ARPC3, S100A11, PPIA, ATP5PD, MYL12B, RBM8B, ATP5PO </span></span>
 <span><span class="co">#&gt; Negative:  LRRC75A-AS1, RPS14, FTH1, RPL29, RPL28, ZFAS1, RPL13A, FTH1P10, FTH1P7, RPS16 </span></span>
 <span><span class="co">#&gt;     EEF2, SNHG5, RPL13AP5, C1orf56, TMSB10, FTH1P8, MKNK2, STEAP2, TMSB4X, RPL32 </span></span>
-<span><span class="co">#&gt;     RPL13AP25, LRWD1, LINC01588, NBPF10, RPL4, NREP, C6orf48, VCAN, ANKRD36B, RPL9P9 </span></span>
+<span><span class="co">#&gt;     ASMTL, RPL13AP25, RPL4, NBPF10, C6orf48, NREP, VCAN, RPL9P9, ANKRD36B, HCFC1R1 </span></span>
 <span><span class="co">#&gt; PC_ 2 </span></span>
-<span><span class="co">#&gt; Positive:  SIVA1, RPL39L, CENPK, TMPO, DEK, ASF1B, HNRNPAB, H2AFV, CENPX, CKLF </span></span>
-<span><span class="co">#&gt;     SNRNP25, TMEM106C, CHCHD2, CDCA5, FAM111A, RAD51AP1, RRM1, ZWINT, LSM4, SAC3D1 </span></span>
-<span><span class="co">#&gt;     CDCA4, BRI3BP, CENPN, SUZ12, BRCA1, ESCO2, ORC6, PGP, PRADC1, FBXO5 </span></span>
+<span><span class="co">#&gt; Positive:  SIVA1, RPL39L, CENPK, TMPO, HNRNPAB, DEK, ASF1B, H2AFV, CENPX, SNRNP25 </span></span>
+<span><span class="co">#&gt;     CKLF, TMEM106C, CHCHD2, CDCA5, FAM111A, RAD51AP1, RRM1, ZWINT, LSM4, SAC3D1 </span></span>
+<span><span class="co">#&gt;     CDCA4, BRI3BP, CENPN, SUZ12, BRCA1, PGP, ESCO2, ORC6, FBXO5, PRADC1 </span></span>
 <span><span class="co">#&gt; Negative:  NACA, RPL7AP6, RPL10, RPL7A, RPL10P16, RPL9P9, UBA52, BTF3, RPL10P9, SSR2 </span></span>
 <span><span class="co">#&gt;     EEF2, SKP1, RPL4, RPL18, LRRC75A-AS1, ANXA5, RPS4XP11, BSG, PSMD4, PPIB </span></span>
-<span><span class="co">#&gt;     APEX1, ARPC3, EIF3M, SNRPB2, VPS28, MYDGF, CTSD, EDF1, PNRC1, EIF1 </span></span>
+<span><span class="co">#&gt;     APEX1, ARPC3, EIF3M, SNRPB2, MYDGF, VPS28, CTSD, EDF1, PNRC1, EIF1 </span></span>
 <span><span class="co">#&gt; PC_ 3 </span></span>
-<span><span class="co">#&gt; Positive:  RPL29, RPL14, RPSAP19, RPL15, RPL13AP25, RPL32, RPL13AP5, RPL18, RPSA, DRAP1 </span></span>
+<span><span class="co">#&gt; Positive:  RPL29, RPL14, RPSAP19, RPL15, RPL13AP25, RPL32, RPL18, RPL13AP5, RPSA, DRAP1 </span></span>
 <span><span class="co">#&gt;     RPS5, RPS11, TMA7, CFL1, RPS19, FLNA, DCBLD2, RPL28, PFN1, RPS16 </span></span>
-<span><span class="co">#&gt;     PDCD5, SLBP, RPS15, PEBP1, FXYD5, AP2S1, BASP1, TMSB10, HSPE1P4, NME1 </span></span>
-<span><span class="co">#&gt; Negative:  ASS1, C3, ADGRF1, B2M, PERP, ATP1B1, CASP4, TSPAN13, LIPH, CPD </span></span>
+<span><span class="co">#&gt;     PDCD5, SLBP, RPS15, PEBP1, AP2S1, FXYD5, BASP1, TMSB10, NME1, HSPE1P4 </span></span>
+<span><span class="co">#&gt; Negative:  ASS1, ADGRF1, C3, B2M, PERP, ATP1B1, CASP4, TSPAN13, CPD, LIPH </span></span>
 <span><span class="co">#&gt;     SMIM22, EPS8, IFI16, GOLGB1, TMED10, NMB, SDC4, LIMA1, NMI, SPINT1 </span></span>
-<span><span class="co">#&gt;     TNFAIP2, CD55, CCDC186, HLA-DMB, F11R, SQSTM1, SELENBP1, NAMPT, SQOR, PLA2G16 </span></span>
+<span><span class="co">#&gt;     TNFAIP2, CCDC186, CD55, HLA-DMB, F11R, NAMPT, SELENBP1, SQSTM1, SQOR, PLA2G16 </span></span>
 <span><span class="co">#&gt; PC_ 4 </span></span>
-<span><span class="co">#&gt; Positive:  IFNGR1, RFC4, NAMPT, BRCA1, EID1, POLD3, NDUFA4, MCM3, HINT1, ATP6V0E1 </span></span>
+<span><span class="co">#&gt; Positive:  S100A16, H3F3B, LAMC2, RPL36AL, PMEPA1, EIF5, TBRG1, RPL15, RNF145, ABRACL </span></span>
+<span><span class="co">#&gt;     IMP4, SERTAD1, LAMB3, KDM5B, HMGB3, HIST1H2BD, DDX21, ZNF593, ZPR1, PFDN2 </span></span>
+<span><span class="co">#&gt;     HIST2H4B, TSSC4, GOT1, PLEC, HIST3H2A, ITGA6, OTUB1, ALCAM, COA6, EIF1 </span></span>
+<span><span class="co">#&gt; Negative:  IFNGR1, RFC4, NAMPT, BRCA1, EID1, POLD3, NDUFA4, HINT1, MCM3, ATP6V0E1 </span></span>
 <span><span class="co">#&gt;     RPA3, SOD1, CYB5A, DNMT1, CDT1, GMNN, CHAF1A, THYN1, CPD, CXXC5 </span></span>
-<span><span class="co">#&gt;     ORC6, ADGRF1, NAMPTP1, MCM6, CARHSP1, RPL7AP6, RHOBTB3, ACOT13, NCOA7, RMI2 </span></span>
-<span><span class="co">#&gt; Negative:  S100A16, H3F3B, LAMC2, RPL36AL, PMEPA1, EIF5, TBRG1, RPL15, RNF145, SERTAD1 </span></span>
-<span><span class="co">#&gt;     ABRACL, LAMB3, IMP4, KDM5B, HMGB3, HIST1H2BD, ZPR1, DDX21, ZNF593, GOT1 </span></span>
-<span><span class="co">#&gt;     PFDN2, HIST2H4B, TSSC4, HIST3H2A, PLEC, ALCAM, COA6, ITGA6, LRIF1, EIF1 </span></span>
+<span><span class="co">#&gt;     ADGRF1, ORC6, NAMPTP1, MCM6, CARHSP1, ACOT13, RPL7AP6, RHOBTB3, RMI2, NCOA7 </span></span>
 <span><span class="co">#&gt; PC_ 5 </span></span>
-<span><span class="co">#&gt; Positive:  UQCRQ, NDUFS6, COX6B1, FTH1, FTH1P8, ATP5MC3, FTH1P10, APRT, COX7B, COX4I1 </span></span>
-<span><span class="co">#&gt;     FTH1P7, NDUFB3, ATP6V0E1, PFN1, POLR2L, LY6E, SLIRP, NMB, HINT1, CHCHD10 </span></span>
-<span><span class="co">#&gt;     ATP5MF, POMP, NDUFB4, MCRIP2, RPL36AL, MRPL23, S100A10, GPX4, DUSP23, IFITM2 </span></span>
-<span><span class="co">#&gt; Negative:  MT-ND6, RAD21, NDC80, DIAPH3, ITGA2, C6orf48, KIF5B, NUCKS1, TMEM132A, CCDC88A </span></span>
-<span><span class="co">#&gt;     ANP32E, SPC25, NCAPG, RRM1, ZNF622, GARS, TATDN1P1, SMC2, MTHFD2, C1orf56 </span></span>
-<span><span class="co">#&gt;     CEP55, VCAN, LINC01588, CEP57, BCLAF1P2, PIGK, SF3B2, TBC1D7, CKAP2L, RTCB</span></span>
+<span><span class="co">#&gt; Positive:  MT-ND6, RAD21, DIAPH3, NDC80, ITGA2, C6orf48, KIF5B, NUCKS1, TMEM132A, RRM1 </span></span>
+<span><span class="co">#&gt;     ANP32E, NCAPG, CCDC88A, SPC25, ZNF622, SMC2, TATDN1P1, GARS, MTHFD2, CEP55 </span></span>
+<span><span class="co">#&gt;     C1orf56, SF3B2, VCAN, CEP57, CKAP2L, PIGK, NCAPD3, BCLAF1P2, TBC1D7, RTCB </span></span>
+<span><span class="co">#&gt; Negative:  UQCRQ, NDUFS6, COX6B1, FTH1, FTH1P8, ATP5MC3, FTH1P10, APRT, COX7B, COX4I1 </span></span>
+<span><span class="co">#&gt;     ATP6V0E1, FTH1P7, NDUFB3, POLR2L, LY6E, SLIRP, PFN1, NMB, CHCHD10, HINT1 </span></span>
+<span><span class="co">#&gt;     ATP5MF, POMP, NDUFB4, MCRIP2, RPL36AL, MRPL23, S100A10, SEC61G, GPX4, DUSP23</span></span>
 <span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing nearest neighbor graph</span></span>
 <span><span class="co">#&gt; Computing SNN</span></span>
@@ -282,27 +282,27 @@ parameter so that we still get two clusters.</p>
 <span><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Number of nodes: 758</span></span>
-<span><span class="co">#&gt; Number of edges: 29433</span></span>
+<span><span class="co">#&gt; Number of edges: 29614</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Running Louvain algorithm...</span></span>
-<span><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7229</span></span>
+<span><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7309</span></span>
 <span><span class="co">#&gt; Number of communities: 2</span></span>
 <span><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
 <span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 18:22:58 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
-<span><span class="co">#&gt; 18:22:58 Read 758 rows and found 10 numeric columns</span></span>
-<span><span class="co">#&gt; 18:22:58 Using Annoy for neighbor search, n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 18:22:58 Building Annoy index with metric = cosine, n_trees = 50</span></span>
+<span><span class="co">#&gt; 01:12:05 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
+<span><span class="co">#&gt; 01:12:05 Read 758 rows and found 10 numeric columns</span></span>
+<span><span class="co">#&gt; 01:12:05 Using Annoy for neighbor search, n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 01:12:05 Building Annoy index with metric = cosine, n_trees = 50</span></span>
 <span><span class="co">#&gt; 0%   10   20   30   40   50   60   70   80   90   100%</span></span>
 <span><span class="co">#&gt; [----|----|----|----|----|----|----|----|----|----|</span></span>
 <span><span class="co">#&gt; **************************************************|</span></span>
-<span><span class="co">#&gt; 18:22:58 Writing NN index file to temp file /tmp/RtmpQZhLJn/file1cad32d5eb34</span></span>
-<span><span class="co">#&gt; 18:22:58 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">#&gt; 18:22:58 Annoy recall = 100%</span></span>
-<span><span class="co">#&gt; 18:22:59 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 18:23:00 Initializing from normalized Laplacian + noise (using irlba)</span></span>
-<span><span class="co">#&gt; 18:23:00 Commencing optimization for 500 epochs, with 28370 positive edges</span></span>
-<span><span class="co">#&gt; 18:23:02 Optimization finished</span></span>
+<span><span class="co">#&gt; 01:12:05 Writing NN index file to temp file /tmp/RtmpKj5gZZ/file1cc778fbf7ec</span></span>
+<span><span class="co">#&gt; 01:12:05 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">#&gt; 01:12:05 Annoy recall = 100%</span></span>
+<span><span class="co">#&gt; 01:12:06 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 01:12:07 Initializing from normalized Laplacian + noise (using irlba)</span></span>
+<span><span class="co">#&gt; 01:12:07 Commencing optimization for 500 epochs, with 28370 positive edges</span></span>
+<span><span class="co">#&gt; 01:12:08 Optimization finished</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ClusterDE-cellline_files/figure-html/unnamed-chunk-6-1.png" width="700">
 We perform the DE test on synthetic null data.</p>
@@ -331,7 +331,7 @@ around 0.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">res</span><span class="op">$</span><span class="va">summaryTable</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">cs</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"white"</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Distribution of constrast scores"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span>
-<span><span class="co">#&gt; Warning: Removed 2 rows containing non-finite values (`stat_bin()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: Removed 1 rows containing non-finite values (`stat_bin()`).</span></span></code></pre></div>
 <p><img src="ClusterDE-cellline_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
 <div class="section level2">
@@ -366,7 +366,7 @@ around 0.</p>
 <span><span class="co">#&gt; [8] base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt;  [1] ggplot2_3.4.3               SingleCellExperiment_1.22.0</span></span>
+<span><span class="co">#&gt;  [1] ggplot2_3.4.4               SingleCellExperiment_1.22.0</span></span>
 <span><span class="co">#&gt;  [3] SummarizedExperiment_1.30.2 Biobase_2.60.0             </span></span>
 <span><span class="co">#&gt;  [5] GenomicRanges_1.52.1        GenomeInfoDb_1.36.4        </span></span>
 <span><span class="co">#&gt;  [7] IRanges_2.34.1              S4Vectors_0.38.2           </span></span>
@@ -379,7 +379,7 @@ around 0.</p>
 <span><span class="co">#&gt;   [1] RColorBrewer_1.1-3      jsonlite_1.8.7          magrittr_2.0.3         </span></span>
 <span><span class="co">#&gt;   [4] spatstat.utils_3.0-3    farver_2.1.1            rmarkdown_2.25         </span></span>
 <span><span class="co">#&gt;   [7] zlibbioc_1.46.0         fs_1.6.3                ragg_1.2.6             </span></span>
-<span><span class="co">#&gt;  [10] vctrs_0.6.3             ROCR_1.0-11             memoise_2.0.1          </span></span>
+<span><span class="co">#&gt;  [10] vctrs_0.6.4             ROCR_1.0-11             memoise_2.0.1          </span></span>
 <span><span class="co">#&gt;  [13] spatstat.explore_3.2-3  RCurl_1.98-1.12         S4Arrays_1.0.6         </span></span>
 <span><span class="co">#&gt;  [16] htmltools_0.5.6.1       sass_0.4.7              sctransform_0.4.0      </span></span>
 <span><span class="co">#&gt;  [19] parallelly_1.36.0       KernSmooth_2.23-21      bslib_0.5.1            </span></span>
@@ -412,7 +412,7 @@ around 0.</p>
 <span><span class="co">#&gt; [100] lazyeval_0.2.2          yaml_2.3.7              evaluate_0.22          </span></span>
 <span><span class="co">#&gt; [103] codetools_0.2-19        tibble_3.2.1            BiocManager_1.30.22    </span></span>
 <span><span class="co">#&gt; [106] cli_3.6.1               uwot_0.1.16             xtable_1.8-4           </span></span>
-<span><span class="co">#&gt; [109] reticulate_1.32.0       systemfonts_1.0.5       munsell_0.5.0          </span></span>
+<span><span class="co">#&gt; [109] reticulate_1.34.0       systemfonts_1.0.5       munsell_0.5.0          </span></span>
 <span><span class="co">#&gt; [112] jquerylib_0.1.4         Rcpp_1.0.11             globals_0.16.2         </span></span>
 <span><span class="co">#&gt; [115] spatstat.random_3.1-6   png_0.1-8               rngWELL_0.10-9         </span></span>
 <span><span class="co">#&gt; [118] parallel_4.3.1          ellipsis_0.3.2          randtoolbox_2.0.4      </span></span>
