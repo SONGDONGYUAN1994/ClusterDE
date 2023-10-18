@@ -70,7 +70,7 @@ p2 <- DimPlot(object = pbmc, reduction = "umap", group.by = "CellType", label = 
 p1 + p2
 ```
 
-In this vignette, we are interested in cluster 2 vs 8, which approximately represent CD14+/CD16+ monocytes. Please note that ClusterDE is designed for 1 vs 1 comparison. Therefore, users may (1) choose the two interested clusters manually based on their knowledge or (2) use the two closest clusters from computation (e.g., `BuildClusterTree` in `Seurat`).
+In this vignette, we are interested in cluster 2 vs 8, which approximately represent CD14+/CD16+ monocytes. Please note that ClusterDE is designed for 1 vs 1 comparison. Therefore, users may (1) choose the two interested clusters manually based on their knowledge or (2) use the two locally closest clusters from computation (e.g., `BuildClusterTree` in `Seurat`).
 ```{r}
 pbmc <- BuildClusterTree(pbmc)
 PlotClusterTree(pbmc)
@@ -85,10 +85,11 @@ original_markers <- FindMarkers(pbmc_sub,
                                 min.pct = 0, 
                                 logfc.threshold = 0)
 ```
+**Note**: since we need the same number of genes being tested in real data and null data, we manually remove the default filtering in Seurat, which will exclude some genes from being test. We believe that this fitering should be performed after you test every gene.
 
 ## Generate synthetic null data
 
-We first generate the synthetic null data based on the target data (real subset data, `pbmc_sub`, which contains the two clusters you are interested in). You can increase the number of cores to speed it up.
+We first generate the synthetic null data based on the target data (real subset data, `pbmc_sub`, which contains the two clusters you are interested in). You can increase the number of cores (CPUs) to speed it up.
 ```{r}
 count_mat <- GetAssayData(object = pbmc_sub, slot = "counts")
 set.seed(1234)

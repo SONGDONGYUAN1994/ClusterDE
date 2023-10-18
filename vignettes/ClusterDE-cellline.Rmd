@@ -38,7 +38,7 @@ library(ggplot2)
 
 ## Download data
 
-We download the a cell line data set H2228. The original data is from [Tian et al., Nature Methods 2019](https://github.com/LuyiTian/sc_mixology). Since the data is from the pure cell line, it should not have cell types, and, of course, between cell type DE genes.
+We download the a cell line data set H2228. The original data is from [Tian et al., Nature Methods 2019](https://github.com/LuyiTian/sc_mixology) as the gold standard for benchmarking the accuracy of clustering. Since the data is from the pure cell line, it should not have cell types, and, of course, between cell type DE genes. **Note**: it does not mean that within one cell line there is no variation; of course there are, e.g., cell cycle, total UMI, etc. However, these variations do not represent **discrete cell groups** and essentially it means you should not using your obtained clusters to explain the variation.
 ```{r}
 sce <- readRDS(url("https://figshare.com/ndownloader/files/41395260"))
 cellline <- Seurat::as.Seurat(sce)
