@@ -77,7 +77,7 @@ Song</h4>
 Angeles<br><a class="author_email" href="mailto:#"></a><a href="mailto:dongyuansong@ucla.edu" class="email">dongyuansong@ucla.edu</a>
       </address>
                   
-            <h4 data-toc-skip class="date">16 October 2023</h4>
+            <h4 data-toc-skip class="date">18 October 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SONGDONGYUAN1994/ClusterDE/blob/HEAD/vignettes/ClusterDE-cellline.Rmd" class="external-link"><code>vignettes/ClusterDE-cellline.Rmd</code></a></small>
       <div class="d-none name"><code>ClusterDE-cellline.Rmd</code></div>
@@ -96,8 +96,14 @@ Angeles<br><a class="author_email" href="mailto:#"></a><a href="mailto:dongyuans
 </h2>
 <p>We download the a cell line data set H2228. The original data is from
 <a href="https://github.com/LuyiTian/sc_mixology" class="external-link">Tian et al., Nature
-Methods 2019</a>. Since the data is from the pure cell line, it should
-not have cell types, and, of course, between cell type DE genes.</p>
+Methods 2019</a> as the gold standard for benchmarking the accuracy of
+clustering. Since the data is from the pure cell line, it should not
+have cell types, and, of course, between cell type DE genes.
+<strong>Note</strong>: it does not mean that within one cell line there
+is no variation; of course there are, e.g., cell cycle, total UMI, etc.
+However, these variations do not represent <strong>discrete cell
+groups</strong> and essentially it means you should not using your
+obtained clusters to explain the variation.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html" class="external-link">url</a></span><span class="op">(</span><span class="st">"https://figshare.com/ndownloader/files/41395260"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/as.Seurat.html" class="external-link">as.Seurat</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
@@ -174,20 +180,20 @@ is designed for 1 vs 1 comparison; therefore, we set the resolution as
 <span><span class="co">#&gt; Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric</span></span>
 <span><span class="co">#&gt; To use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to 'correlation'</span></span>
 <span><span class="co">#&gt; This message will be shown once per session</span></span>
-<span><span class="co">#&gt; 01:08:39 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
-<span><span class="co">#&gt; 01:08:39 Read 758 rows and found 10 numeric columns</span></span>
-<span><span class="co">#&gt; 01:08:39 Using Annoy for neighbor search, n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 01:08:39 Building Annoy index with metric = cosine, n_trees = 50</span></span>
+<span><span class="co">#&gt; 03:44:23 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
+<span><span class="co">#&gt; 03:44:23 Read 758 rows and found 10 numeric columns</span></span>
+<span><span class="co">#&gt; 03:44:23 Using Annoy for neighbor search, n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 03:44:23 Building Annoy index with metric = cosine, n_trees = 50</span></span>
 <span><span class="co">#&gt; 0%   10   20   30   40   50   60   70   80   90   100%</span></span>
 <span><span class="co">#&gt; [----|----|----|----|----|----|----|----|----|----|</span></span>
 <span><span class="co">#&gt; **************************************************|</span></span>
-<span><span class="co">#&gt; 01:08:39 Writing NN index file to temp file /tmp/RtmpKj5gZZ/file1cc72b97d744</span></span>
-<span><span class="co">#&gt; 01:08:39 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">#&gt; 01:08:39 Annoy recall = 100%</span></span>
-<span><span class="co">#&gt; 01:08:40 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 01:08:41 Initializing from normalized Laplacian + noise (using irlba)</span></span>
-<span><span class="co">#&gt; 01:08:41 Commencing optimization for 500 epochs, with 27914 positive edges</span></span>
-<span><span class="co">#&gt; 01:08:42 Optimization finished</span></span>
+<span><span class="co">#&gt; 03:44:23 Writing NN index file to temp file /tmp/RtmprW00Mr/file1b0b5705f292</span></span>
+<span><span class="co">#&gt; 03:44:23 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">#&gt; 03:44:23 Annoy recall = 100%</span></span>
+<span><span class="co">#&gt; 03:44:23 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 03:44:25 Initializing from normalized Laplacian + noise (using irlba)</span></span>
+<span><span class="co">#&gt; 03:44:25 Commencing optimization for 500 epochs, with 27914 positive edges</span></span>
+<span><span class="co">#&gt; 03:44:26 Optimization finished</span></span>
 <span><span class="co">#&gt; Warning: Cannot add objects with duplicate keys (offending key: UMAP_), setting</span></span>
 <span><span class="co">#&gt; key to 'umap_'</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Clustering result"</span><span class="op">)</span></span></code></pre></div>
@@ -225,7 +231,7 @@ discoveries.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">synthetic_null</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/constructNull.html">constructNull</a></span><span class="op">(</span><span class="va">count_mat</span>, nCores <span class="op">=</span> <span class="fl">2</span>, fastVersion <span class="op">=</span> <span class="cn">TRUE</span>, family <span class="op">=</span> <span class="st">"nb"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt; 173.531  44.039 115.019</span></span></code></pre></div>
+<span><span class="co">#&gt; 201.421  42.167 126.998</span></span></code></pre></div>
 <p>We perform the same pipeline as we did for target data. Please note
 we need two clusters here, too. This is straightforward for clustering
 method with predefined cluster numbers, e.g., K-means. For louvain
@@ -289,20 +295,20 @@ parameter so that we still get two clusters.</p>
 <span><span class="co">#&gt; Number of communities: 2</span></span>
 <span><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
 <span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 01:12:05 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
-<span><span class="co">#&gt; 01:12:05 Read 758 rows and found 10 numeric columns</span></span>
-<span><span class="co">#&gt; 01:12:05 Using Annoy for neighbor search, n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 01:12:05 Building Annoy index with metric = cosine, n_trees = 50</span></span>
+<span><span class="co">#&gt; 03:47:59 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
+<span><span class="co">#&gt; 03:47:59 Read 758 rows and found 10 numeric columns</span></span>
+<span><span class="co">#&gt; 03:47:59 Using Annoy for neighbor search, n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 03:47:59 Building Annoy index with metric = cosine, n_trees = 50</span></span>
 <span><span class="co">#&gt; 0%   10   20   30   40   50   60   70   80   90   100%</span></span>
 <span><span class="co">#&gt; [----|----|----|----|----|----|----|----|----|----|</span></span>
 <span><span class="co">#&gt; **************************************************|</span></span>
-<span><span class="co">#&gt; 01:12:05 Writing NN index file to temp file /tmp/RtmpKj5gZZ/file1cc778fbf7ec</span></span>
-<span><span class="co">#&gt; 01:12:05 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">#&gt; 01:12:05 Annoy recall = 100%</span></span>
-<span><span class="co">#&gt; 01:12:06 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 01:12:07 Initializing from normalized Laplacian + noise (using irlba)</span></span>
-<span><span class="co">#&gt; 01:12:07 Commencing optimization for 500 epochs, with 28370 positive edges</span></span>
-<span><span class="co">#&gt; 01:12:08 Optimization finished</span></span>
+<span><span class="co">#&gt; 03:47:59 Writing NN index file to temp file /tmp/RtmprW00Mr/file1b0b3522bdee</span></span>
+<span><span class="co">#&gt; 03:47:59 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">#&gt; 03:48:00 Annoy recall = 100%</span></span>
+<span><span class="co">#&gt; 03:48:00 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 03:48:02 Initializing from normalized Laplacian + noise (using irlba)</span></span>
+<span><span class="co">#&gt; 03:48:02 Commencing optimization for 500 epochs, with 28370 positive edges</span></span>
+<span><span class="co">#&gt; 03:48:03 Optimization finished</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ClusterDE-cellline_files/figure-html/unnamed-chunk-6-1.png" width="700">
 We perform the DE test on synthetic null data.</p>
@@ -388,7 +394,7 @@ around 0.</p>
 <span><span class="co">#&gt;  [28] cachem_1.0.8            igraph_1.5.1            mime_0.12              </span></span>
 <span><span class="co">#&gt;  [31] lifecycle_1.0.3         pkgconfig_2.0.3         Matrix_1.6-1.1         </span></span>
 <span><span class="co">#&gt;  [34] R6_2.5.1                fastmap_1.1.1           GenomeInfoDbData_1.2.10</span></span>
-<span><span class="co">#&gt;  [37] fitdistrplus_1.1-11     future_1.33.0           shiny_1.7.5            </span></span>
+<span><span class="co">#&gt;  [37] fitdistrplus_1.1-11     future_1.33.0           shiny_1.7.5.1          </span></span>
 <span><span class="co">#&gt;  [40] digest_0.6.33           colorspace_2.1-0        patchwork_1.1.3        </span></span>
 <span><span class="co">#&gt;  [43] rprojroot_2.0.3         tensor_1.5              irlba_2.3.5.1          </span></span>
 <span><span class="co">#&gt;  [46] kde1d_1.0.5             textshaping_0.3.7       labeling_0.4.3         </span></span>
@@ -401,13 +407,13 @@ around 0.</p>
 <span><span class="co">#&gt;  [67] grid_4.3.1              Rtsne_0.16              cluster_2.1.4          </span></span>
 <span><span class="co">#&gt;  [70] reshape2_1.4.4          generics_0.1.3          gtable_0.3.4           </span></span>
 <span><span class="co">#&gt;  [73] spatstat.data_3.0-1     tidyr_1.3.0             data.table_1.14.8      </span></span>
-<span><span class="co">#&gt;  [76] XVector_0.40.0          sp_2.1-0                utf8_1.2.3             </span></span>
-<span><span class="co">#&gt;  [79] spatstat.geom_3.2-5     RcppAnnoy_0.0.21        ggrepel_0.9.3          </span></span>
+<span><span class="co">#&gt;  [76] XVector_0.40.0          sp_2.1-1                utf8_1.2.3             </span></span>
+<span><span class="co">#&gt;  [79] spatstat.geom_3.2-5     RcppAnnoy_0.0.21        ggrepel_0.9.4          </span></span>
 <span><span class="co">#&gt;  [82] RANN_2.6.1              pillar_1.9.0            stringr_1.5.0          </span></span>
 <span><span class="co">#&gt;  [85] later_1.3.1             splines_4.3.1           dplyr_1.1.3            </span></span>
 <span><span class="co">#&gt;  [88] lattice_0.21-8          survival_3.5-5          deldir_1.0-9           </span></span>
 <span><span class="co">#&gt;  [91] tidyselect_1.2.0        miniUI_0.1.1.1          pbapply_1.7-2          </span></span>
-<span><span class="co">#&gt;  [94] knitr_1.44              gridExtra_2.3           bookdown_0.35          </span></span>
+<span><span class="co">#&gt;  [94] knitr_1.44              gridExtra_2.3           bookdown_0.36          </span></span>
 <span><span class="co">#&gt;  [97] scattermore_1.2         xfun_0.40               stringi_1.7.12         </span></span>
 <span><span class="co">#&gt; [100] lazyeval_0.2.2          yaml_2.3.7              evaluate_0.22          </span></span>
 <span><span class="co">#&gt; [103] codetools_0.2-19        tibble_3.2.1            BiocManager_1.30.22    </span></span>
