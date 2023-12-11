@@ -2,7 +2,7 @@
 
 ------------------------------------------------------------------------
 
-The R package **ClusterDE** is a post-clustering DE method for controlling the false discovery rate (FDR) of identified between cell-type DE genes regardless of clustering quality. The core idea of ClusterDE is to generate real-data-based synthetic null data with only one cell type, as contrast to the real data, for evaluating the whole procedure of clustering followed by a DE test. <span style="color:blue"> **Detailed tutorials that illustrate various functionalities of ClusterDE are available at this [website](https://songdongyuan1994.github.io/ClusterDE/docs/index.html)**</span>. The following illustration figure summarizes the usage of ClusterDE:
+The R package **ClusterDE** is a post-clustering DE method for controlling the false discovery rate (FDR) of identified between cell-type DE genes regardless of clustering quality. The core idea of ClusterDE is to generate real-data-based synthetic null data with only one cell type, as contrast to the real data, for evaluating the whole procedure of clustering followed by a DE test. <span style="color:blue"> **Detailed tutorials that illustrate various functionalities of ClusterDE are available at this [website](https://songdongyuan1994.github.io/ClusterDE/index.html)**</span>. The following illustration figure summarizes the usage of ClusterDE:
 
 <img src="man/figures/ClusterDE_illustration.png" width="600"/>
 
@@ -87,10 +87,10 @@ The output of `callDE` is a list of target FDR, DE genes, and the detailed summa
 
 ## Tutorials<a name="tutorials"></a>
 
-For all detailed tutorials, please check the [website](https://songdongyuan1994.github.io/ClusterDE/docs/index.html). The tutorials will demonstrate the applications of **ClusterDE** in two cases: a cell line dataset (no cell type exists) and a PBMC dataset.
+For all detailed tutorials, please check the [website](https://songdongyuan1994.github.io/ClusterDE/index.html). The tutorials will demonstrate the applications of **ClusterDE** in two cases: a cell line dataset (no cell type exists) and a PBMC dataset.
 
--   [Perform ClusterDE on a cell line dataset](https://songdongyuan1994.github.io/ClusterDE/docs/articles/ClusterDE-cellline.html)
--   [Perform ClusterDE on a PBMC dataset](https://songdongyuan1994.github.io/ClusterDE/docs/articles/ClusterDE-PBMC.html)
+-   [Perform ClusterDE on a cell line dataset](https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-cellline.html)
+-   [Perform ClusterDE on a PBMC dataset](https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-PBMC.html)
 
 
 ## Contact<a name="contact"></a>
