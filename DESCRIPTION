@@ -22,7 +22,8 @@ Imports: scDesign3,
          Matrix,
          mvnfast,
          matrixStats,
-         methods
+         methods,
+         pbmcapply
 Suggests: parallel,
           ggplot2,
           knitr,

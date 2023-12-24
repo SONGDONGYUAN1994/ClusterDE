@@ -31,8 +31,12 @@ constructNull <- function(mat,
                           nCores = 1,
                           parallelization = "pbmcmapply",
                           fastVersion = FALSE,
-                          corrCut = 0.2,
+                          corrCut = 0.1,
                           BPPARAM = NULL) {
+  if(is.null(rownames(mat))|is.null(colnames(mat))) {
+    stop("The matrix must have both row names and col names!")
+  }
+
   isSparse <- methods::is(mat, "sparseMatrix")
 
   if(!fastVersion) {
@@ -70,6 +74,7 @@ constructNull <- function(mat,
       filtered_gene <- NULL
     }else{
       filtered_gene <- names(which(qc))
+      message(paste0(length(which(qc)), " genes have no more than 2 non-zero values; ignore fitting and return all 0s."))
     }
 
     mat_filtered <- mat[!qc, ]
@@ -81,12 +86,14 @@ constructNull <- function(mat,
     para_feature <- rownames(mat_filtered)
 
     mat_corr <- t(mat_filtered[important_feature, ])
+    corr_prop <- round(length(important_feature)/n_gene, 3)
+    message(paste0(corr_prop*100, "% of genes are used in correlation modelling."))
 
     if(family == "nb") {
-      para <- parallel::mclapply(X = seq_len(dim(mat_filtered)[1]),
+      para <- pbmcapply::pbmclapply(X = seq_len(dim(mat_filtered)[1]),
                                  FUN = function(x) {
                                    tryCatch({
-                                     res <- fitdistrplus::fitdist(mat_filtered[x, ], "nbinom", method = "mle")$estimate
+                                     res <- fitdistrplus::fitdist(mat_filtered[x, ], "nbinom", method = "mle", lower = c(0, 0))$estimate
                                      res},
                                      error = function(cond) {
                                        message(paste0(x, "is problematic with NB MLE; using Poisson MME instead."))
@@ -99,6 +106,12 @@ constructNull <- function(mat,
                                  mc.cores = nCores)
       para <- t(simplify2array(para))
       rownames(para) <- para_feature
+
+      if(sum(is.na(para[, 2])) > 0) {
+        warning("NA produces in mean estimate; using 0 instead.")
+        para[, 2][is.na(para[, 2])] <- 0
+      }
+
     } else if (family == "poisson") {
       para <- parallel::mclapply(X = seq_len(dim(mat_filtered)[1]),
                                  FUN = function(x) {
@@ -116,12 +129,17 @@ constructNull <- function(mat,
                                  mc.cores = nCores)
       para <- simplify2array(para)
       names(para) <- para_feature
+      if(sum(is.na(para)) > 0) {
+        warning("NA produces in mean estimate; using 0 instead.")
+        para[is.na(para)] <- 0
+      }
+
     } else {
       stop("FastVersion only supports NB and Poisson.")
     }
 
-
     p_obs <- rvinecopulib::pseudo_obs(mat_corr)
+
     normal_obs <- stats::qnorm(p_obs)
 
     corrlation <- function(x) {
@@ -176,6 +194,8 @@ constructNull <- function(mat,
     rownames(important_mat) <- important_feature
 
     newMat[important_feature, ] <- important_mat
+    newMat[is.na(newMat)] <- 0
+
     if(isSparse){
       newMat <- Matrix::Matrix(newMat, sparse = TRUE)
     }

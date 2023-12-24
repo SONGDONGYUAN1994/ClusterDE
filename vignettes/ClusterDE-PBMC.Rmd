@@ -128,7 +128,7 @@ names(original_pval) <- rownames(original_markers)
 null_pval <- null_markers$p_val
 names(null_pval) <- rownames(null_markers)
 
-res <- ClusterDE::callDE(original_pval, null_pval, nlogTrans = TRUE)
+res <- ClusterDE::callDE(original_pval, null_pval, nlogTrans = TRUE, FDR = 0.05)
 ```
 
 You can check the summary table. The genes are ranked by "contrast score (cs)".
