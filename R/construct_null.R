@@ -96,7 +96,7 @@ constructNull <- function(mat,
                                      res <- fitdistrplus::fitdist(mat_filtered[x, ], "nbinom", method = "mle", lower = c(0, 0))$estimate
                                      res},
                                      error = function(cond) {
-                                       message(paste0(x, "is problematic with NB MLE; using Poisson MME instead."))
+                                       message(paste0(x, " is problematic with NB MLE; using Poisson MME instead."))
                                        fit_para <- fitdistrplus::fitdist(mat_filtered[x, ], "pois", method = "mme")$estimate
                                        res <- c(NA, fit_para)
                                        names(res) <- c("size", "mu")
