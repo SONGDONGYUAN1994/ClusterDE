@@ -79,7 +79,7 @@ constructNull <- function(mat,
 
     mat_filtered <- mat[!qc, ]
 
-    important_feature <- names(which(matrixStats::rowMeans2(mat_filtered!=0) > corrCut))
+    important_feature <- names(which(rowMeans(mat_filtered!=0) > corrCut))
 
     unimportant_feature <- setdiff(gene_names, union(important_feature, filtered_gene))
 
@@ -93,7 +93,7 @@ constructNull <- function(mat,
       para <- pbmcapply::pbmclapply(X = seq_len(dim(mat_filtered)[1]),
                                  FUN = function(x) {
                                    tryCatch({
-                                     res <- fitdistrplus::fitdist(mat_filtered[x, ], "nbinom", method = "mle", lower = c(0, 0))$estimate
+                                     res <- suppressWarnings(fitdistrplus::fitdist(mat_filtered[x, ], "nbinom", method = "mle")$estimate)
                                      res},
                                      error = function(cond) {
                                        message(paste0(x, " is problematic with NB MLE; using Poisson MME instead."))
