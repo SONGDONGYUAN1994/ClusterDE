@@ -10,6 +10,7 @@
 #' @param FDR A numeric value of the target False Discovery Rate (FDR). Default is 0.05.
 #' @param correct A logical value. If TRUE, perform the correction to make the distribution of contrast scores approximately symmetric. Default is FALSE.
 #' @param threshold A string value of the threshold method. Must be 'BC' or 'DS'.
+#' @param ordering A logic value. If TRUE, order the genes in the returned table by their significance. Default is TRUE.
 #'
 #' @return A list of target FDR, DE genes, and the detailed summary table.
 #'
@@ -25,7 +26,8 @@ callDE <- function(targetScores,
                    nlogTrans = TRUE,
                    FDR = 0.05,
                    correct = FALSE,
-                   threshold = "BC") {
+                   threshold = "BC",
+                   ordering = TRUE) {
   value <- null <- target <- cs <- NULL
 
   if(is.null(names(targetScores))|is.null(names(nullScores))) {
@@ -51,7 +53,9 @@ callDE <- function(targetScores,
   }
 
   tbl_merge <- dplyr::mutate(tbl_merge, q = cs2q(contrastScore = tbl_merge$cs, threshold = threshold))
-  tbl_merge <- dplyr::arrange(tbl_merge, dplyr::desc(cs))
+  if(ordering) {
+    tbl_merge <- dplyr::arrange(tbl_merge, dplyr::desc(cs))
+  }
 
   DEgenes <- as.vector(dplyr::filter(tbl_merge, q <= FDR)$Gene)
   return(list(targetFDR = FDR, DEgenes = DEgenes, summaryTable = tbl_merge))
