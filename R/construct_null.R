@@ -55,7 +55,7 @@ constructNull <- function(mat,
                                     nonzerovar = FALSE,
                                     n_cores = nCores,
                                     parallelization = parallelization,
-                                    important_feature = "auto",
+                                    important_feature = corrCut,
                                     nonnegative = FALSE,
                                     copula = "gaussian",
                                     fastmvn = FALSE)
@@ -142,13 +142,13 @@ constructNull <- function(mat,
 
     normal_obs <- stats::qnorm(p_obs)
 
-    corrlation <- function(x) {
-      mat <- t(x) - matrixStats::colMeans2(x)
-      mat <- mat / sqrt(matrixStats::rowSums2(mat^2))
-      tcrossprod(mat)
-    }
+    # corrlation <- function(x) {
+    #   mat <- t(x) - matrixStats::colMeans2(x)
+    #   mat <- mat / sqrt(matrixStats::rowSums2(mat^2))
+    #   tcrossprod(mat)
+    # }
 
-    corr_mat <- corrlation(normal_obs)
+    corr_mat <- coop::pcor(normal_obs)
     diag(corr_mat) <- diag(corr_mat) + tol
     new_mvn <- mvnfast::rmvn(n_cell,
                   mu = rep(0, dim(corr_mat)[1]),

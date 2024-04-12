@@ -10,7 +10,7 @@ constructNull(
   nCores = 1,
   parallelization = "pbmcmapply",
   fastVersion = FALSE,
-  corrCut = 0.2,
+  corrCut = 0.1,
   BPPARAM = NULL
 )
 }
