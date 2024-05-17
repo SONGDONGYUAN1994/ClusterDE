@@ -36,7 +36,7 @@ constructNull <- function(mat,
                           nCores = 1,
                           parallelization = "pbmcmapply",
                           fastVersion = FALSE,
-                          corrCut = 0.1,
+                          corrCut = 0.9,
                           BPPARAM = NULL) {
   if(is.null(rownames(mat))|is.null(colnames(mat))) {
     stop("The matrix must have both row names and col names!")
@@ -76,7 +76,7 @@ constructNull <- function(mat,
                                       spatial = NULL,
                                       other_covariates = colnames(extraInfo),
                                       empirical_quantile = FALSE,
-                                      mu_formula = "1",
+                                      mu_formula = formula,
                                       sigma_formula = "1",
                                       corr_formula = "1",
                                       family_use = family,
