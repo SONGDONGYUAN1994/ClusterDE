@@ -8,6 +8,10 @@ The R package **ClusterDE** is a post-clustering DE method for controlling the f
 
 Instead of a new pipeline, ClusterDE actually works as an add-on to popular pipelines such as Seurat. To find out more details about **ClusterDE**, you can check out our manuscript on [bioRxiv](https://www.biorxiv.org/content/10.1101/2023.07.21.550107v1).
 
+## Changelog
+-   2024-06-29 Important changes
+    - Add functions for spatial clustering
+
 **The motivation and application of ClusterDE**: 
 In Seurat function `findMarkers`, the authors pointed out: *"p-values should be interpreted cautiously, as the genes used for clustering are the same genes tested for differential expression."* This is the "double-dipping" issue. If your clustering results are inaccurate and since the clustering has used your expression data already, the discovered DE genes may not represent the discrete cell type separation, but other variation in your data (e.g., cell cycle, total UMI, or other variation you are not clear. These are still biological variation but do not define discrete status).
 
@@ -38,8 +42,10 @@ The following code is a quick example of how to generate the synthetic null data
 data(exampleCounts)
 nullData <- constructNull(mat = exampleCounts,
                           family = "nb",
+                          formula = NULL,
+                          extraInfo = NULL,
                           nCores = 1,
-                          parallelization = "pbmcmapply",
+                          parallelization = "mcmapply",
                           fastVersion = FALSE,
                           corrCut = 0.2,
                           BPPARAM = NULL)
@@ -49,7 +55,9 @@ The parameters of `constructNull()` are:
 
 - `mat`: The input gene by cell matrix. It can be a sparse matrix.
 - `family`: A string of the distribution you want to use when fitting the model. Must be one of 'poisson', 'nb', 'zip', 'zinb' or 'gaussian'.
-- `nCores`: An integer. The number of cores to use. Increasing the cores will greatly speed up the computaion.
+- `formula`: A string of the mu parameter formula. It defines the relationship between gene expression in synthetic null data and the extra covariates. Default is NULL (cell type case). For example, if your input data is a spatial data with X, Y coordinates, the formula can be 's(X, Y, bs = 'gp', k = 4)'.
+- `extraInfo`: A data frame of the extra covariates used in \code{formula}. For example, the 2D spatial coordinates. Default is NULL.
+- `nCores`: An integer. The number of cores to use. Increasing the cores will greatly speed up the computation.
 - `parallelization`: A string indicating the specific parallelization function to use. Must be one of 'mcmapply', 'bpmapply', or 'pbmcmapply', which corresponds to the parallelization function in the package 'parallel', 'BiocParallel', and 'pbmcapply' respectively. The default value is 'pbmcmapply'.
 - `fastVersion`: A logic value. If TRUE, the fast approximation is used.
 - `corrCut`: A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation. The reason is that lowly expressed genes are hard to calculate correlation.
@@ -91,7 +99,8 @@ For all detailed tutorials, please check the [website](https://songdongyuan1994.
 
 -   [Perform ClusterDE on a cell line dataset](https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-cellline.html)
 -   [Perform ClusterDE on a PBMC dataset](https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-PBMC.html)
-
+-   [Perform ClusterDE on a single-domain spatial transcriptomics dataset](https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-onedomain.html)
+-   [Perform ClusterDE on a two-domains spatial transcriptomics dataset](https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-twodomains.html)
 
 ## Contact<a name="contact"></a>
 

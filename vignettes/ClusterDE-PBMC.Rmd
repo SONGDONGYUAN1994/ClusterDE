@@ -58,7 +58,8 @@ We perform the default Seurat clustering. Note that in real data analysis, the c
 ```{r, fig.width=12, fig.height=6}
 RNGkind("L'Ecuyer-CMRG")
 set.seed(123)
-pbmc <- NormalizeData(object = pbmc)
+pbmc <- UpdateSeuratObject(pbmc) ## Avoid errors
+pbmc <- NormalizeData(pbmc)
 pbmc <- FindVariableFeatures(object = pbmc)
 pbmc <- ScaleData(object = pbmc)
 pbmc <- RunPCA(object = pbmc)
@@ -93,7 +94,7 @@ We first generate the synthetic null data based on the target data (real subset 
 ```{r}
 count_mat <- GetAssayData(object = pbmc_sub, slot = "counts")
 set.seed(1234)
-system.time(synthetic_null <- ClusterDE::constructNull(count_mat, nCores = 1, fastVersion = TRUE))
+system.time(synthetic_null <- ClusterDE::constructNull(count_mat, nCores = 2, fastVersion = TRUE))
 ```
 
 We perform the same pipeline as we did for target data. Please note we need two clusters here, too. This is straightforward for clustering method with predefined cluster numbers, e.g., K-means. For louvain clustering used in Seurat you may manually adjust the resolution parameter so that we still get two clusters.

@@ -10,24 +10,24 @@ constructNull(
   formula = NULL,
   extraInfo = NULL,
   nCores = 1,
-  parallelization = "pbmcmapply",
+  parallelization = "mcmapply",
   fastVersion = FALSE,
-  corrCut = 0.1,
+  corrCut = 0.9,
   BPPARAM = NULL
 )
 }
 \arguments{
-\item{mat}{An expression matrix (gene by cell). It can be a regular matrix or a \code{sparseMatrix}.}
+\item{mat}{An expression matrix (gene by cell). It can be a regular dense matrix or a \code{sparseMatrix}.}
 
 \item{family}{A string or a vector of strings of the distribution of your data.
 Must be one of 'nb', 'binomial', 'poisson', 'zip', 'zinb' or 'gaussian', which represent 'poisson distribution',
 'negative binomial distribution', 'zero-inflated poisson distribution', 'zero-inflated negative binomail distribution',
 and 'gaussian distribution' respectively. For UMI-counts data, we usually use 'nb'. Default is 'nb'.}
 
-\item{formula}{A string of the mu parameter formula. It defines the relationship between gene expression in synthetic null data and the extra covariates. Default is NULL.
+\item{formula}{A string of the mu parameter formula. It defines the relationship between gene expression in synthetic null data and the extra covariates. Default is NULL (cell type case).
 For example, if your input data is a spatial data with X, Y coordinates, the formula can be 's(X, Y, bs = 'gp', k = 4)'.}
 
-\item{extraInfo}{A data frame of the extra covariates used in \code{formula}. Default is NULL.}
+\item{extraInfo}{A data frame of the extra covariates used in \code{formula}. For example, the 2D spatial coordinates. Default is NULL.}
 
 \item{nCores}{An integer. The number of cores to use for Parallel processing.}
 

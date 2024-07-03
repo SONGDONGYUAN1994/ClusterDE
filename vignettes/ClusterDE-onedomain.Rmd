@@ -1,0 +1,243 @@
+---
+title: "Perform ClusterDE on a single-domain spatial dataset"
+author: 
+  - name: Siqi Chen
+    affiliation:
+    - Computer Science, Central South University
+    email: siqichen4477@gmail.com
+  - name: Dongyuan Song
+    affiliation:
+    - Bioinformatics IDP, University of California, Los Angeles
+    email: dongyuansong@ucla.edu
+output: 
+  BiocStyle::html_document:
+    self_contained: yes
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    code_folding: show
+date: "`r doc_date()`"
+package: "`r pkg_ver('ClusterDE')`"
+vignette: >
+  %\VignetteIndexEntry{ClusterDE-onedomain_vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+tools::R_user_dir("ClusterDE", which="cache")
+```
+
+```{r setup, message=FALSE, warning=FALSE, results='hide'}
+#tools::R_user_dir("ClusterDE", which="cache")
+library(Seurat)
+library(SingleCellExperiment)
+library(spatialLIBD)
+library(ggplot2)
+library(ClusterDE)
+library(BayesSpace)
+library(dplyr)
+library(scales)
+```
+
+# Download data
+
+We selected layer 5 of 151673 slice from the LIBD Human Dorsolateral Prefrontal Cortex (DLPFC) dataset, which is downloaded in the spatialLIBD R package. Since the data contains only one domain, there should not have between domains marker genes.
+```{r}
+## Download the spot-level data
+spe <- fetch_data(type = "spe")
+
+###select the Layer5 in the slice 151673
+sub_151673 <- spe[, spe$sample_id == "151673"]
+index <- sub_151673$spatialLIBD == "L5"
+index[which(is.na(index))]="NAN"
+sub_151673 <- sub_151673[, index=="TRUE"]
+print(sub_151673)
+
+#delete the genes that express rate less than 20%
+data <- sub_151673@assays@data$counts
+zero_expre_rate <- apply(data,1,function(x){
+  zero_true<-x==0
+  zero_num<-length(which(zero_true==TRUE))/dim(data)[2]
+  return(zero_num)
+})
+zero_expre_gene_idx <- which(zero_expre_rate<0.8)
+print(paste0("the number of gene with zero expression rate: ",sum(zero_expre_rate==1),sep=""))
+sub_151673 <- sub_151673[zero_expre_gene_idx,]
+print(paste0("the size of data: ",dim(sub_151673)[1],"*",dim(sub_151673)[2],sep=""))
+
+###construct the SingleCellExperiment object
+real_sce <- SingleCellExperiment(list(counts=sub_151673@assays@data$counts))
+###add colData information of singlecellexperiment
+real_sce$spatial1 <- sub_151673@int_colData@listData$spatialCoords[,2]
+real_sce$spatial2 <- sub_151673@int_colData@listData$spatialCoords[,1]
+real_sce$cell_type <- sub_151673@colData$spatialLIBD
+###visualize the real spatial domains
+real_sce_domains <- data.frame(Xaxis=real_sce$spatial1,Yaxis=real_sce$spatial2,Domain=real_sce$cell_type)
+ggplot(real_sce_domains, aes(x = Xaxis, y = Yaxis, col =Domain)) + geom_point(size=1.0) +
+  ggtitle("Manual annotation \n (The layer5 in the slice 151673)") + 
+  theme(plot.title = element_text(size=10,hjust=0.5),
+        panel.grid=element_blank(),
+        panel.background = element_rect(fill = "gray90"),
+        panel.border = element_rect(color = "black", fill = NA, size = 0.6),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank()) + scale_color_manual(values = c("#5791cc"))
+```
+
+Visualize the real data.
+
+# Run the BayesSpace + Seurat pipeline
+
+Firstly, we employed the BayesSpace for spatial clustering. Please note that ClusterDE is designed for 1 vs 1 comparison; therefore, we obtain two spatial clusters for illustration purpose.
+
+```{r}
+###construct the input of BayesSpace based on real dataset
+#the input of BayesSpace is sce object
+real_sce_clu <- SingleCellExperiment(list(counts=real_sce@assays@data$counts))
+# add colData information of singlecellexperiment
+real_sce_clu$row <- real_sce$spatial1
+real_sce_clu$col <- real_sce$spatial2
+## log-normalize the count data
+set.seed(102)
+real_sce_clu <- spatialPreprocess(real_sce_clu, platform="ST", n.PCs=7,log.normalize=TRUE)
+#clustering with BayesSpace
+set.seed(149)
+real_sce_clu <- spatialCluster(real_sce_clu, q=2, platform="ST", d=7,
+                               init.method="mclust", model="t", gamma=2,
+                               nrep=1000, burn.in=100,
+                               save.chain=TRUE)
+#visualize the spatial cluster
+real_sce_spatial_clu <- data.frame(Xaxis=real_sce_clu$row,Yaxis=real_sce_clu$col,Clusters=as.character(real_sce_clu$spatial.cluster))
+ggplot(real_sce_spatial_clu, aes(x = Xaxis, y = Yaxis, col =Clusters)) + geom_point(size=1.0) +
+  ggtitle("Real data \n (spatial clusters detected by BayesSpace)") + 
+  theme(plot.title = element_text(size=10,hjust=0.5),
+        panel.grid = element_blank(),
+        panel.background = element_rect(fill = "gray90"),
+        panel.border = element_rect(color = "black", fill = NA, size = 0.6),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank()) + scale_color_manual(values = c("#e87d72","#54bcc2"))
+```
+
+Visualize the spatial clustering results based on the real data
+
+Then, we used the common DE  method (Wilcoxon Rank Sum Test) to identify domain marker genes between the two spatial clusters.
+
+```{r}
+#Identify domain marker genes in the real dataset based on the BayesSpace clustering result, follow Seurat tutorial
+#create Seurat object
+real_count_dataset <- real_sce@assays@data$counts
+real_seurat <- CreateSeuratObject(counts = real_count_dataset, project = "real_seurat", min.cells = 0, min.features = 0)
+real_seurat[["percent.mt"]] <- PercentageFeatureSet(real_seurat, pattern = "^MT-")
+real_seurat <- NormalizeData(real_seurat, normalization.method = "LogNormalize", scale.factor = 10000)
+real_seurat <- ScaleData(real_seurat, features = rownames(real_seurat))
+real_ct <-real_sce_clu$spatial.cluster
+names(real_ct) <- colnames(real_sce)
+real_seurat[["cell_type"]] <- real_ct
+Idents(real_seurat) <- "cell_type"
+#Then we follow seurat tutorial to conduct DE analysis
+real_markers <- FindMarkers(object = real_seurat, ident.1 = unique(real_ct)[1], ident.2 =  unique(real_ct)[2], test.use = "wilcox", logfc.threshold = 0, min.pct = 0, min.cells.feature = 1, min.cells.group = 1)
+real_pvals <- real_markers[rownames(real_seurat),"p_val"]
+names(real_pvals) <- rownames(real_seurat)
+```
+
+# Generate synthetic null data
+
+We first generate the synthetic null data based on the target data (real data). You can increase the number of cores to speed it up using the parameter "nCores".
+
+```{r}
+###generate synthetic null data
+count_mat <- real_sce@assays@data$counts
+location_mat <- data.frame(X=real_sce$spatial1,Y=real_sce$spatial2)
+system.time(null_onedomain_dataset <- ClusterDE::constructNull(mat=count_mat,
+                                                   family = "nb",
+                                                   extraInfo=location_mat,
+                                                   formula = "s(X, Y, bs = 'gp', k= 4)",
+                                                   nCores = 2))
+```
+
+We perform the same pipeline as we did for target data. Please note we need two spatial clusters here, too.
+```{r}
+###construct the input of BayesSpace based on null dataset######
+null_sce <- SingleCellExperiment(list(counts =null_onedomain_dataset))
+# add colData information of singlecellexperiment
+null_sce$row <- real_sce$spatial1
+null_sce$col <- real_sce$spatial2
+## log-normalize the count data
+set.seed(102)
+null_sce<- spatialPreprocess(null_sce, platform="ST", n.PCs=7,log.normalize=TRUE)
+#clustering with BayesSpace
+set.seed(149)
+null_sce <- spatialCluster(null_sce, q=2, platform="ST", d=7,
+                           init.method="mclust", model="t", gamma=2,
+                           nrep=1000, burn.in=100,
+                           save.chain=TRUE)
+#visualize the spatial cluster
+null_spatial_clu=data.frame(Xaxis=null_sce$row,Yaxis=null_sce$col,Clusters=as.character(null_sce$spatial.cluster))
+ggplot(null_spatial_clu, aes(x = Xaxis, y = Yaxis, col =Clusters))  + geom_point(size=1.0) +
+  ggtitle("Synthetic null data \n (spatial clusters detected by BayesSpace)") + 
+  theme(plot.title = element_text(size=10,hjust=0.5),
+        panel.grid=element_blank(),
+        panel.background = element_rect(fill = "gray90"),
+        panel.border = element_rect(color = "black", fill = NA, size = 0.6),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank()) + scale_color_manual(values = c("#e87d72","#54bcc2"))
+```
+
+Visualize the spatial clustering results based on the synthetic null data.
+
+Perform the common DE  method (Wilcoxon Rank Sum Test) on synthetic null data
+
+```{r}
+#Identify domain marker genes in the synthetic null dataset based on the BayesSpace clustering result, follow Seurat tutorial
+#create Seurat object
+null_count_dataset= null_onedomain_dataset
+null_seurat <- CreateSeuratObject(counts = null_count_dataset, project = "null_seurat", min.cells = 0, min.features = 0)
+null_seurat[["percent.mt"]] <- PercentageFeatureSet(null_seurat, pattern = "^MT-")
+null_seurat <- NormalizeData(null_seurat, normalization.method = "LogNormalize", scale.factor = 10000)
+null_seurat <- ScaleData(null_seurat, features = rownames(null_seurat))
+null_ct <- null_sce$spatial.cluster
+names(null_ct) <- colnames(null_sce)
+null_seurat[["cell_type"]] <- null_ct
+Idents(null_seurat) <- "cell_type"
+#Then we follow seurat tutorial to conduct DE analysis
+null_markers <- FindMarkers(object = null_seurat, ident.1 = unique(null_ct)[1], ident.2 =  unique(null_ct)[2], test.use = "wilcox",logfc.threshold = 0, min.pct = 0, min.cells.feature = 1, min.cells.group = 1)
+null_pvals <- null_markers[rownames(null_seurat),"p_val"]
+names(null_pvals) <- rownames(null_seurat)
+```
+
+We extract the p-values from both target data and synthetic null data, then use `ClusterDE` to "compare" them. We do not discover any DE genes.
+
+```{r}
+##run clusterDE to find real marker genes
+###you can set the value of FDR, the default value is 0.05
+res <- ClusterDE::callDE(real_pvals, null_pvals, nlogTrans = TRUE)
+print(paste0("The number of domain marker genes is: ",length(res$DEgenes),sep=""))
+```
+
+We can also visualize the distribution of contrast scores (diff between the -log p-values from real and null). It is roughly symmetric around 0.
+
+```{r}
+ggplot(data = res$summaryTable, aes(x = cs)) + geom_histogram(fill = "white", color = "black") + theme_bw() + ggtitle("Distribution of constrast scores")
+```
+
+# Session information
+
+```{r}
+sessionInfo()
+```

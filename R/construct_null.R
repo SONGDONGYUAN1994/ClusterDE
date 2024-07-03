@@ -4,14 +4,14 @@
 #'
 #' This function constructs the synthetic null data based on the target data (real data). The input is a expression matrix (gene by cell); the user should specify a distribution, which is usually Negative Binomial for count matrix.
 #'
-#' @param mat An expression matrix (gene by cell). It can be a regular matrix or a \code{sparseMatrix}.
+#' @param mat An expression matrix (gene by cell). It can be a regular dense matrix or a \code{sparseMatrix}.
 #' @param family A string or a vector of strings of the distribution of your data.
 #' Must be one of 'nb', 'binomial', 'poisson', 'zip', 'zinb' or 'gaussian', which represent 'poisson distribution',
 #' 'negative binomial distribution', 'zero-inflated poisson distribution', 'zero-inflated negative binomail distribution',
 #' and 'gaussian distribution' respectively. For UMI-counts data, we usually use 'nb'. Default is 'nb'.
-#' @param formula A string of the mu parameter formula. It defines the relationship between gene expression in synthetic null data and the extra covariates. Default is NULL.
+#' @param formula A string of the mu parameter formula. It defines the relationship between gene expression in synthetic null data and the extra covariates. Default is NULL (cell type case).
 #' For example, if your input data is a spatial data with X, Y coordinates, the formula can be 's(X, Y, bs = 'gp', k = 4)'.
-#' @param extraInfo A data frame of the extra covariates used in \code{formula}. Default is NULL.
+#' @param extraInfo A data frame of the extra covariates used in \code{formula}. For example, the 2D spatial coordinates. Default is NULL.
 #' @param nCores An integer. The number of cores to use for Parallel processing.
 #' @param parallelization A string indicating the specific parallelization function to use.
 #' Must be one of 'mcmapply', 'bpmapply', or 'pbmcmapply', which corresponds to the parallelization function in the package
@@ -34,9 +34,9 @@ constructNull <- function(mat,
                           formula = NULL,
                           extraInfo = NULL,
                           nCores = 1,
-                          parallelization = "pbmcmapply",
+                          parallelization = "mcmapply",
                           fastVersion = FALSE,
-                          corrCut = 0.9,
+                          corrCut = 0.1,
                           BPPARAM = NULL) {
   if(is.null(rownames(mat))|is.null(colnames(mat))) {
     stop("The matrix must have both row names and col names!")
@@ -119,7 +119,7 @@ constructNull <- function(mat,
     message(paste0(corr_prop*100, "% of genes are used in correlation modelling."))
 
     if(family == "nb") {
-      para <- pbmcapply::pbmclapply(X = seq_len(dim(mat_filtered)[1]),
+      para <- parallel::mclapply(X = seq_len(dim(mat_filtered)[1]),
                                  FUN = function(x) {
                                    tryCatch({
                                      res <- suppressWarnings(fitdistrplus::fitdist(mat_filtered[x, ], "nbinom", method = "mle")$estimate)
