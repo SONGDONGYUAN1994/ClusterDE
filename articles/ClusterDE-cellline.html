@@ -8,10 +8,10 @@
 <meta name="description" content="ClusterDE">
 <title>Perform ClusterDE on a cell line dataset • ClusterDE</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Perform ClusterDE on a cell line dataset">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Perform ClusterDE on a cell line dataset">
 <meta property="og:description" content="ClusterDE">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -22,11 +22,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">ClusterDE</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,8 +41,10 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/ClusterDE-PBMC.html">Perform ClusterDE on a PBMC dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-cellline.html">Perform ClusterDE on a cell line dataset</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-onedomain.html">Perform ClusterDE on a single-domain spatial dataset</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-PBMC.html">Perform ClusterDE on a PBMC dataset</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-twodomains.html">Perform ClusterDE on a two-domain spatial dataset</a>
   </div>
 </li>
       </ul>
@@ -77,7 +79,7 @@ Song</h4>
 Angeles<br><a class="author_email" href="mailto:#"></a><a href="mailto:dongyuansong@ucla.edu" class="email">dongyuansong@ucla.edu</a>
       </address>
                   
-            <h4 data-toc-skip class="date">18 October 2023</h4>
+            <h4 data-toc-skip class="date">3 July 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SONGDONGYUAN1994/ClusterDE/blob/HEAD/vignettes/ClusterDE-cellline.Rmd" class="external-link"><code>vignettes/ClusterDE-cellline.Rmd</code></a></small>
       <div class="d-none name"><code>ClusterDE-cellline.Rmd</code></div>
@@ -99,18 +101,16 @@ Angeles<br><a class="author_email" href="mailto:#"></a><a href="mailto:dongyuans
 Methods 2019</a> as the gold standard for benchmarking the accuracy of
 clustering. Since the data is from the pure cell line, it should not
 have cell types, and, of course, between cell type DE genes.
-<strong>Note</strong>: it does not mean that within one cell line there
-is no variation; of course there are, e.g., cell cycle, total UMI, etc.
-However, these variations do not represent <strong>discrete cell
+<strong>Note</strong>: it does not mean that there are no variations
+within one cell line; of course there are, e.g., cell cycle, total UMI,
+etc. However, these variations do not represent <strong>discrete cell
 groups</strong> and essentially it means you should not using your
 obtained clusters to explain the variation.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html" class="external-link">url</a></span><span class="op">(</span><span class="st">"https://figshare.com/ndownloader/files/41395260"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/as.Seurat.html" class="external-link">as.Seurat</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Keys should be one or more alphanumeric characters followed by an</span></span>
-<span><span class="co">#&gt; underscore, setting key from PC to PC_</span></span>
-<span><span class="co">#&gt; Warning: All keys should be one or more alphanumeric characters followed by an</span></span>
-<span><span class="co">#&gt; underscore '_', setting key to PC_</span></span></code></pre></div>
+<span><span class="co">#&gt; underscore, setting key from PC to PC_</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="run-the-regular-seurat-pipeline">Run the regular Seurat pipeline<a class="anchor" aria-label="anchor" href="#run-the-regular-seurat-pipeline"></a>
@@ -121,11 +121,29 @@ is designed for 1 vs 1 comparison; therefore, we set the resolution as
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">RNGkind</a></span><span class="op">(</span><span class="st">"L'Ecuyer-CMRG"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/NormalizeData.html" class="external-link">NormalizeData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span><span class="op">)</span></span>
+<span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/UpdateSeuratObject.html" class="external-link">UpdateSeuratObject</a></span><span class="op">(</span><span class="va">cellline</span><span class="op">)</span> <span class="co">## Avoid errors</span></span>
+<span><span class="co">#&gt; Validating object structure</span></span>
+<span><span class="co">#&gt; Updating object slots</span></span>
+<span><span class="co">#&gt; Ensuring keys are in the proper structure</span></span>
+<span><span class="co">#&gt; Updating matrix keys for DimReduc 'PCA'</span></span>
+<span><span class="co">#&gt; Updating matrix keys for DimReduc 'UMAP'</span></span>
+<span><span class="co">#&gt; Ensuring keys are in the proper structure</span></span>
+<span><span class="co">#&gt; Ensuring feature names don't have underscores or pipes</span></span>
+<span><span class="co">#&gt; Updating slots in originalexp</span></span>
+<span><span class="co">#&gt; Updating slots in PCA</span></span>
+<span><span class="co">#&gt; Updating slots in UMAP</span></span>
+<span><span class="co">#&gt; Setting UMAP DimReduc to global</span></span>
+<span><span class="co">#&gt; Validating object structure for Assay 'originalexp'</span></span>
+<span><span class="co">#&gt; Validating object structure for DimReduc 'PCA'</span></span>
+<span><span class="co">#&gt; Validating object structure for DimReduc 'UMAP'</span></span>
+<span><span class="co">#&gt; Object representation is consistent with the most current Seurat version</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/NormalizeData.html" class="external-link">NormalizeData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span><span class="op">)</span></span>
 <span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindVariableFeatures.html" class="external-link">FindVariableFeatures</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span><span class="op">)</span></span>
 <span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/ScaleData.html" class="external-link">ScaleData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Centering and scaling data matrix</span></span>
-<span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Centering and scaling data matrix</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span><span class="op">)</span></span>
 <span><span class="co">#&gt; PC_ 1 </span></span>
 <span><span class="co">#&gt; Positive:  RPS14, RPL18AP3, RPL36, RPS23, RPL28, LRRC75A-AS1, AC079250.1, FTH1, ZFAS1, EEF2 </span></span>
 <span><span class="co">#&gt;     RPL7P9, RPL13A, RPS3AP26, EEF1A1P13, RPS16, RPS23P8, RPL13AP5, RPL29, FTH1P10, RPL13AP25 </span></span>
@@ -161,12 +179,13 @@ is designed for 1 vs 1 comparison; therefore, we set the resolution as
 <span><span class="co">#&gt; Negative:  BTG1, PPP1R15A, EIF1, JUN, CEBPG, H3F3B, TMEM132A, C6orf48, HIST2H4B, SGK1 </span></span>
 <span><span class="co">#&gt;     KPNA4, PMEPA1, KLF6, CDKN1A, WARS, PEA15, GARS, MAP1LC3B, SNHG12, SERTAD1 </span></span>
 <span><span class="co">#&gt;     LAMC2, EPB41L4A-AS1, NAP1L1, SNHG5, KLF10, SLC7A5, KIF5B, ATP2B1, EIF5, ABL2</span></span>
-<span><span class="co">#&gt; Warning: Cannot add objects with duplicate keys (offending key: PC_), setting</span></span>
-<span><span class="co">#&gt; key to 'pca_'</span></span>
-<span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Key 'PC_' taken, using 'pca_' instead</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing nearest neighbor graph</span></span>
-<span><span class="co">#&gt; Computing SNN</span></span>
-<span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindClusters.html" class="external-link">FindClusters</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span>, resolution <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Computing SNN</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindClusters.html" class="external-link">FindClusters</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span>, resolution <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Number of nodes: 758</span></span>
@@ -175,50 +194,51 @@ is designed for 1 vs 1 comparison; therefore, we set the resolution as
 <span><span class="co">#&gt; Running Louvain algorithm...</span></span>
 <span><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8257</span></span>
 <span><span class="co">#&gt; Number of communities: 2</span></span>
-<span><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
-<span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Elapsed time: 0 seconds</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric</span></span>
 <span><span class="co">#&gt; To use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to 'correlation'</span></span>
 <span><span class="co">#&gt; This message will be shown once per session</span></span>
-<span><span class="co">#&gt; 03:44:23 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
-<span><span class="co">#&gt; 03:44:23 Read 758 rows and found 10 numeric columns</span></span>
-<span><span class="co">#&gt; 03:44:23 Using Annoy for neighbor search, n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 03:44:23 Building Annoy index with metric = cosine, n_trees = 50</span></span>
+<span><span class="co">#&gt; 22:28:30 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
+<span><span class="co">#&gt; 22:28:30 Read 758 rows and found 10 numeric columns</span></span>
+<span><span class="co">#&gt; 22:28:30 Using Annoy for neighbor search, n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 22:28:30 Building Annoy index with metric = cosine, n_trees = 50</span></span>
 <span><span class="co">#&gt; 0%   10   20   30   40   50   60   70   80   90   100%</span></span>
 <span><span class="co">#&gt; [----|----|----|----|----|----|----|----|----|----|</span></span>
 <span><span class="co">#&gt; **************************************************|</span></span>
-<span><span class="co">#&gt; 03:44:23 Writing NN index file to temp file /tmp/RtmprW00Mr/file1b0b5705f292</span></span>
-<span><span class="co">#&gt; 03:44:23 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">#&gt; 03:44:23 Annoy recall = 100%</span></span>
-<span><span class="co">#&gt; 03:44:23 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 03:44:25 Initializing from normalized Laplacian + noise (using irlba)</span></span>
-<span><span class="co">#&gt; 03:44:25 Commencing optimization for 500 epochs, with 27914 positive edges</span></span>
-<span><span class="co">#&gt; 03:44:26 Optimization finished</span></span>
-<span><span class="co">#&gt; Warning: Cannot add objects with duplicate keys (offending key: UMAP_), setting</span></span>
-<span><span class="co">#&gt; key to 'umap_'</span></span>
-<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Clustering result"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co">#&gt; 22:28:31 Writing NN index file to temp file /tmp/Rtmp8TZr84/file81f33065be44</span></span>
+<span><span class="co">#&gt; 22:28:31 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">#&gt; 22:28:31 Annoy recall = 100%</span></span>
+<span><span class="co">#&gt; 22:28:31 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 22:28:32 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
+<span><span class="co">#&gt; 22:28:32 Commencing optimization for 500 epochs, with 27914 positive edges</span></span>
+<span><span class="co">#&gt; 22:28:33 Optimization finished</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Clustering result"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ClusterDE-cellline_files/figure-html/unnamed-chunk-3-1.png" width="700">
 From the UMAP, the two clusters seem to be dubious. Although we do not
 expect the existence of cell types, when we perform Seurat DE test
 between the two clusters, and we get &gt; 1000 genes with FDR &lt; 0.05.
 It means that the double dipping introduces a huge number of
 discoveries.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">original_markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindMarkers.html" class="external-link">FindMarkers</a></span><span class="op">(</span><span class="va">cellline</span>, </span>
 <span>                                ident.1 <span class="op">=</span> <span class="fl">0</span>, </span>
 <span>                                ident.2 <span class="op">=</span> <span class="fl">1</span>, </span>
 <span>                                min.pct <span class="op">=</span> <span class="fl">0</span>, </span>
 <span>                                logfc.threshold <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span><span class="co">#&gt; For a more efficient implementation of the Wilcoxon Rank Sum Test,</span></span>
-<span><span class="co">#&gt; (default method for FindMarkers) please install the limma package</span></span>
+<span><span class="co">#&gt; For a (much!) faster implementation of the Wilcoxon Rank Sum Test,</span></span>
+<span><span class="co">#&gt; (default method for FindMarkers) please install the presto package</span></span>
 <span><span class="co">#&gt; --------------------------------------------</span></span>
-<span><span class="co">#&gt; install.packages('BiocManager')</span></span>
-<span><span class="co">#&gt; BiocManager::install('limma')</span></span>
+<span><span class="co">#&gt; install.packages('devtools')</span></span>
+<span><span class="co">#&gt; devtools::install_github('immunogenomics/presto')</span></span>
 <span><span class="co">#&gt; --------------------------------------------</span></span>
-<span><span class="co">#&gt; After installation of limma, Seurat will automatically use the more </span></span>
+<span><span class="co">#&gt; After installation of presto, Seurat will automatically use the more </span></span>
 <span><span class="co">#&gt; efficient implementation (no further action necessary).</span></span>
-<span><span class="co">#&gt; This message will be shown once per session</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">original_markers</span><span class="op">$</span><span class="va">p_val_adj</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; This message will be shown once per session</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">original_markers</span><span class="op">$</span><span class="va">p_val_adj</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1023</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -226,93 +246,110 @@ discoveries.</p>
 </h2>
 <p>We first generate the synthetic null data based on the target data
 (real data). You can increase the number of cores to speed it up.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">count_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AssayData.html" class="external-link">GetAssayData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span>, slot <span class="op">=</span> <span class="st">"counts"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: The `slot` argument of `GetAssayData()` is deprecated as of SeuratObject 5.0.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `layer` argument instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">synthetic_null</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/constructNull.html">constructNull</a></span><span class="op">(</span><span class="va">count_mat</span>, nCores <span class="op">=</span> <span class="fl">2</span>, fastVersion <span class="op">=</span> <span class="cn">TRUE</span>, family <span class="op">=</span> <span class="st">"nb"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 1 genes have no more than 2 non-zero values; ignore fitting and return all 0s.</span></span>
+<span><span class="co">#&gt; 98.5% of genes are used in correlation modelling.</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt; 201.421  42.167 126.998</span></span></code></pre></div>
+<span><span class="co">#&gt; 111.665  63.151  51.617</span></span></code></pre></div>
 <p>We perform the same pipeline as we did for target data. Please note
 we need two clusters here, too. This is straightforward for clustering
 method with predefined cluster numbers, e.g., K-means. For louvain
 clustering used in Seurat you may manually adjust the resolution
 parameter so that we still get two clusters.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">synthetic_null</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/NormalizeData.html" class="external-link">NormalizeData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span><span class="op">)</span></span>
-<span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindVariableFeatures.html" class="external-link">FindVariableFeatures</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span><span class="op">)</span></span>
-<span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/ScaleData.html" class="external-link">ScaleData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Centering and scaling data matrix</span></span>
-<span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Normalizing layer: counts</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindVariableFeatures.html" class="external-link">FindVariableFeatures</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Finding variable features for layer counts</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/ScaleData.html" class="external-link">ScaleData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Centering and scaling data matrix</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span><span class="op">)</span></span>
 <span><span class="co">#&gt; PC_ 1 </span></span>
-<span><span class="co">#&gt; Positive:  PSMB2, PSMC5, PSMA7, XRCC5, SKP1, PSMD8, NUDC, PSME2P2, U2AF1, VPS29 </span></span>
-<span><span class="co">#&gt;     CALM1, MRPL47, MGST1, CLIC1, CNIH4, SSBP1, RBM8A, TAGLN2, RPA3, COX5A </span></span>
-<span><span class="co">#&gt;     PSME2, U2AF1L5, SNRPF, ARPC3, S100A11, PPIA, ATP5PD, MYL12B, RBM8B, ATP5PO </span></span>
-<span><span class="co">#&gt; Negative:  LRRC75A-AS1, RPS14, FTH1, RPL29, RPL28, ZFAS1, RPL13A, FTH1P10, FTH1P7, RPS16 </span></span>
-<span><span class="co">#&gt;     EEF2, SNHG5, RPL13AP5, C1orf56, TMSB10, FTH1P8, MKNK2, STEAP2, TMSB4X, RPL32 </span></span>
-<span><span class="co">#&gt;     ASMTL, RPL13AP25, RPL4, NBPF10, C6orf48, NREP, VCAN, RPL9P9, ANKRD36B, HCFC1R1 </span></span>
+<span><span class="co">#&gt; Positive:  NUCKS1, CALM1, CACYBP, PSMB2, SOD1, NDUFAB1, ATP5PO, XRCC5, VPS29, ATP5PD </span></span>
+<span><span class="co">#&gt;     PSMA7, RPA3, U2AF1, HMGB1, BUB3, RBM8A, NUDC, CNIH4, PSMC5, MRPL47 </span></span>
+<span><span class="co">#&gt;     RANBP1, CCDC34, SRSF7, SLIRP, ATP5MC3, CYC1, SEPT7, MRPL51, NDUFA8, SNRPF </span></span>
+<span><span class="co">#&gt; Negative:  RPL28, RPL13AP25, RPL13AP5, LRRC75A-AS1, RPS11, RPL13A, EEF2, RPS16, ZFAS1, RPL7P9 </span></span>
+<span><span class="co">#&gt;     EEF1A1P13, RPL10P16, RPL10, RPS3AP6, RPL7AP6, RPL9P9, RPS4XP11, RPL13AP7, RPS5, SNHG5 </span></span>
+<span><span class="co">#&gt;     RPL10P9, FTH1, TMSB4X, RPL4, RPS23P8, RPS3, RPS15, EPB41L4A-AS1, UGCG, FTH1P8 </span></span>
 <span><span class="co">#&gt; PC_ 2 </span></span>
-<span><span class="co">#&gt; Positive:  SIVA1, RPL39L, CENPK, TMPO, HNRNPAB, DEK, ASF1B, H2AFV, CENPX, SNRNP25 </span></span>
-<span><span class="co">#&gt;     CKLF, TMEM106C, CHCHD2, CDCA5, FAM111A, RAD51AP1, RRM1, ZWINT, LSM4, SAC3D1 </span></span>
-<span><span class="co">#&gt;     CDCA4, BRI3BP, CENPN, SUZ12, BRCA1, PGP, ESCO2, ORC6, FBXO5, PRADC1 </span></span>
-<span><span class="co">#&gt; Negative:  NACA, RPL7AP6, RPL10, RPL7A, RPL10P16, RPL9P9, UBA52, BTF3, RPL10P9, SSR2 </span></span>
-<span><span class="co">#&gt;     EEF2, SKP1, RPL4, RPL18, LRRC75A-AS1, ANXA5, RPS4XP11, BSG, PSMD4, PPIB </span></span>
-<span><span class="co">#&gt;     APEX1, ARPC3, EIF3M, SNRPB2, MYDGF, VPS28, CTSD, EDF1, PNRC1, EIF1 </span></span>
+<span><span class="co">#&gt; Positive:  NACA, SKP1, SSR2, PSMD4, BTF3, RPL7AP6, LGALS3BP, RPL7A, ARPC3, UBA52 </span></span>
+<span><span class="co">#&gt;     RPL9P9, BSG, ADH5, RPL10, ANXA5, EIF1, CTSD, SNRPB2, MGST1, PPIB </span></span>
+<span><span class="co">#&gt;     RPL10P16, SSBP1, PSME1, RPL10P9, EIF3M, SQSTM1, EEF2, RNH1, PPA1, ERP29 </span></span>
+<span><span class="co">#&gt; Negative:  SIVA1, CDCA5, RPL39L, TMPO, CENPX, CDCA4, HNRNPAB, DEK, CENPK, H2AFV </span></span>
+<span><span class="co">#&gt;     SAC3D1, CKLF, ASF1B, SUZ12, USP1, ESCO2, FAM111A, SHCBP1, CENPN, ORC6 </span></span>
+<span><span class="co">#&gt;     FBXO5, BRCA1, ZWINT, LSM4, RAD51AP1, MT-CO2, WDR34, CHAF1A, DNAJC9, CMC2 </span></span>
 <span><span class="co">#&gt; PC_ 3 </span></span>
-<span><span class="co">#&gt; Positive:  RPL29, RPL14, RPSAP19, RPL15, RPL13AP25, RPL32, RPL18, RPL13AP5, RPSA, DRAP1 </span></span>
-<span><span class="co">#&gt;     RPS5, RPS11, TMA7, CFL1, RPS19, FLNA, DCBLD2, RPL28, PFN1, RPS16 </span></span>
-<span><span class="co">#&gt;     PDCD5, SLBP, RPS15, PEBP1, AP2S1, FXYD5, BASP1, TMSB10, NME1, HSPE1P4 </span></span>
-<span><span class="co">#&gt; Negative:  ASS1, ADGRF1, C3, B2M, PERP, ATP1B1, CASP4, TSPAN13, CPD, LIPH </span></span>
-<span><span class="co">#&gt;     SMIM22, EPS8, IFI16, GOLGB1, TMED10, NMB, SDC4, LIMA1, NMI, SPINT1 </span></span>
-<span><span class="co">#&gt;     TNFAIP2, CCDC186, CD55, HLA-DMB, F11R, NAMPT, SELENBP1, SQSTM1, SQOR, PLA2G16 </span></span>
+<span><span class="co">#&gt; Positive:  RPSAP19, RPL13AP5, RPL18, RPL13AP25, RPL15, RPS11, RPL13AP7, RPS5, RPS19, CFL1 </span></span>
+<span><span class="co">#&gt;     RPSA, FXYD5, FBL, RPL28, SLBP, PDCD5, RPS3AP6, RPS16, RPL9P9, PEBP1 </span></span>
+<span><span class="co">#&gt;     DRAP1, PFN1, AP2S1, NME1, NAA10, RPS15, FLNA, DNMT1, COTL1, UBA52 </span></span>
+<span><span class="co">#&gt; Negative:  MT-CO1, MTCO1P12, TSPAN13, B2M, ADGRF1, ST14, MT-CO2, CPD, SERINC2, LIPH </span></span>
+<span><span class="co">#&gt;     SMIM22, C3, GOLGB1, NMB, PERP, F11R, ASS1, LIMA1, ATP1B1, SELENBP1 </span></span>
+<span><span class="co">#&gt;     MT-CYB, TAX1BP1, LGMN, PPIC, GPX3, SPINT1, HLA-E, SDC4, TNFAIP2, CCDC186 </span></span>
 <span><span class="co">#&gt; PC_ 4 </span></span>
-<span><span class="co">#&gt; Positive:  S100A16, H3F3B, LAMC2, RPL36AL, PMEPA1, EIF5, TBRG1, RPL15, RNF145, ABRACL </span></span>
-<span><span class="co">#&gt;     IMP4, SERTAD1, LAMB3, KDM5B, HMGB3, HIST1H2BD, DDX21, ZNF593, ZPR1, PFDN2 </span></span>
-<span><span class="co">#&gt;     HIST2H4B, TSSC4, GOT1, PLEC, HIST3H2A, ITGA6, OTUB1, ALCAM, COA6, EIF1 </span></span>
-<span><span class="co">#&gt; Negative:  IFNGR1, RFC4, NAMPT, BRCA1, EID1, POLD3, NDUFA4, HINT1, MCM3, ATP6V0E1 </span></span>
-<span><span class="co">#&gt;     RPA3, SOD1, CYB5A, DNMT1, CDT1, GMNN, CHAF1A, THYN1, CPD, CXXC5 </span></span>
-<span><span class="co">#&gt;     ADGRF1, ORC6, NAMPTP1, MCM6, CARHSP1, ACOT13, RPL7AP6, RHOBTB3, RMI2, NCOA7 </span></span>
+<span><span class="co">#&gt; Positive:  SLIRP, S100A16, POLR2L, ATP5MC3, RPL36AL, HSPE1, NDUFS6, TRMT112, S100A13, HSPE1P4 </span></span>
+<span><span class="co">#&gt;     COX7B, HSPE1P3, ATP5MC1, SNRPG, COX5B, PFN1, MPC1, MRPL12, SNRPF, MCRIP2 </span></span>
+<span><span class="co">#&gt;     BOLA2B, DYNLL1, NAA10, CHCHD10, PDCD5, NDUFB10, SEC61G, CYC1, MGLL, NDUFB3 </span></span>
+<span><span class="co">#&gt; Negative:  NAP1L1, NAMPT, RRM1, C1S, EZH2, IFNGR1, TARS, BRCA1, RFC4, ITGA2 </span></span>
+<span><span class="co">#&gt;     PSAP, RAD51AP1, ATF4, SYNE2, RMI1, CPD, EXOSC8, CEP57, GLA, FANCG </span></span>
+<span><span class="co">#&gt;     GARS, HSD17B4, P4HB, SLC7A11, EEF1A1P13, IFI16, LRRC75A-AS1, CDCA5, NCOA7, MCM6 </span></span>
 <span><span class="co">#&gt; PC_ 5 </span></span>
-<span><span class="co">#&gt; Positive:  MT-ND6, RAD21, DIAPH3, NDC80, ITGA2, C6orf48, KIF5B, NUCKS1, TMEM132A, RRM1 </span></span>
-<span><span class="co">#&gt;     ANP32E, NCAPG, CCDC88A, SPC25, ZNF622, SMC2, TATDN1P1, GARS, MTHFD2, CEP55 </span></span>
-<span><span class="co">#&gt;     C1orf56, SF3B2, VCAN, CEP57, CKAP2L, PIGK, NCAPD3, BCLAF1P2, TBC1D7, RTCB </span></span>
-<span><span class="co">#&gt; Negative:  UQCRQ, NDUFS6, COX6B1, FTH1, FTH1P8, ATP5MC3, FTH1P10, APRT, COX7B, COX4I1 </span></span>
-<span><span class="co">#&gt;     ATP6V0E1, FTH1P7, NDUFB3, POLR2L, LY6E, SLIRP, PFN1, NMB, CHCHD10, HINT1 </span></span>
-<span><span class="co">#&gt;     ATP5MF, POMP, NDUFB4, MCRIP2, RPL36AL, MRPL23, S100A10, SEC61G, GPX4, DUSP23</span></span>
-<span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Positive:  H3F3B, BTG1, CDCA8, KIF5B, CEP55, CDCA2, TROAP, C6orf48, RPL10P16, KIF20A </span></span>
+<span><span class="co">#&gt;     UBALD2, KIF14, RPL10P9, RPL10, NEK2, KIF4A, ARHGAP11A, EIF1, MXD3, PRR11 </span></span>
+<span><span class="co">#&gt;     HMGB3, CKAP2L, AAK1, RAD21, HP1BP3, RACGAP1, RNF26, RPSAP19, AC084033.3, FOXM1 </span></span>
+<span><span class="co">#&gt; Negative:  S100A10, ATP6V0E1, TXN, ASPH, RMI2, SPTSSA, COX5B, MRPL17, NDUFB4, IFNGR1 </span></span>
+<span><span class="co">#&gt;     SOD1, PAQR4, THYN1, RFC4, CDC6, CDCA7, GCHFR, ATP5PO, MCM2, CASP4 </span></span>
+<span><span class="co">#&gt;     ATP5MC1, SLBP, FTH1, C9orf3, COTL1, FTH1P8, CARHSP1, ADGRF1, MCM3, RPA3</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing nearest neighbor graph</span></span>
-<span><span class="co">#&gt; Computing SNN</span></span>
-<span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindClusters.html" class="external-link">FindClusters</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span>, resolution <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Computing SNN</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindClusters.html" class="external-link">FindClusters</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span>, resolution <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Number of nodes: 758</span></span>
-<span><span class="co">#&gt; Number of edges: 29614</span></span>
+<span><span class="co">#&gt; Number of edges: 29737</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Running Louvain algorithm...</span></span>
-<span><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7309</span></span>
+<span><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7327</span></span>
 <span><span class="co">#&gt; Number of communities: 2</span></span>
-<span><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
-<span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 03:47:59 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
-<span><span class="co">#&gt; 03:47:59 Read 758 rows and found 10 numeric columns</span></span>
-<span><span class="co">#&gt; 03:47:59 Using Annoy for neighbor search, n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 03:47:59 Building Annoy index with metric = cosine, n_trees = 50</span></span>
+<span><span class="co">#&gt; Elapsed time: 0 seconds</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 22:30:17 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
+<span><span class="co">#&gt; 22:30:17 Read 758 rows and found 10 numeric columns</span></span>
+<span><span class="co">#&gt; 22:30:17 Using Annoy for neighbor search, n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 22:30:17 Building Annoy index with metric = cosine, n_trees = 50</span></span>
 <span><span class="co">#&gt; 0%   10   20   30   40   50   60   70   80   90   100%</span></span>
 <span><span class="co">#&gt; [----|----|----|----|----|----|----|----|----|----|</span></span>
 <span><span class="co">#&gt; **************************************************|</span></span>
-<span><span class="co">#&gt; 03:47:59 Writing NN index file to temp file /tmp/RtmprW00Mr/file1b0b3522bdee</span></span>
-<span><span class="co">#&gt; 03:47:59 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">#&gt; 03:48:00 Annoy recall = 100%</span></span>
-<span><span class="co">#&gt; 03:48:00 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 03:48:02 Initializing from normalized Laplacian + noise (using irlba)</span></span>
-<span><span class="co">#&gt; 03:48:02 Commencing optimization for 500 epochs, with 28370 positive edges</span></span>
-<span><span class="co">#&gt; 03:48:03 Optimization finished</span></span>
-<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co">#&gt; 22:30:17 Writing NN index file to temp file /tmp/Rtmp8TZr84/file81f358a90853</span></span>
+<span><span class="co">#&gt; 22:30:17 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">#&gt; 22:30:17 Annoy recall = 100%</span></span>
+<span><span class="co">#&gt; 22:30:17 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 22:30:18 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
+<span><span class="co">#&gt; 22:30:19 Commencing optimization for 500 epochs, with 28134 positive edges</span></span>
+<span><span class="co">#&gt; 22:30:20 Optimization finished</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ClusterDE-cellline_files/figure-html/unnamed-chunk-6-1.png" width="700">
 We perform the DE test on synthetic null data.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">null_markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindMarkers.html" class="external-link">FindMarkers</a></span><span class="op">(</span><span class="va">cellline_null</span>, </span>
 <span>                            ident.1 <span class="op">=</span> <span class="fl">0</span>, </span>
 <span>                            ident.2 <span class="op">=</span> <span class="fl">1</span>, </span>
@@ -321,7 +358,7 @@ We perform the DE test on synthetic null data.</p>
 <p>We extract the p-values from both original data and synthetic null
 data, then use <code>ClusterDE</code> to “compare” them. We do not
 discover any DE genes.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">original_pval</span> <span class="op">&lt;-</span> <span class="va">original_markers</span><span class="op">$</span><span class="va">p_val</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">original_pval</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">original_markers</span><span class="op">)</span></span>
 <span></span>
@@ -329,25 +366,24 @@ discover any DE genes.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">null_pval</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">null_markers</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/callDE.html">callDE</a></span><span class="op">(</span><span class="va">original_pval</span>, <span class="va">null_pval</span>, nlogTrans <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">res</span><span class="op">$</span><span class="va">DEgenes</span></span>
-<span><span class="co">#&gt; character(0)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Number of DE gene is "</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">DEgenes</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Number of DE gene is 0</span></span></code></pre></div>
 <p>We can also visualize the distribution of contrast scores (diff
 between the -log p-values from real and null). It is roughly symmetric
 around 0.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">res</span><span class="op">$</span><span class="va">summaryTable</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">cs</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"white"</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Distribution of constrast scores"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span>
-<span><span class="co">#&gt; Warning: Removed 1 rows containing non-finite values (`stat_bin()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span></code></pre></div>
 <p><img src="ClusterDE-cellline_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
 </h2>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R version 4.3.1 (2023-06-16)</span></span>
-<span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
-<span><span class="co">#&gt; Running under: Ubuntu 22.04.3 LTS</span></span>
+<span><span class="co">#&gt; R version 4.4.1 (2024-06-14)</span></span>
+<span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
+<span><span class="co">#&gt; Running under: Ubuntu 22.04.4 LTS</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
 <span><span class="co">#&gt; BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
@@ -372,61 +408,63 @@ around 0.</p>
 <span><span class="co">#&gt; [8] base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt;  [1] ggplot2_3.4.4               SingleCellExperiment_1.22.0</span></span>
-<span><span class="co">#&gt;  [3] SummarizedExperiment_1.30.2 Biobase_2.60.0             </span></span>
-<span><span class="co">#&gt;  [5] GenomicRanges_1.52.1        GenomeInfoDb_1.36.4        </span></span>
-<span><span class="co">#&gt;  [7] IRanges_2.34.1              S4Vectors_0.38.2           </span></span>
-<span><span class="co">#&gt;  [9] BiocGenerics_0.46.0         MatrixGenerics_1.12.3      </span></span>
-<span><span class="co">#&gt; [11] matrixStats_1.0.0           SeuratObject_4.1.4         </span></span>
-<span><span class="co">#&gt; [13] Seurat_4.4.0                ClusterDE_0.99.1           </span></span>
-<span><span class="co">#&gt; [15] BiocStyle_2.28.1           </span></span>
+<span><span class="co">#&gt;  [1] ggplot2_3.5.1               SingleCellExperiment_1.26.0</span></span>
+<span><span class="co">#&gt;  [3] SummarizedExperiment_1.34.0 Biobase_2.64.0             </span></span>
+<span><span class="co">#&gt;  [5] GenomicRanges_1.56.1        GenomeInfoDb_1.40.1        </span></span>
+<span><span class="co">#&gt;  [7] IRanges_2.38.0              S4Vectors_0.42.0           </span></span>
+<span><span class="co">#&gt;  [9] BiocGenerics_0.50.0         MatrixGenerics_1.16.0      </span></span>
+<span><span class="co">#&gt; [11] matrixStats_1.3.0           Seurat_5.1.0               </span></span>
+<span><span class="co">#&gt; [13] SeuratObject_5.0.2          sp_2.1-4                   </span></span>
+<span><span class="co">#&gt; [15] ClusterDE_0.99.3            BiocStyle_2.32.1           </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;   [1] RColorBrewer_1.1-3      jsonlite_1.8.7          magrittr_2.0.3         </span></span>
-<span><span class="co">#&gt;   [4] spatstat.utils_3.0-3    farver_2.1.1            rmarkdown_2.25         </span></span>
-<span><span class="co">#&gt;   [7] zlibbioc_1.46.0         fs_1.6.3                ragg_1.2.6             </span></span>
-<span><span class="co">#&gt;  [10] vctrs_0.6.4             ROCR_1.0-11             memoise_2.0.1          </span></span>
-<span><span class="co">#&gt;  [13] spatstat.explore_3.2-3  RCurl_1.98-1.12         S4Arrays_1.0.6         </span></span>
-<span><span class="co">#&gt;  [16] htmltools_0.5.6.1       sass_0.4.7              sctransform_0.4.0      </span></span>
-<span><span class="co">#&gt;  [19] parallelly_1.36.0       KernSmooth_2.23-21      bslib_0.5.1            </span></span>
-<span><span class="co">#&gt;  [22] htmlwidgets_1.6.2       desc_1.4.2              ica_1.0-3              </span></span>
-<span><span class="co">#&gt;  [25] plyr_1.8.9              plotly_4.10.2           zoo_1.8-12             </span></span>
-<span><span class="co">#&gt;  [28] cachem_1.0.8            igraph_1.5.1            mime_0.12              </span></span>
-<span><span class="co">#&gt;  [31] lifecycle_1.0.3         pkgconfig_2.0.3         Matrix_1.6-1.1         </span></span>
-<span><span class="co">#&gt;  [34] R6_2.5.1                fastmap_1.1.1           GenomeInfoDbData_1.2.10</span></span>
-<span><span class="co">#&gt;  [37] fitdistrplus_1.1-11     future_1.33.0           shiny_1.7.5.1          </span></span>
-<span><span class="co">#&gt;  [40] digest_0.6.33           colorspace_2.1-0        patchwork_1.1.3        </span></span>
-<span><span class="co">#&gt;  [43] rprojroot_2.0.3         tensor_1.5              irlba_2.3.5.1          </span></span>
-<span><span class="co">#&gt;  [46] kde1d_1.0.5             textshaping_0.3.7       labeling_0.4.3         </span></span>
-<span><span class="co">#&gt;  [49] progressr_0.14.0        fansi_1.0.5             spatstat.sparse_3.0-2  </span></span>
-<span><span class="co">#&gt;  [52] httr_1.4.7              polyclip_1.10-6         abind_1.4-5            </span></span>
-<span><span class="co">#&gt;  [55] compiler_4.3.1          withr_2.5.1             MASS_7.3-60            </span></span>
-<span><span class="co">#&gt;  [58] DelayedArray_0.26.7     tools_4.3.1             lmtest_0.9-40          </span></span>
-<span><span class="co">#&gt;  [61] httpuv_1.6.11           future.apply_1.11.0     goftest_1.2-3          </span></span>
-<span><span class="co">#&gt;  [64] glue_1.6.2              nlme_3.1-162            promises_1.2.1         </span></span>
-<span><span class="co">#&gt;  [67] grid_4.3.1              Rtsne_0.16              cluster_2.1.4          </span></span>
-<span><span class="co">#&gt;  [70] reshape2_1.4.4          generics_0.1.3          gtable_0.3.4           </span></span>
-<span><span class="co">#&gt;  [73] spatstat.data_3.0-1     tidyr_1.3.0             data.table_1.14.8      </span></span>
-<span><span class="co">#&gt;  [76] XVector_0.40.0          sp_2.1-1                utf8_1.2.3             </span></span>
-<span><span class="co">#&gt;  [79] spatstat.geom_3.2-5     RcppAnnoy_0.0.21        ggrepel_0.9.4          </span></span>
-<span><span class="co">#&gt;  [82] RANN_2.6.1              pillar_1.9.0            stringr_1.5.0          </span></span>
-<span><span class="co">#&gt;  [85] later_1.3.1             splines_4.3.1           dplyr_1.1.3            </span></span>
-<span><span class="co">#&gt;  [88] lattice_0.21-8          survival_3.5-5          deldir_1.0-9           </span></span>
-<span><span class="co">#&gt;  [91] tidyselect_1.2.0        miniUI_0.1.1.1          pbapply_1.7-2          </span></span>
-<span><span class="co">#&gt;  [94] knitr_1.44              gridExtra_2.3           bookdown_0.36          </span></span>
-<span><span class="co">#&gt;  [97] scattermore_1.2         xfun_0.40               stringi_1.7.12         </span></span>
-<span><span class="co">#&gt; [100] lazyeval_0.2.2          yaml_2.3.7              evaluate_0.22          </span></span>
-<span><span class="co">#&gt; [103] codetools_0.2-19        tibble_3.2.1            BiocManager_1.30.22    </span></span>
-<span><span class="co">#&gt; [106] cli_3.6.1               uwot_0.1.16             xtable_1.8-4           </span></span>
-<span><span class="co">#&gt; [109] reticulate_1.34.0       systemfonts_1.0.5       munsell_0.5.0          </span></span>
-<span><span class="co">#&gt; [112] jquerylib_0.1.4         Rcpp_1.0.11             globals_0.16.2         </span></span>
-<span><span class="co">#&gt; [115] spatstat.random_3.1-6   png_0.1-8               rngWELL_0.10-9         </span></span>
-<span><span class="co">#&gt; [118] parallel_4.3.1          ellipsis_0.3.2          randtoolbox_2.0.4      </span></span>
-<span><span class="co">#&gt; [121] assertthat_0.2.1        pkgdown_2.0.7           mvnfast_0.2.8          </span></span>
-<span><span class="co">#&gt; [124] bitops_1.0-7            listenv_0.9.0           viridisLite_0.4.2      </span></span>
-<span><span class="co">#&gt; [127] scales_1.2.1            ggridges_0.5.4          crayon_1.5.2           </span></span>
-<span><span class="co">#&gt; [130] leiden_0.4.3            purrr_1.0.2             rlang_1.1.1            </span></span>
-<span><span class="co">#&gt; [133] rvinecopulib_0.6.3.1.1  cowplot_1.1.1</span></span></code></pre></div>
+<span><span class="co">#&gt;   [1] RColorBrewer_1.1-3      jsonlite_1.8.8          magrittr_2.0.3         </span></span>
+<span><span class="co">#&gt;   [4] spatstat.utils_3.0-5    farver_2.1.2            rmarkdown_2.27         </span></span>
+<span><span class="co">#&gt;   [7] zlibbioc_1.50.0         fs_1.6.4                ragg_1.3.2             </span></span>
+<span><span class="co">#&gt;  [10] vctrs_0.6.5             ROCR_1.0-11             memoise_2.0.1          </span></span>
+<span><span class="co">#&gt;  [13] spatstat.explore_3.2-7  S4Arrays_1.4.1          htmltools_0.5.8.1      </span></span>
+<span><span class="co">#&gt;  [16] SparseArray_1.4.8       sass_0.4.9              sctransform_0.4.1      </span></span>
+<span><span class="co">#&gt;  [19] parallelly_1.37.1       KernSmooth_2.23-24      bslib_0.7.0            </span></span>
+<span><span class="co">#&gt;  [22] htmlwidgets_1.6.4       desc_1.4.3              ica_1.0-3              </span></span>
+<span><span class="co">#&gt;  [25] plyr_1.8.9              plotly_4.10.4           zoo_1.8-12             </span></span>
+<span><span class="co">#&gt;  [28] cachem_1.1.0            igraph_2.0.3            mime_0.12              </span></span>
+<span><span class="co">#&gt;  [31] lifecycle_1.0.4         pkgconfig_2.0.3         Matrix_1.7-0           </span></span>
+<span><span class="co">#&gt;  [34] R6_2.5.1                fastmap_1.2.0           GenomeInfoDbData_1.2.12</span></span>
+<span><span class="co">#&gt;  [37] fitdistrplus_1.1-11     future_1.33.2           shiny_1.8.1.1          </span></span>
+<span><span class="co">#&gt;  [40] digest_0.6.36           colorspace_2.1-0        patchwork_1.2.0        </span></span>
+<span><span class="co">#&gt;  [43] tensor_1.5              RSpectra_0.16-1         irlba_2.3.5.1          </span></span>
+<span><span class="co">#&gt;  [46] kde1d_1.0.7             textshaping_0.4.0       labeling_0.4.3         </span></span>
+<span><span class="co">#&gt;  [49] progressr_0.14.0        fansi_1.0.6             spatstat.sparse_3.1-0  </span></span>
+<span><span class="co">#&gt;  [52] coop_0.6-3              httr_1.4.7              polyclip_1.10-6        </span></span>
+<span><span class="co">#&gt;  [55] abind_1.4-5             compiler_4.4.1          withr_3.0.0            </span></span>
+<span><span class="co">#&gt;  [58] fastDummies_1.7.3       highr_0.11              MASS_7.3-60.2          </span></span>
+<span><span class="co">#&gt;  [61] DelayedArray_0.30.1     tools_4.4.1             lmtest_0.9-40          </span></span>
+<span><span class="co">#&gt;  [64] httpuv_1.6.15           future.apply_1.11.2     goftest_1.2-3          </span></span>
+<span><span class="co">#&gt;  [67] glue_1.7.0              nlme_3.1-164            promises_1.3.0         </span></span>
+<span><span class="co">#&gt;  [70] grid_4.4.1              Rtsne_0.17              cluster_2.1.6          </span></span>
+<span><span class="co">#&gt;  [73] reshape2_1.4.4          generics_0.1.3          gtable_0.3.5           </span></span>
+<span><span class="co">#&gt;  [76] spatstat.data_3.1-2     tidyr_1.3.1             data.table_1.15.4      </span></span>
+<span><span class="co">#&gt;  [79] XVector_0.44.0          utf8_1.2.4              spatstat.geom_3.2-9    </span></span>
+<span><span class="co">#&gt;  [82] RcppAnnoy_0.0.22        ggrepel_0.9.5           RANN_2.6.1             </span></span>
+<span><span class="co">#&gt;  [85] pillar_1.9.0            stringr_1.5.1           limma_3.60.3           </span></span>
+<span><span class="co">#&gt;  [88] spam_2.10-0             RcppHNSW_0.6.0          later_1.3.2            </span></span>
+<span><span class="co">#&gt;  [91] splines_4.4.1           dplyr_1.1.4             lattice_0.22-6         </span></span>
+<span><span class="co">#&gt;  [94] survival_3.6-4          deldir_2.0-4            tidyselect_1.2.1       </span></span>
+<span><span class="co">#&gt;  [97] miniUI_0.1.1.1          pbapply_1.7-2           knitr_1.47             </span></span>
+<span><span class="co">#&gt; [100] gridExtra_2.3           bookdown_0.40           scattermore_1.2        </span></span>
+<span><span class="co">#&gt; [103] xfun_0.45               statmod_1.5.0           UCSC.utils_1.0.0       </span></span>
+<span><span class="co">#&gt; [106] stringi_1.8.4           lazyeval_0.2.2          yaml_2.3.8             </span></span>
+<span><span class="co">#&gt; [109] evaluate_0.24.0         codetools_0.2-20        tibble_3.2.1           </span></span>
+<span><span class="co">#&gt; [112] BiocManager_1.30.23     cli_3.6.3               uwot_0.2.2             </span></span>
+<span><span class="co">#&gt; [115] xtable_1.8-4            reticulate_1.38.0       systemfonts_1.1.0      </span></span>
+<span><span class="co">#&gt; [118] munsell_0.5.1           jquerylib_0.1.4         Rcpp_1.0.12            </span></span>
+<span><span class="co">#&gt; [121] globals_0.16.3          spatstat.random_3.2-3   png_0.1-8              </span></span>
+<span><span class="co">#&gt; [124] rngWELL_0.10-9          parallel_4.4.1          randtoolbox_2.0.4      </span></span>
+<span><span class="co">#&gt; [127] assertthat_0.2.1        pkgdown_2.0.9           mvnfast_0.2.8          </span></span>
+<span><span class="co">#&gt; [130] dotCall64_1.1-1         listenv_0.9.1           viridisLite_0.4.2      </span></span>
+<span><span class="co">#&gt; [133] scales_1.3.0            ggridges_0.5.6          crayon_1.5.3           </span></span>
+<span><span class="co">#&gt; [136] leiden_0.4.3.1          purrr_1.0.2             rlang_1.1.4            </span></span>
+<span><span class="co">#&gt; [139] rvinecopulib_0.6.3.1.1  cowplot_1.1.3</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -435,13 +473,11 @@ around 0.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p>
-<p>Developed by Dongyuan Song, Kexin Li.</p>
+  <p>Developed by Dongyuan Song, Kexin Li, Siqi Chen.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
     </footer>
