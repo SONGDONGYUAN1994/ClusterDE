@@ -18,6 +18,7 @@
 #' \code{parallel},\code{BiocParallel}, and \code{pbmcapply} respectively. The default value is 'pbmcmapply'.
 #' @param fastVersion A logic value. If TRUE, the fast approximation is used. Default is FALSE.
 #' @param corrCut A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation.
+#' @param ifSparse A logic value. For high-dimentional data (gene number is much larger than cell number), if a sparse correlation estimation will be used. Default is FALSE.
 #' @param BPPARAM A \code{MulticoreParam} object or NULL. When the parameter parallelization = 'mcmapply' or 'pbmcmapply',
 #' this parameter must be NULL. When the parameter parallelization = 'bpmapply',  this parameter must be one of the
 #' \code{MulticoreParam} object offered by the package 'BiocParallel. The default value is NULL.
@@ -35,7 +36,8 @@ constructNull <- function(mat,
                           extraInfo = NULL,
                           nCores = 1,
                           parallelization = "mcmapply",
-                          fastVersion = FALSE,
+                          fastVersion = TRUE,
+                          ifSparse = FALSE,
                           corrCut = 0.1,
                           BPPARAM = NULL) {
   if(is.null(rownames(mat))|is.null(colnames(mat))) {
@@ -64,6 +66,7 @@ constructNull <- function(mat,
                                       important_feature = corrCut,
                                       nonnegative = FALSE,
                                       copula = "gaussian",
+                                      if_sparse = ifSparse,
                                       fastmvn = FALSE)
       newMat <- newData$new_count
     } else {
@@ -177,7 +180,17 @@ constructNull <- function(mat,
     #   tcrossprod(mat)
     # }
 
-    corr_mat <- coop::pcor(normal_obs)
+
+
+    if(ifSparse) {
+      corr_mat <- scDesign3::sparse_cov(normal_obs,
+                                      method = 'qiu',
+                                      operator = 'hard',
+                                      corr = TRUE)
+    } else {
+      corr_mat <- coop::pcor(normal_obs)
+    }
+
     diag(corr_mat) <- diag(corr_mat) + tol
     new_mvn <- mvnfast::rmvn(n_cell,
                   mu = rep(0, dim(corr_mat)[1]),
