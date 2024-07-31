@@ -1,45 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/404.html</loc>
-  </url>
-  <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-PBMC.html</loc>
-  </url>
-  <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-cellline.html</loc>
-  </url>
-  <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-onedomain.html</loc>
-  </url>
-  <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-twodomains.html</loc>
-  </url>
-  <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/index.html</loc>
-  </url>
-  <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/reference/callDE.html</loc>
-  </url>
-  <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/reference/constructNull.html</loc>
-  </url>
-  <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/reference/exampleCounts.html</loc>
-  </url>
-  <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/reference/index.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://songdongyuan1994.github.io/ClusterDE/404.html</loc></url>
+<url><loc>https://songdongyuan1994.github.io/ClusterDE/LICENSE-text.html</loc></url>
+<url><loc>https://songdongyuan1994.github.io/ClusterDE/LICENSE.html</loc></url>
+<url><loc>https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-PBMC.html</loc></url>
+<url><loc>https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-cellline.html</loc></url>
+<url><loc>https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-onedomain.html</loc></url>
+<url><loc>https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-twodomains.html</loc></url>
+<url><loc>https://songdongyuan1994.github.io/ClusterDE/articles/index.html</loc></url>
+<url><loc>https://songdongyuan1994.github.io/ClusterDE/authors.html</loc></url>
+<url><loc>https://songdongyuan1994.github.io/ClusterDE/index.html</loc></url>
+<url><loc>https://songdongyuan1994.github.io/ClusterDE/reference/callDE.html</loc></url>
+<url><loc>https://songdongyuan1994.github.io/ClusterDE/reference/constructNull.html</loc></url>
+<url><loc>https://songdongyuan1994.github.io/ClusterDE/reference/exampleCounts.html</loc></url>
+<url><loc>https://songdongyuan1994.github.io/ClusterDE/reference/index.html</loc></url>
 </urlset>
+
