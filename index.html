@@ -130,7 +130,16 @@
 <p>The following figure briefly describes how ClusterDE generates the synthetic null data:</p>
 <p><img src="reference/figures/ClusterDE_supp_null_generation.png" width="800"></p>
 <p>After obtaining the synthetic null data, you should <em>perform the same clustering procedure as you have done on your real data</em> to get the DE p-values (<code>nullPvalues</code>). Finally, we compare the p-values from the null and p-values from the target data (real data) by <code><a href="reference/callDE.html">callDE()</a></code>. For illustration, here we use the Uniform random numbers as the p-values.</p>
-<p><code>{r} set.seed(123) targetPvalues &lt;- runif(10000) nullPvalues &lt;- runif(10000) names(targetPvalues) &lt;- names(nullPvalues) &lt;- paste0("Gene", 1:10000) res &lt;- callDE(targetScores = targetPvalues,               nullScores = nullPvalues,               nlogTrans = TRUE,               FDR = 0.05,               correct = FALSE)</code></p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">targetPvalues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10000</span><span class="op">)</span></span>
+<span><span class="va">nullPvalues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10000</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">targetPvalues</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">nullPvalues</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Gene"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10000</span><span class="op">)</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/callDE.html">callDE</a></span><span class="op">(</span>targetScores <span class="op">=</span> <span class="va">targetPvalues</span>,</span>
+<span>              nullScores <span class="op">=</span> <span class="va">nullPvalues</span>,</span>
+<span>              nlogTrans <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>              FDR <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>              correct <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>The parameters of <code>callDE</code> are:</p>
 <ul>
 <li>

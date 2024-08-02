@@ -71,7 +71,7 @@ Song</h4>
 Angeles<br><a class="author_email" href="mailto:#"></a><a href="mailto:dongyuansong@ucla.edu" class="email">dongyuansong@ucla.edu</a>
       </address>
                   
-            <h4 data-toc-skip class="date">31 July 2024</h4>
+            <h4 data-toc-skip class="date">2 August 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SONGDONGYUAN1994/ClusterDE/blob/main/vignettes/ClusterDE-onedomain.Rmd" class="external-link"><code>vignettes/ClusterDE-onedomain.Rmd</code></a></small>
       <div class="d-none name"><code>ClusterDE-onedomain.Rmd</code></div>
@@ -100,7 +100,7 @@ should not have between domains marker genes.</p>
 <code class="sourceCode R"><span><span class="co">## Download the spot-level data</span></span>
 <span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/spatialLIBD/man/fetch_data.html" class="external-link">fetch_data</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"spe"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; adding rname 'https://www.dropbox.com/s/f4wcvtdq428y73p/Human_DLPFC_Visium_processedData_sce_scran_spatialLIBD.Rdata?dl=1'</span></span>
-<span><span class="co">#&gt; 2024-07-31 00:42:55.378771 loading file /home/runner/.cache/R/BiocFileCache/836869633308_Human_DLPFC_Visium_processedData_sce_scran_spatialLIBD.Rdata%3Fdl%3D1</span></span>
+<span><span class="co">#&gt; 2024-08-02 14:32:44.702602 loading file /home/runner/.cache/R/BiocFileCache/82795ece4b82_Human_DLPFC_Visium_processedData_sce_scran_spatialLIBD.Rdata%3Fdl%3D1</span></span>
 <span></span>
 <span><span class="co">###select the Layer5 in the slice 151673</span></span>
 <span><span class="va">sub_151673</span> <span class="op">&lt;-</span> <span class="va">spe</span><span class="op">[</span>, <span class="va">spe</span><span class="op">$</span><span class="va">sample_id</span> <span class="op">==</span> <span class="st">"151673"</span><span class="op">]</span></span>
@@ -255,7 +255,7 @@ the parameter “nCores”.</p>
 <span>                                                   nCores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 100% of genes are used in correlation modelling.</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;  48.882  33.786  23.443</span></span></code></pre></div>
+<span><span class="co">#&gt;  48.349  34.694  23.476</span></span></code></pre></div>
 <p>We perform the same pipeline as we did for target data. Please note
 we need two spatial clusters here, too.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -378,7 +378,7 @@ around 0.</p>
 <span><span class="co">#&gt;  [11] parallelly_1.38.0         magick_2.8.4             </span></span>
 <span><span class="co">#&gt;  [13] MASS_7.3-60.2             pkgdown_2.1.0            </span></span>
 <span><span class="co">#&gt;  [15] reshape2_1.4.4            httpuv_1.6.15            </span></span>
-<span><span class="co">#&gt;  [17] foreach_1.5.2             withr_3.0.0              </span></span>
+<span><span class="co">#&gt;  [17] foreach_1.5.2             withr_3.0.1              </span></span>
 <span><span class="co">#&gt;  [19] xfun_0.46                 survival_3.6-4           </span></span>
 <span><span class="co">#&gt;  [21] memoise_2.0.1             benchmarkme_1.0.8        </span></span>
 <span><span class="co">#&gt;  [23] ggbeeswarm_0.7.2          systemfonts_1.1.0        </span></span>
@@ -458,7 +458,7 @@ around 0.</p>
 <span><span class="co">#&gt; [171] highr_0.11                metapod_1.12.0           </span></span>
 <span><span class="co">#&gt; [173] config_0.3.2              dqrng_0.4.1              </span></span>
 <span><span class="co">#&gt; [175] spatstat.univar_3.0-0     lazyeval_0.2.2           </span></span>
-<span><span class="co">#&gt; [177] shiny_1.9.0               htmltools_0.5.8.1        </span></span>
+<span><span class="co">#&gt; [177] shiny_1.9.1               htmltools_0.5.8.1        </span></span>
 <span><span class="co">#&gt; [179] sctransform_0.4.1         rappdirs_0.3.3           </span></span>
 <span><span class="co">#&gt; [181] glue_1.7.0                spam_2.10-0              </span></span>
 <span><span class="co">#&gt; [183] XVector_0.44.0            RCurl_1.98-1.16          </span></span>
