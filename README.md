@@ -71,7 +71,7 @@ The following figure briefly describes how ClusterDE generates the synthetic nul
 
 After obtaining the synthetic null data, you should *perform the same clustering procedure as you have done on your real data* to get the DE p-values (`nullPvalues`). Finally, we compare the p-values from the null and p-values from the target data (real data) by `callDE()`. For illustration, here we use the Uniform random numbers as the p-values.
 
-```{r}
+``` r
 set.seed(123)
 targetPvalues <- runif(10000)
 nullPvalues <- runif(10000)
