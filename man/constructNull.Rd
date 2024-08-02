@@ -11,8 +11,9 @@ constructNull(
   extraInfo = NULL,
   nCores = 1,
   parallelization = "mcmapply",
-  fastVersion = FALSE,
-  corrCut = 0.9,
+  fastVersion = TRUE,
+  ifSparse = FALSE,
+  corrCut = 0.1,
   BPPARAM = NULL
 )
 }
@@ -36,6 +37,8 @@ Must be one of 'mcmapply', 'bpmapply', or 'pbmcmapply', which corresponds to the
 \code{parallel},\code{BiocParallel}, and \code{pbmcapply} respectively. The default value is 'pbmcmapply'.}
 
 \item{fastVersion}{A logic value. If TRUE, the fast approximation is used. Default is FALSE.}
+
+\item{ifSparse}{A logic value. For high-dimentional data (gene number is much larger than cell number), if a sparse correlation estimation will be used. Default is FALSE.}
 
 \item{corrCut}{A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation.}
 
