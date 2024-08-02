@@ -182,20 +182,20 @@ is designed for 1 vs 1 comparison; therefore, we set the resolution as
 <span><span class="co">#&gt; Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric</span></span>
 <span><span class="co">#&gt; To use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to 'correlation'</span></span>
 <span><span class="co">#&gt; This message will be shown once per session</span></span>
-<span><span class="co">#&gt; 14:29:31 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
-<span><span class="co">#&gt; 14:29:31 Read 758 rows and found 10 numeric columns</span></span>
-<span><span class="co">#&gt; 14:29:31 Using Annoy for neighbor search, n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 14:29:31 Building Annoy index with metric = cosine, n_trees = 50</span></span>
+<span><span class="co">#&gt; 18:32:28 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
+<span><span class="co">#&gt; 18:32:28 Read 758 rows and found 10 numeric columns</span></span>
+<span><span class="co">#&gt; 18:32:28 Using Annoy for neighbor search, n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 18:32:28 Building Annoy index with metric = cosine, n_trees = 50</span></span>
 <span><span class="co">#&gt; 0%   10   20   30   40   50   60   70   80   90   100%</span></span>
 <span><span class="co">#&gt; [----|----|----|----|----|----|----|----|----|----|</span></span>
 <span><span class="co">#&gt; **************************************************|</span></span>
-<span><span class="co">#&gt; 14:29:31 Writing NN index file to temp file /tmp/Rtmp3Mn8bI/file82094d6722ba</span></span>
-<span><span class="co">#&gt; 14:29:31 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">#&gt; 14:29:31 Annoy recall = 100%</span></span>
-<span><span class="co">#&gt; 14:29:32 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 14:29:33 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
-<span><span class="co">#&gt; 14:29:33 Commencing optimization for 500 epochs, with 27914 positive edges</span></span>
-<span><span class="co">#&gt; 14:29:34 Optimization finished</span></span>
+<span><span class="co">#&gt; 18:32:28 Writing NN index file to temp file /tmp/RtmpqycZA2/file1859553a02a7</span></span>
+<span><span class="co">#&gt; 18:32:28 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">#&gt; 18:32:28 Annoy recall = 100%</span></span>
+<span><span class="co">#&gt; 18:32:28 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 18:32:30 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
+<span><span class="co">#&gt; 18:32:30 Commencing optimization for 500 epochs, with 27914 positive edges</span></span>
+<span><span class="co">#&gt; 18:32:31 Optimization finished</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Clustering result"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ClusterDE-cellline_files/figure-html/unnamed-chunk-3-1.png" width="700">
 From the UMAP, the two clusters seem to be dubious. Although we do not
@@ -238,7 +238,7 @@ discoveries.</p>
 <span><span class="co">#&gt; 1 genes have no more than 2 non-zero values; ignore fitting and return all 0s.</span></span>
 <span><span class="co">#&gt; 98.5% of genes are used in correlation modelling.</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt; 113.769  64.229  52.933</span></span></code></pre></div>
+<span><span class="co">#&gt; 114.478  64.780  53.208</span></span></code></pre></div>
 <p>We perform the same pipeline as we did for target data. Please note
 we need two clusters here, too. This is straightforward for clustering
 method with predefined cluster numbers, e.g., K-means. For louvain
@@ -304,20 +304,20 @@ parameter so that we still get two clusters.</p>
 <span><span class="co">#&gt; Number of communities: 2</span></span>
 <span><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
 <span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 14:31:19 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
-<span><span class="co">#&gt; 14:31:19 Read 758 rows and found 10 numeric columns</span></span>
-<span><span class="co">#&gt; 14:31:19 Using Annoy for neighbor search, n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 14:31:19 Building Annoy index with metric = cosine, n_trees = 50</span></span>
+<span><span class="co">#&gt; 18:34:17 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
+<span><span class="co">#&gt; 18:34:17 Read 758 rows and found 10 numeric columns</span></span>
+<span><span class="co">#&gt; 18:34:17 Using Annoy for neighbor search, n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 18:34:17 Building Annoy index with metric = cosine, n_trees = 50</span></span>
 <span><span class="co">#&gt; 0%   10   20   30   40   50   60   70   80   90   100%</span></span>
 <span><span class="co">#&gt; [----|----|----|----|----|----|----|----|----|----|</span></span>
 <span><span class="co">#&gt; **************************************************|</span></span>
-<span><span class="co">#&gt; 14:31:19 Writing NN index file to temp file /tmp/Rtmp3Mn8bI/file82092a82ee82</span></span>
-<span><span class="co">#&gt; 14:31:19 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">#&gt; 14:31:19 Annoy recall = 100%</span></span>
-<span><span class="co">#&gt; 14:31:20 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 14:31:21 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
-<span><span class="co">#&gt; 14:31:21 Commencing optimization for 500 epochs, with 28134 positive edges</span></span>
-<span><span class="co">#&gt; 14:31:22 Optimization finished</span></span>
+<span><span class="co">#&gt; 18:34:17 Writing NN index file to temp file /tmp/RtmpqycZA2/file185951df402</span></span>
+<span><span class="co">#&gt; 18:34:17 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">#&gt; 18:34:17 Annoy recall = 100%</span></span>
+<span><span class="co">#&gt; 18:34:18 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 18:34:19 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
+<span><span class="co">#&gt; 18:34:19 Commencing optimization for 500 epochs, with 28134 positive edges</span></span>
+<span><span class="co">#&gt; 18:34:20 Optimization finished</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ClusterDE-cellline_files/figure-html/unnamed-chunk-6-1.png" width="700">
 We perform the DE test on synthetic null data.</p>

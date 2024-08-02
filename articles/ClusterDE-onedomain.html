@@ -100,7 +100,7 @@ should not have between domains marker genes.</p>
 <code class="sourceCode R"><span><span class="co">## Download the spot-level data</span></span>
 <span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/spatialLIBD/man/fetch_data.html" class="external-link">fetch_data</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"spe"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; adding rname 'https://www.dropbox.com/s/f4wcvtdq428y73p/Human_DLPFC_Visium_processedData_sce_scran_spatialLIBD.Rdata?dl=1'</span></span>
-<span><span class="co">#&gt; 2024-08-02 14:32:44.702602 loading file /home/runner/.cache/R/BiocFileCache/82795ece4b82_Human_DLPFC_Visium_processedData_sce_scran_spatialLIBD.Rdata%3Fdl%3D1</span></span>
+<span><span class="co">#&gt; 2024-08-02 18:35:45.017086 loading file /home/runner/.cache/R/BiocFileCache/18ed545ef88_Human_DLPFC_Visium_processedData_sce_scran_spatialLIBD.Rdata%3Fdl%3D1</span></span>
 <span></span>
 <span><span class="co">###select the Layer5 in the slice 151673</span></span>
 <span><span class="va">sub_151673</span> <span class="op">&lt;-</span> <span class="va">spe</span><span class="op">[</span>, <span class="va">spe</span><span class="op">$</span><span class="va">sample_id</span> <span class="op">==</span> <span class="st">"151673"</span><span class="op">]</span></span>
@@ -255,7 +255,7 @@ the parameter “nCores”.</p>
 <span>                                                   nCores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 100% of genes are used in correlation modelling.</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;  48.349  34.694  23.476</span></span></code></pre></div>
+<span><span class="co">#&gt;  50.206  35.324  24.165</span></span></code></pre></div>
 <p>We perform the same pipeline as we did for target data. Please note
 we need two spatial clusters here, too.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">

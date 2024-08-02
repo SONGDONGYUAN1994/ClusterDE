@@ -52,8 +52,9 @@
 <span>  extraInfo <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  nCores <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  parallelization <span class="op">=</span> <span class="st">"mcmapply"</span>,</span>
-<span>  fastVersion <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  corrCut <span class="op">=</span> <span class="fl">0.9</span>,</span>
+<span>  fastVersion <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ifSparse <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  corrCut <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  BPPARAM <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -94,6 +95,10 @@ Must be one of 'mcmapply', 'bpmapply', or 'pbmcmapply', which corresponds to the
 
 <dt id="arg-fastversion">fastVersion<a class="anchor" aria-label="anchor" href="#arg-fastversion"></a></dt>
 <dd><p>A logic value. If TRUE, the fast approximation is used. Default is FALSE.</p></dd>
+
+
+<dt id="arg-ifsparse">ifSparse<a class="anchor" aria-label="anchor" href="#arg-ifsparse"></a></dt>
+<dd><p>A logic value. For high-dimentional data (gene number is much larger than cell number), if a sparse correlation estimation will be used. Default is FALSE.</p></dd>
 
 
 <dt id="arg-corrcut">corrCut<a class="anchor" aria-label="anchor" href="#arg-corrcut"></a></dt>
