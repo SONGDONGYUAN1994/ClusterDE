@@ -18,7 +18,7 @@
 #' \code{parallel},\code{BiocParallel}, and \code{pbmcapply} respectively. The default value is 'pbmcmapply'.
 #' @param fastVersion A logic value. If TRUE, the fast approximation is used. Default is FALSE.
 #' @param corrCut A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation.
-#' @param ifSparse A logic value. For high-dimentional data (gene number is much larger than cell number), if a sparse correlation estimation will be used. Default is FALSE.
+#' @param ifSparse A logic value. For high-dimensional data (gene number is much larger than cell number), if a sparse correlation estimation will be used. Default is FALSE.
 #' @param BPPARAM A \code{MulticoreParam} object or NULL. When the parameter parallelization = 'mcmapply' or 'pbmcmapply',
 #' this parameter must be NULL. When the parameter parallelization = 'bpmapply',  this parameter must be one of the
 #' \code{MulticoreParam} object offered by the package 'BiocParallel. The default value is NULL.
@@ -110,16 +110,9 @@ constructNull <- function(mat,
     }
 
     mat_filtered <- mat[!qc, ]
-
-    important_feature <- names(which(rowMeans(mat_filtered!=0) > corrCut))
-
-    unimportant_feature <- setdiff(gene_names, union(important_feature, filtered_gene))
-
     para_feature <- rownames(mat_filtered)
 
-    mat_corr <- t(mat_filtered[important_feature, ])
-    corr_prop <- round(length(important_feature)/n_gene, 3)
-    message(paste0(corr_prop*100, "% of genes are used in correlation modelling."))
+    ## Marginal fitting
 
     if(family == "nb") {
       para <- parallel::mclapply(X = seq_len(dim(mat_filtered)[1]),
@@ -144,7 +137,8 @@ constructNull <- function(mat,
         para[, 2][is.na(para[, 2])] <- 0
       }
 
-    } else if (family == "poisson") {
+    }
+    else if (family == "poisson") {
       para <- parallel::mclapply(X = seq_len(dim(mat_filtered)[1]),
                                  FUN = function(x) {
                                    tryCatch({
@@ -170,41 +164,42 @@ constructNull <- function(mat,
       stop("FastVersion only supports NB and Poisson.")
     }
 
-    p_obs <- rvinecopulib::pseudo_obs(mat_corr)
+    ## Copula fitting
+    important_feature <- names(which(rowMeans(mat_filtered!=0) > corrCut))
 
-    normal_obs <- stats::qnorm(p_obs)
+    if(length(important_feature) > 1) {
+      unimportant_feature <- setdiff(gene_names, union(important_feature, filtered_gene))
 
-    # corrlation <- function(x) {
-    #   mat <- t(x) - matrixStats::colMeans2(x)
-    #   mat <- mat / sqrt(matrixStats::rowSums2(mat^2))
-    #   tcrossprod(mat)
-    # }
+      mat_corr <- t(mat_filtered[important_feature, ])
+      corr_prop <- round(length(important_feature)/n_gene, 3)
+      p_obs <- rvinecopulib::pseudo_obs(mat_corr)
+      normal_obs <- stats::qnorm(p_obs)
 
+      message(paste0(corr_prop*100, "% of genes are used in correlation modelling."))
 
+      if(ifSparse) {
+        corr_mat <- scDesign3::sparse_cov(normal_obs,
+                                          method = 'qiu',
+                                          operator = 'hard',
+                                          corr = TRUE)
+      } else {
+        corr_mat <- coop::pcor(normal_obs)
+      }
 
-    if(ifSparse) {
-      corr_mat <- scDesign3::sparse_cov(normal_obs,
-                                      method = 'qiu',
-                                      operator = 'hard',
-                                      corr = TRUE)
-    } else {
-      corr_mat <- coop::pcor(normal_obs)
-    }
+      diag(corr_mat) <- diag(corr_mat) + tol
+      new_mvn <- mvnfast::rmvn(n_cell,
+                               mu = rep(0, dim(corr_mat)[1]),
+                               sigma = corr_mat,
+                               isChol = FALSE,
+                               ncores = nCores)
+      colnames(new_mvn) <- important_feature
+      new_mvp <- stats::pnorm(new_mvn)
 
-    diag(corr_mat) <- diag(corr_mat) + tol
-    new_mvn <- mvnfast::rmvn(n_cell,
-                  mu = rep(0, dim(corr_mat)[1]),
-                  sigma = corr_mat,
-                  isChol = FALSE,
-                  ncores = nCores)
-    colnames(new_mvn) <- important_feature
-    new_mvp <- stats::pnorm(new_mvn)
+      newMat <- matrix(0, nrow = n_gene, ncol = n_cell)
+      rownames(newMat) <- gene_names
+      colnames(newMat) <- paste0("Cell", seq_len(n_cell))
 
-    newMat <- matrix(0, nrow = n_gene, ncol = n_cell)
-    rownames(newMat) <- gene_names
-    colnames(newMat) <- paste0("Cell", seq_len(n_cell))
-
-    if(length(unimportant_feature) > 0) {
+      if(length(unimportant_feature) > 0) {
         unimportant_mat <- parallel::mclapply(unimportant_feature, function(x) {
           if(family == "nb") {
             if(is.na(para[x, 1])) {
@@ -222,21 +217,45 @@ constructNull <- function(mat,
         rownames(unimportant_mat) <- unimportant_feature
 
         newMat[unimportant_feature, ] <- unimportant_mat
-    }
-
-    important_mat <- parallel::mclapply(important_feature, function(x) {
-      if(family == "nb") {
-        stats::qnbinom(p = as.vector(new_mvp[, x]), size = para[x, 1], mu = para[x, 2])}
-      else {
-        stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x])
       }
-    }, mc.cores = nCores)
 
-    important_mat <- t(simplify2array(important_mat))
-    rownames(important_mat) <- important_feature
+      important_mat <- parallel::mclapply(important_feature, function(x) {
+        if(family == "nb") {
+          stats::qnbinom(p = as.vector(new_mvp[, x]), size = para[x, 1], mu = para[x, 2])}
+        else {
+          stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x])
+        }
+      }, mc.cores = nCores)
 
-    newMat[important_feature, ] <- important_mat
-    newMat[is.na(newMat)] <- 0
+      important_mat <- t(simplify2array(important_mat))
+      rownames(important_mat) <- important_feature
+
+      newMat[important_feature, ] <- important_mat
+      newMat[is.na(newMat)] <- 0
+    } else {
+      message("No correlation structure. All features are independent.")
+
+      newMat <- matrix(0, nrow = n_gene, ncol = n_cell)
+      rownames(newMat) <- gene_names
+      colnames(newMat) <- paste0("Cell", seq_len(n_cell))
+
+      para_mat <- parallel::mclapply(para_feature, function(x) {
+        if(family == "nb") {
+          if(is.na(para[x, 1])) {
+            stats::rpois(n = n_cell, lambda = para[x, 2])
+          } else {
+            stats::rnbinom(n = n_cell, size = para[x, 1], mu = para[x, 2])
+          }
+          stats::rnbinom(n = n_cell, size = para[x, 1], mu = para[x, 2])
+        } else {
+          stats::rpois(n = n_cell, lambda = para[x])
+        }
+      }, mc.cores = nCores)
+
+      para_mat <- t(simplify2array(para_mat))
+      newMat[para_feature, ] <- para_mat
+      newMat[is.na(newMat)] <- 0
+    }
 
     if(isSparse){
       newMat <- Matrix::Matrix(newMat, sparse = TRUE)
