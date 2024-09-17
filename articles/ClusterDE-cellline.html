@@ -66,7 +66,7 @@ Song</h4>
 Angeles<br><a class="author_email" href="mailto:#"></a><a href="mailto:dongyuansong@ucla.edu" class="email">dongyuansong@ucla.edu</a>
       </address>
                   
-            <h4 data-toc-skip class="date">2 August 2024</h4>
+            <h4 data-toc-skip class="date">17 September 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SONGDONGYUAN1994/ClusterDE/blob/main/vignettes/ClusterDE-cellline.Rmd" class="external-link"><code>vignettes/ClusterDE-cellline.Rmd</code></a></small>
       <div class="d-none name"><code>ClusterDE-cellline.Rmd</code></div>
@@ -182,20 +182,20 @@ is designed for 1 vs 1 comparison; therefore, we set the resolution as
 <span><span class="co">#&gt; Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric</span></span>
 <span><span class="co">#&gt; To use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to 'correlation'</span></span>
 <span><span class="co">#&gt; This message will be shown once per session</span></span>
-<span><span class="co">#&gt; 18:32:28 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
-<span><span class="co">#&gt; 18:32:28 Read 758 rows and found 10 numeric columns</span></span>
-<span><span class="co">#&gt; 18:32:28 Using Annoy for neighbor search, n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 18:32:28 Building Annoy index with metric = cosine, n_trees = 50</span></span>
+<span><span class="co">#&gt; 00:24:35 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
+<span><span class="co">#&gt; 00:24:35 Read 758 rows and found 10 numeric columns</span></span>
+<span><span class="co">#&gt; 00:24:35 Using Annoy for neighbor search, n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 00:24:35 Building Annoy index with metric = cosine, n_trees = 50</span></span>
 <span><span class="co">#&gt; 0%   10   20   30   40   50   60   70   80   90   100%</span></span>
 <span><span class="co">#&gt; [----|----|----|----|----|----|----|----|----|----|</span></span>
 <span><span class="co">#&gt; **************************************************|</span></span>
-<span><span class="co">#&gt; 18:32:28 Writing NN index file to temp file /tmp/RtmpqycZA2/file1859553a02a7</span></span>
-<span><span class="co">#&gt; 18:32:28 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">#&gt; 18:32:28 Annoy recall = 100%</span></span>
-<span><span class="co">#&gt; 18:32:28 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 18:32:30 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
-<span><span class="co">#&gt; 18:32:30 Commencing optimization for 500 epochs, with 27914 positive edges</span></span>
-<span><span class="co">#&gt; 18:32:31 Optimization finished</span></span>
+<span><span class="co">#&gt; 00:24:35 Writing NN index file to temp file /tmp/RtmpVXHxMl/file827b465fefd9</span></span>
+<span><span class="co">#&gt; 00:24:35 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">#&gt; 00:24:35 Annoy recall = 100%</span></span>
+<span><span class="co">#&gt; 00:24:36 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 00:24:37 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
+<span><span class="co">#&gt; 00:24:37 Commencing optimization for 500 epochs, with 27914 positive edges</span></span>
+<span><span class="co">#&gt; 00:24:38 Optimization finished</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Clustering result"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ClusterDE-cellline_files/figure-html/unnamed-chunk-3-1.png" width="700">
 From the UMAP, the two clusters seem to be dubious. Although we do not
@@ -238,7 +238,7 @@ discoveries.</p>
 <span><span class="co">#&gt; 1 genes have no more than 2 non-zero values; ignore fitting and return all 0s.</span></span>
 <span><span class="co">#&gt; 98.5% of genes are used in correlation modelling.</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt; 114.478  64.780  53.208</span></span></code></pre></div>
+<span><span class="co">#&gt; 115.030  64.231  53.569</span></span></code></pre></div>
 <p>We perform the same pipeline as we did for target data. Please note
 we need two clusters here, too. This is straightforward for clustering
 method with predefined cluster numbers, e.g., K-means. For louvain
@@ -304,20 +304,20 @@ parameter so that we still get two clusters.</p>
 <span><span class="co">#&gt; Number of communities: 2</span></span>
 <span><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
 <span><span class="va">cellline_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 18:34:17 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
-<span><span class="co">#&gt; 18:34:17 Read 758 rows and found 10 numeric columns</span></span>
-<span><span class="co">#&gt; 18:34:17 Using Annoy for neighbor search, n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 18:34:17 Building Annoy index with metric = cosine, n_trees = 50</span></span>
+<span><span class="co">#&gt; 00:26:23 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
+<span><span class="co">#&gt; 00:26:23 Read 758 rows and found 10 numeric columns</span></span>
+<span><span class="co">#&gt; 00:26:23 Using Annoy for neighbor search, n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 00:26:23 Building Annoy index with metric = cosine, n_trees = 50</span></span>
 <span><span class="co">#&gt; 0%   10   20   30   40   50   60   70   80   90   100%</span></span>
 <span><span class="co">#&gt; [----|----|----|----|----|----|----|----|----|----|</span></span>
 <span><span class="co">#&gt; **************************************************|</span></span>
-<span><span class="co">#&gt; 18:34:17 Writing NN index file to temp file /tmp/RtmpqycZA2/file185951df402</span></span>
-<span><span class="co">#&gt; 18:34:17 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">#&gt; 18:34:17 Annoy recall = 100%</span></span>
-<span><span class="co">#&gt; 18:34:18 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 18:34:19 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
-<span><span class="co">#&gt; 18:34:19 Commencing optimization for 500 epochs, with 28134 positive edges</span></span>
-<span><span class="co">#&gt; 18:34:20 Optimization finished</span></span>
+<span><span class="co">#&gt; 00:26:23 Writing NN index file to temp file /tmp/RtmpVXHxMl/file827b11fc666d</span></span>
+<span><span class="co">#&gt; 00:26:23 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">#&gt; 00:26:23 Annoy recall = 100%</span></span>
+<span><span class="co">#&gt; 00:26:24 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 00:26:25 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
+<span><span class="co">#&gt; 00:26:25 Commencing optimization for 500 epochs, with 28134 positive edges</span></span>
+<span><span class="co">#&gt; 00:26:26 Optimization finished</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">cellline_null</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ClusterDE-cellline_files/figure-html/unnamed-chunk-6-1.png" width="700">
 We perform the DE test on synthetic null data.</p>
@@ -385,48 +385,48 @@ around 0.</p>
 <span><span class="co">#&gt;  [5] GenomicRanges_1.56.1        GenomeInfoDb_1.40.1        </span></span>
 <span><span class="co">#&gt;  [7] IRanges_2.38.1              S4Vectors_0.42.1           </span></span>
 <span><span class="co">#&gt;  [9] BiocGenerics_0.50.0         MatrixGenerics_1.16.0      </span></span>
-<span><span class="co">#&gt; [11] matrixStats_1.3.0           Seurat_5.1.0               </span></span>
+<span><span class="co">#&gt; [11] matrixStats_1.4.1           Seurat_5.1.0               </span></span>
 <span><span class="co">#&gt; [13] SeuratObject_5.0.2          sp_2.1-4                   </span></span>
 <span><span class="co">#&gt; [15] ClusterDE_0.99.3            BiocStyle_2.32.1           </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;   [1] RcppAnnoy_0.0.22        splines_4.4.1           later_1.3.2            </span></span>
-<span><span class="co">#&gt;   [4] tibble_3.2.1            polyclip_1.10-7         fastDummies_1.7.3      </span></span>
+<span><span class="co">#&gt;   [4] tibble_3.2.1            polyclip_1.10-7         fastDummies_1.7.4      </span></span>
 <span><span class="co">#&gt;   [7] lifecycle_1.0.4         globals_0.16.3          lattice_0.22-6         </span></span>
 <span><span class="co">#&gt;  [10] MASS_7.3-60.2           magrittr_2.0.3          limma_3.60.4           </span></span>
-<span><span class="co">#&gt;  [13] plotly_4.10.4           sass_0.4.9              rmarkdown_2.27         </span></span>
+<span><span class="co">#&gt;  [13] plotly_4.10.4           sass_0.4.9              rmarkdown_2.28         </span></span>
 <span><span class="co">#&gt;  [16] jquerylib_0.1.4         yaml_2.3.10             httpuv_1.6.15          </span></span>
 <span><span class="co">#&gt;  [19] sctransform_0.4.1       spam_2.10-0             spatstat.sparse_3.1-0  </span></span>
-<span><span class="co">#&gt;  [22] reticulate_1.38.0       cowplot_1.1.3           pbapply_1.7-2          </span></span>
-<span><span class="co">#&gt;  [25] RColorBrewer_1.1-3      abind_1.4-5             zlibbioc_1.50.0        </span></span>
+<span><span class="co">#&gt;  [22] reticulate_1.39.0       cowplot_1.1.3           pbapply_1.7-2          </span></span>
+<span><span class="co">#&gt;  [25] RColorBrewer_1.1-3      abind_1.4-8             zlibbioc_1.50.0        </span></span>
 <span><span class="co">#&gt;  [28] Rtsne_0.17              purrr_1.0.2             kde1d_1.0.7            </span></span>
-<span><span class="co">#&gt;  [31] GenomeInfoDbData_1.2.12 ggrepel_0.9.5           irlba_2.3.5.1          </span></span>
-<span><span class="co">#&gt;  [34] listenv_0.9.1           spatstat.utils_3.0-5    goftest_1.2-3          </span></span>
+<span><span class="co">#&gt;  [31] GenomeInfoDbData_1.2.12 ggrepel_0.9.6           irlba_2.3.5.1          </span></span>
+<span><span class="co">#&gt;  [34] listenv_0.9.1           spatstat.utils_3.1-0    goftest_1.2-3          </span></span>
 <span><span class="co">#&gt;  [37] RSpectra_0.16-2         spatstat.random_3.3-1   fitdistrplus_1.2-1     </span></span>
 <span><span class="co">#&gt;  [40] parallelly_1.38.0       pkgdown_2.1.0           leiden_0.4.3.1         </span></span>
 <span><span class="co">#&gt;  [43] codetools_0.2-20        DelayedArray_0.30.1     tidyselect_1.2.1       </span></span>
 <span><span class="co">#&gt;  [46] UCSC.utils_1.0.0        farver_2.1.2            randtoolbox_2.0.4      </span></span>
-<span><span class="co">#&gt;  [49] spatstat.explore_3.3-1  jsonlite_1.8.8          progressr_0.14.0       </span></span>
+<span><span class="co">#&gt;  [49] spatstat.explore_3.3-2  jsonlite_1.8.8          progressr_0.14.0       </span></span>
 <span><span class="co">#&gt;  [52] ggridges_0.5.6          survival_3.6-4          systemfonts_1.1.0      </span></span>
-<span><span class="co">#&gt;  [55] tools_4.4.1             ragg_1.3.2              ica_1.0-3              </span></span>
+<span><span class="co">#&gt;  [55] tools_4.4.1             ragg_1.3.3              ica_1.0-3              </span></span>
 <span><span class="co">#&gt;  [58] Rcpp_1.0.13             glue_1.7.0              gridExtra_2.3          </span></span>
-<span><span class="co">#&gt;  [61] SparseArray_1.4.8       xfun_0.46               mvnfast_0.2.8          </span></span>
-<span><span class="co">#&gt;  [64] dplyr_1.1.4             withr_3.0.1             BiocManager_1.30.23    </span></span>
-<span><span class="co">#&gt;  [67] fastmap_1.2.0           fansi_1.0.6             digest_0.6.36          </span></span>
+<span><span class="co">#&gt;  [61] SparseArray_1.4.8       xfun_0.47               mvnfast_0.2.8          </span></span>
+<span><span class="co">#&gt;  [64] dplyr_1.1.4             withr_3.0.1             BiocManager_1.30.25    </span></span>
+<span><span class="co">#&gt;  [67] fastmap_1.2.0           fansi_1.0.6             digest_0.6.37          </span></span>
 <span><span class="co">#&gt;  [70] R6_2.5.1                mime_0.12               textshaping_0.4.0      </span></span>
 <span><span class="co">#&gt;  [73] colorspace_2.1-1        scattermore_1.2         tensor_1.5             </span></span>
 <span><span class="co">#&gt;  [76] spatstat.data_3.1-2     utf8_1.2.4              tidyr_1.3.1            </span></span>
-<span><span class="co">#&gt;  [79] generics_0.1.3          data.table_1.15.4       httr_1.4.7             </span></span>
+<span><span class="co">#&gt;  [79] generics_0.1.3          data.table_1.16.0       httr_1.4.7             </span></span>
 <span><span class="co">#&gt;  [82] htmlwidgets_1.6.4       S4Arrays_1.4.1          rngWELL_0.10-9         </span></span>
 <span><span class="co">#&gt;  [85] uwot_0.2.2              pkgconfig_2.0.3         gtable_0.3.5           </span></span>
 <span><span class="co">#&gt;  [88] lmtest_0.9-40           XVector_0.44.0          htmltools_0.5.8.1      </span></span>
 <span><span class="co">#&gt;  [91] dotCall64_1.1-1         bookdown_0.40           scales_1.3.0           </span></span>
-<span><span class="co">#&gt;  [94] png_0.1-8               spatstat.univar_3.0-0   knitr_1.48             </span></span>
+<span><span class="co">#&gt;  [94] png_0.1-8               spatstat.univar_3.0-1   knitr_1.48             </span></span>
 <span><span class="co">#&gt;  [97] reshape2_1.4.4          nlme_3.1-164            cachem_1.1.0           </span></span>
 <span><span class="co">#&gt; [100] zoo_1.8-12              stringr_1.5.1           KernSmooth_2.23-24     </span></span>
 <span><span class="co">#&gt; [103] parallel_4.4.1          miniUI_0.1.1.1          desc_1.4.3             </span></span>
 <span><span class="co">#&gt; [106] pillar_1.9.0            grid_4.4.1              vctrs_0.6.5            </span></span>
-<span><span class="co">#&gt; [109] RANN_2.6.1              promises_1.3.0          xtable_1.8-4           </span></span>
+<span><span class="co">#&gt; [109] RANN_2.6.2              promises_1.3.0          xtable_1.8-4           </span></span>
 <span><span class="co">#&gt; [112] cluster_2.1.6           evaluate_0.24.0         cli_3.6.3              </span></span>
 <span><span class="co">#&gt; [115] compiler_4.4.1          rlang_1.1.4             crayon_1.5.3           </span></span>
 <span><span class="co">#&gt; [118] future.apply_1.11.2     labeling_0.4.3          plyr_1.8.9             </span></span>
