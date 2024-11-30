@@ -7,7 +7,8 @@
 #' @param targetScores A named numeric vector of the DE scores from the target data, e.g., the p-values between two clusters from the real data.
 #' @param nullScores A named numeric vector of the DE scores from the synthetic null data, e.g., the p-values between two clusters from the null data.
 #' @param nlogTrans A logical value. If the input scores are p-values, take the \code{-log10} transformation since Clipper require larger scores represent more significant DE. Default is TRUE.
-#' @param FDR A numeric value of the target False Discovery Rate (FDR). Default is 0.05.
+#' @param FDR A numeric value of the target False Discovery Rate (FDR). Must be 'diff' or 'max'.
+#' @param contrastScore A string value of the way to construct contrast scores. The choice can be
 #' @param correct A logical value. If TRUE, perform the correction to make the distribution of contrast scores approximately symmetric. Default is FALSE.
 #' @param threshold A string value of the threshold method. Must be 'BC' or 'DS'.
 #' @param ordering A logic value. If TRUE, order the genes in the returned table by their significance. Default is TRUE.
@@ -25,6 +26,7 @@ callDE <- function(targetScores,
                    nullScores,
                    nlogTrans = TRUE,
                    FDR = 0.05,
+                   contrastScore = "diff",
                    correct = FALSE,
                    threshold = "BC",
                    ordering = TRUE) {
@@ -43,14 +45,21 @@ callDE <- function(targetScores,
   if(nlogTrans) {
     tbl_merge <- dplyr::mutate(tbl_merge, target = -log10(target), null = -log10(null))
   }
-  tbl_merge <- dplyr::mutate(tbl_merge, cs = target - null) ## Diff contrast scores
 
-  if(correct) {
-    if(PairedData::yuen.t.test(x = tbl_merge$target, y = tbl_merge$null, alternative = "greater", paired = TRUE, tr = 0.1)$p.value < 0.001) {
-      fit <- MASS::rlm(tbl_merge$target ~ tbl_merge$null, maxit = 100)
-      tbl_merge$cs <- fit$residuals
+  if(contrastScore == 'diff') {
+    tbl_merge <- dplyr::mutate(tbl_merge, cs = target - null) ## Diff contrast scores
+
+    if(correct) {
+      if(PairedData::yuen.t.test(x = tbl_merge$target, y = tbl_merge$null, alternative = "greater", paired = TRUE, tr = 0.1)$p.value < 0.001) {
+        fit <- MASS::rlm(tbl_merge$target ~ tbl_merge$null, maxit = 100)
+        tbl_merge$cs <- fit$residuals
+      }
     }
-  }
+  } else (contrastScore == 'max') {
+    tbl_merge <- dplyr::mutate(tbl_merge, cs = max(target, null)*sign(target - null))
+
+  } else stop("Contrast score must be constructed by 'diff' or 'max' method.")
+
 
   tbl_merge <- dplyr::mutate(tbl_merge, q = cs2q(contrastScore = tbl_merge$cs, threshold = threshold))
   if(ordering) {

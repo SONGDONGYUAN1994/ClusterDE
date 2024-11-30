@@ -7,6 +7,7 @@ author:
     email: siqichen4477@gmail.com
   - name: Dongyuan Song
     affiliation:
+    - Department of Genetics & Genome Sciences, UConn Health  
     - Bioinformatics IDP, University of California, Los Angeles
     email: dongyuansong@ucla.edu
 output: 
