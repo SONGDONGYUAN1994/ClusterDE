@@ -55,10 +55,9 @@ callDE <- function(targetScores,
         tbl_merge$cs <- fit$residuals
       }
     }
-  } else (contrastScore == 'max') {
+  } else if (contrastScore == 'max') {
     tbl_merge <- dplyr::mutate(tbl_merge, cs = max(target, null)*sign(target - null))
-
-  } else stop("Contrast score must be constructed by 'diff' or 'max' method.")
+    } else stop("Contrast score must be constructed by 'diff' or 'max' method.")
 
 
   tbl_merge <- dplyr::mutate(tbl_merge, q = cs2q(contrastScore = tbl_merge$cs, threshold = threshold))
