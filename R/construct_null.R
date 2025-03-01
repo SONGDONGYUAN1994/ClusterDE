@@ -13,6 +13,7 @@
 #' For example, if your input data is a spatial data with X, Y coordinates, the formula can be 's(X, Y, bs = 'gp', k = 4)'.
 #' @param extraInfo A data frame of the extra covariates used in \code{formula}. For example, the 2D spatial coordinates. Default is NULL.
 #' @param nCores An integer. The number of cores to use for Parallel processing.
+#' @param nRep An integer. The number of sampled synthetic null datasets. Default value is 1.
 #' @param parallelization A string indicating the specific parallelization function to use.
 #' Must be one of 'mcmapply', 'bpmapply', or 'pbmcmapply', which corresponds to the parallelization function in the package
 #' \code{parallel},\code{BiocParallel}, and \code{pbmcapply} respectively. The default value is 'pbmcmapply'.
@@ -35,6 +36,7 @@ constructNull <- function(mat,
                           formula = NULL,
                           extraInfo = NULL,
                           nCores = 1,
+                          nRep = 1,
                           parallelization = "mcmapply",
                           fastVersion = TRUE,
                           ifSparse = FALSE,
@@ -187,20 +189,68 @@ constructNull <- function(mat,
       }
 
       diag(corr_mat) <- diag(corr_mat) + tol
-      new_mvn <- mvnfast::rmvn(n_cell,
-                               mu = rep(0, dim(corr_mat)[1]),
-                               sigma = corr_mat,
-                               isChol = FALSE,
-                               ncores = nCores)
-      colnames(new_mvn) <- important_feature
-      new_mvp <- stats::pnorm(new_mvn)
 
-      newMat <- matrix(0, nrow = n_gene, ncol = n_cell)
-      rownames(newMat) <- gene_names
-      colnames(newMat) <- paste0("Cell", seq_len(n_cell))
+      ## Start sampling
+      newMat_list <- lapply(seq_len(nRep), function(x) {
+        new_mvn <- mvnfast::rmvn(n_cell,
+                                 mu = rep(0, dim(corr_mat)[1]),
+                                 sigma = corr_mat,
+                                 isChol = FALSE,
+                                 ncores = nCores)
+        colnames(new_mvn) <- important_feature
+        new_mvp <- stats::pnorm(new_mvn)
 
-      if(length(unimportant_feature) > 0) {
-        unimportant_mat <- parallel::mclapply(unimportant_feature, function(x) {
+        newMat <- matrix(0, nrow = n_gene, ncol = n_cell)
+        rownames(newMat) <- gene_names
+        colnames(newMat) <- paste0("Cell", seq_len(n_cell))
+
+        if(length(unimportant_feature) > 0) {
+          unimportant_mat <- parallel::mclapply(unimportant_feature, function(x) {
+            if(family == "nb") {
+              if(is.na(para[x, 1])) {
+                stats::rpois(n = n_cell, lambda = para[x, 2])
+              } else {
+                stats::rnbinom(n = n_cell, size = para[x, 1], mu = para[x, 2])
+              }
+              stats::rnbinom(n = n_cell, size = para[x, 1], mu = para[x, 2])
+            } else {
+              stats::rpois(n = n_cell, lambda = para[x])
+            }
+          }, mc.cores = nCores)
+
+          unimportant_mat <- t(simplify2array(unimportant_mat))
+          rownames(unimportant_mat) <- unimportant_feature
+
+          newMat[unimportant_feature, ] <- unimportant_mat
+        }
+
+        important_mat <- parallel::mclapply(important_feature, function(x) {
+          if(family == "nb") {
+            stats::qnbinom(p = as.vector(new_mvp[, x]), size = para[x, 1], mu = para[x, 2])}
+          else {
+            stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x])
+          }
+        }, mc.cores = nCores)
+
+        important_mat <- t(simplify2array(important_mat))
+        rownames(important_mat) <- important_feature
+
+        newMat[important_feature, ] <- important_mat
+        newMat[is.na(newMat)] <- 0
+        if(isSparse){
+          newMat <- Matrix::Matrix(newMat, sparse = TRUE)
+        }
+        newMat
+      })
+
+    } else {
+      message("No correlation structure. All features are independent.")
+      newMat_list <- lapply(seq_lennRep, function(x) {
+        newMat <- matrix(0, nrow = n_gene, ncol = n_cell)
+        rownames(newMat) <- gene_names
+        colnames(newMat) <- paste0("Cell", seq_len(n_cell))
+
+        para_mat <- parallel::mclapply(para_feature, function(x) {
           if(family == "nb") {
             if(is.na(para[x, 1])) {
               stats::rpois(n = n_cell, lambda = para[x, 2])
@@ -213,53 +263,20 @@ constructNull <- function(mat,
           }
         }, mc.cores = nCores)
 
-        unimportant_mat <- t(simplify2array(unimportant_mat))
-        rownames(unimportant_mat) <- unimportant_feature
-
-        newMat[unimportant_feature, ] <- unimportant_mat
-      }
-
-      important_mat <- parallel::mclapply(important_feature, function(x) {
-        if(family == "nb") {
-          stats::qnbinom(p = as.vector(new_mvp[, x]), size = para[x, 1], mu = para[x, 2])}
-        else {
-          stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x])
+        para_mat <- t(simplify2array(para_mat))
+        newMat[para_feature, ] <- para_mat
+        newMat[is.na(newMat)] <- 0
+        if(isSparse){
+          newMat <- Matrix::Matrix(newMat, sparse = TRUE)
         }
-      }, mc.cores = nCores)
-
-      important_mat <- t(simplify2array(important_mat))
-      rownames(important_mat) <- important_feature
-
-      newMat[important_feature, ] <- important_mat
-      newMat[is.na(newMat)] <- 0
-    } else {
-      message("No correlation structure. All features are independent.")
-
-      newMat <- matrix(0, nrow = n_gene, ncol = n_cell)
-      rownames(newMat) <- gene_names
-      colnames(newMat) <- paste0("Cell", seq_len(n_cell))
-
-      para_mat <- parallel::mclapply(para_feature, function(x) {
-        if(family == "nb") {
-          if(is.na(para[x, 1])) {
-            stats::rpois(n = n_cell, lambda = para[x, 2])
-          } else {
-            stats::rnbinom(n = n_cell, size = para[x, 1], mu = para[x, 2])
-          }
-          stats::rnbinom(n = n_cell, size = para[x, 1], mu = para[x, 2])
-        } else {
-          stats::rpois(n = n_cell, lambda = para[x])
-        }
-      }, mc.cores = nCores)
-
-      para_mat <- t(simplify2array(para_mat))
-      newMat[para_feature, ] <- para_mat
-      newMat[is.na(newMat)] <- 0
+        newMat
+      })
     }
+  } ## End for fastVersion
 
-    if(isSparse){
-      newMat <- Matrix::Matrix(newMat, sparse = TRUE)
-    }
+  if(length(newMat_list) == 1) {
+    return(newMat_list[[1]])
+  } else {
+    return(newMat_list)
   }
-  return(newMat)
 }
