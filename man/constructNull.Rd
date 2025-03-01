@@ -10,6 +10,7 @@ constructNull(
   formula = NULL,
   extraInfo = NULL,
   nCores = 1,
+  nRep = 1,
   parallelization = "mcmapply",
   fastVersion = TRUE,
   ifSparse = FALSE,
@@ -31,6 +32,8 @@ For example, if your input data is a spatial data with X, Y coordinates, the for
 \item{extraInfo}{A data frame of the extra covariates used in \code{formula}. For example, the 2D spatial coordinates. Default is NULL.}
 
 \item{nCores}{An integer. The number of cores to use for Parallel processing.}
+
+\item{nRep}{An integer. The number of sampled synthetic null datasets. Default value is 1.}
 
 \item{parallelization}{A string indicating the specific parallelization function to use.
 Must be one of 'mcmapply', 'bpmapply', or 'pbmcmapply', which corresponds to the parallelization function in the package

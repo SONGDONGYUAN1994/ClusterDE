@@ -9,6 +9,7 @@ callDE(
   nullScores,
   nlogTrans = TRUE,
   FDR = 0.05,
+  contrastScore = "diff",
   correct = FALSE,
   threshold = "BC",
   ordering = TRUE
@@ -21,7 +22,9 @@ callDE(
 
 \item{nlogTrans}{A logical value. If the input scores are p-values, take the \code{-log10} transformation since Clipper require larger scores represent more significant DE. Default is TRUE.}
 
-\item{FDR}{A numeric value of the target False Discovery Rate (FDR). Default is 0.05.}
+\item{FDR}{A numeric value of the target False Discovery Rate (FDR). Must be 'diff' or 'max'.}
+
+\item{contrastScore}{A string value of the way to construct contrast scores. The choice can be}
 
 \item{correct}{A logical value. If TRUE, perform the correction to make the distribution of contrast scores approximately symmetric. Default is FALSE.}
 
