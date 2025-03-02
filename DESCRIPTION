@@ -42,7 +42,6 @@ Suggests: parallel,
           ape,
           BayesSpace,
           spatialLIBD,
-          ape
 Remotes: SONGDONGYUAN1994/scDesign3
 biocViews:
          Software,

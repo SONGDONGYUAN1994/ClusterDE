@@ -55,7 +55,7 @@ spe <- fetch_data(type = "spe")
 ###select the Layer5 in the slice 151673
 sub_151673 <- spe[, spe$sample_id == "151673"]
 index <- sub_151673$spatialLIBD == "L5"
-index[which(is.na(index))]="NAN"
+index[which(is.na(index))] <- "NAN"
 sub_151673 <- sub_151673[, index=="TRUE"]
 print(sub_151673)
 
@@ -80,7 +80,7 @@ real_sce$cell_type <- sub_151673@colData$spatialLIBD
 ###visualize the real spatial domains
 real_sce_domains <- data.frame(Xaxis=real_sce$spatial1,Yaxis=real_sce$spatial2,Domain=real_sce$cell_type)
 ggplot(real_sce_domains, aes(x = Xaxis, y = Yaxis, col =Domain)) + geom_point(size=1.0) +
-  ggtitle("Manual annotation \n (The layer5 in the slice 151673)") + 
+  ggtitle("Manual annotation \n (The layer5 in the slice 151673)") + coord_equal() + 
   theme(plot.title = element_text(size=10,hjust=0.5),
         panel.grid=element_blank(),
         panel.background = element_rect(fill = "gray90"),
@@ -103,9 +103,14 @@ Firstly, we employed the BayesSpace for spatial clustering. Please note that Clu
 ###construct the input of BayesSpace based on real dataset
 #the input of BayesSpace is sce object
 real_sce_clu <- SingleCellExperiment(list(counts=real_sce@assays@data$counts))
-# add colData information of singlecellexperiment
+# add colData information of SingleCellExperiment
 real_sce_clu$row <- real_sce$spatial1
 real_sce_clu$col <- real_sce$spatial2
+
+colData(real_sce_clu)$spot.idx <- seq_len(ncol(real_sce_clu))  # Assign unique spot indices
+colData(real_sce_clu)$array_col <- real_sce_clu$col
+colData(real_sce_clu)$array_row <- real_sce_clu$row  
+
 ## log-normalize the count data
 set.seed(102)
 real_sce_clu <- spatialPreprocess(real_sce_clu, platform="ST", n.PCs=7,log.normalize=TRUE)
@@ -117,7 +122,7 @@ real_sce_clu <- spatialCluster(real_sce_clu, q=2, platform="ST", d=7,
                                save.chain=TRUE)
 #visualize the spatial cluster
 real_sce_spatial_clu <- data.frame(Xaxis=real_sce_clu$row,Yaxis=real_sce_clu$col,Clusters=as.character(real_sce_clu$spatial.cluster))
-ggplot(real_sce_spatial_clu, aes(x = Xaxis, y = Yaxis, col =Clusters)) + geom_point(size=1.0) +
+ggplot(real_sce_spatial_clu, aes(x = Xaxis, y = Yaxis, col =Clusters)) + geom_point(size=1.0)  + coord_equal() +
   ggtitle("Real data \n (spatial clusters detected by BayesSpace)") + 
   theme(plot.title = element_text(size=10,hjust=0.5),
         panel.grid = element_blank(),
@@ -171,7 +176,7 @@ system.time(null_onedomain_dataset <- ClusterDE::constructNull(mat=count_mat,
 We perform the same pipeline as we did for target data. Please note we need two spatial clusters here, too.
 ```{r}
 ###construct the input of BayesSpace based on null dataset######
-null_sce <- SingleCellExperiment(list(counts =null_onedomain_dataset))
+null_sce <- SingleCellExperiment(list(counts = null_onedomain_dataset))
 # add colData information of singlecellexperiment
 null_sce$row <- real_sce$spatial1
 null_sce$col <- real_sce$spatial2

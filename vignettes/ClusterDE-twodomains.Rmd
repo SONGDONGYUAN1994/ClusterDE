@@ -105,6 +105,11 @@ real_sce_clu <- SingleCellExperiment(list(counts=real_sce@assays@data$counts))
 # add colData information of singlecellexperiment
 real_sce_clu$row <- real_sce$spatial1
 real_sce_clu$col <- real_sce$spatial2
+
+colData(real_sce_clu)$spot.idx <- seq_len(ncol(real_sce_clu))  # Assign unique spot indices
+colData(real_sce_clu)$array_col <- real_sce_clu$col
+colData(real_sce_clu)$array_row <- real_sce_clu$row
+
 ## log-normalize the count data
 set.seed(102)
 real_sce_clu <- spatialPreprocess(real_sce_clu, platform="ST", n.PCs=7,log.normalize=TRUE)
@@ -174,6 +179,11 @@ null_sce <- SingleCellExperiment(list(counts =null_twodomain_dataset))
 # add colData information of singlecellexperiment
 null_sce$row <- real_sce$spatial1
 null_sce$col <- real_sce$spatial2
+
+colData(null_sce)$spot.idx <- seq_len(ncol(null_sce))  # Assign unique spot indices
+colData(null_sce)$array_col <- null_sce$col
+colData(null_sce)$array_row <- null_sce$row
+
 ## log-normalize the count data
 set.seed(102)
 null_sce<- spatialPreprocess(null_sce, platform="ST", n.PCs=7,log.normalize=TRUE)

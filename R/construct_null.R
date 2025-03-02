@@ -45,7 +45,7 @@ constructNull <- function(mat,
   if(is.null(rownames(mat))|is.null(colnames(mat))) {
     stop("The matrix must have both row names and col names!")
   }
-
+  ## Check if we should use sparse matrix.
   isSparse <- methods::is(mat, "sparseMatrix")
 
   if(!fastVersion) {
@@ -69,7 +69,8 @@ constructNull <- function(mat,
                                       nonnegative = FALSE,
                                       copula = "gaussian",
                                       if_sparse = ifSparse,
-                                      fastmvn = FALSE)
+                                      fastmvn = FALSE,
+                                      n_rep = nRep)
       newMat <- newData$new_count
     } else {
       sce <- SingleCellExperiment::SingleCellExperiment(list(counts = mat))
@@ -91,7 +92,8 @@ constructNull <- function(mat,
                                       important_feature = corrCut,
                                       nonnegative = FALSE,
                                       copula = "gaussian",
-                                      fastmvn = FALSE)
+                                      fastmvn = FALSE,
+                                      n_rep = nRep)
       newMat <- newData$new_count
     }
   } else {
