@@ -29,7 +29,7 @@
 #' @examples
 #' data(exampleCounts)
 #' nullData <- constructNull(mat = exampleCounts)
-#'
+#' @importFrom gamlss.dist dZIP pZIP qZIP rZIP ZIP
 #' @export constructNull
 constructNull <- function(mat,
                           family = "nb",
@@ -164,8 +164,30 @@ constructNull <- function(mat,
         para[is.na(para)] <- 0
       }
 
+    } else if (family == "zip") {
+        para <- parallel::mclapply(X = seq_len(dim(mat_filtered)[1]),
+                                 FUN = function(x) {
+                                   tryCatch({
+                                     res <- suppressWarnings(fitdistrplus::fitdist(mat_filtered[x, ], "ZIP", method = "mle", start = list(mu = mean(mat[x, ]), sigma = 0.1))$estimate)
+                                     res},
+                                     error = function(cond) {
+                                       message(paste0(x, " is problematic with NB MLE; using Poisson MME instead."))
+                                       fit_para <- suppressWarnings(fitdistrplus::fitdist(mat_filtered[x, ], "pois", method = "mme")$estimate)
+                                       res <- c(fit_para, NA)
+                                       names(res) <- c("mu", "sigma")
+                                       res
+                                     })
+                                 },
+                                 mc.cores = nCores)
+      para <- t(simplify2array(para))
+      rownames(para) <- para_feature
+
+      if(sum(is.na(para[, 1])) > 0) {
+        warning("NA produces in mean estimate; using 0 instead.")
+        para[, 1][is.na(para[, 1])] <- 0
+      }
     } else {
-      stop("FastVersion only supports NB and Poisson.")
+      stop("FastVersion only supports NB, Poisson or zip.")
     }
 
     ## Copula fitting
@@ -214,9 +236,16 @@ constructNull <- function(mat,
               } else {
                 stats::rnbinom(n = n_cell, size = para[x, 1], mu = para[x, 2])
               }
-              stats::rnbinom(n = n_cell, size = para[x, 1], mu = para[x, 2])
-            } else {
+            } else if (family == "poisson"){
               stats::rpois(n = n_cell, lambda = para[x])
+            } else if (family == "zip") {
+              if(is.na(para[x, 2])) {
+                stats::rpois(n = n_cell, lambda = para[x, 1])
+              } else {
+                rZIP(n = n_cell, sigma = para[x, 2], mu = para[x, 1])
+              }
+            } else {
+              stop("Family must be in nb, poisson, or zip.")
             }
           }, mc.cores = nCores)
 
@@ -228,9 +257,21 @@ constructNull <- function(mat,
 
         important_mat <- parallel::mclapply(important_feature, function(x) {
           if(family == "nb") {
-            stats::qnbinom(p = as.vector(new_mvp[, x]), size = para[x, 1], mu = para[x, 2])}
-          else {
-            stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x])
+            if(is.na(para[x, 1])) {
+              stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x, 2])
+            } else {
+              stats::qnbinom(p = as.vector(new_mvp[, x]), size = para[x, 1], mu = para[x, 2])
+            }
+            } else if (family == "poisson") {
+              stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x])
+          } else if (family == "zip") {
+            if(is.na(para[x, 2])) {
+              stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x, 1])
+            } else {
+              qZIP(p = as.vector(new_mvp[, x]), sigma = para[x, 2], mu = para[x, 1])
+            }
+          } else {
+            stop("Family must be in nb, poisson, or zip.")
           }
         }, mc.cores = nCores)
 
@@ -260,8 +301,16 @@ constructNull <- function(mat,
               stats::rnbinom(n = n_cell, size = para[x, 1], mu = para[x, 2])
             }
             stats::rnbinom(n = n_cell, size = para[x, 1], mu = para[x, 2])
-          } else {
+          } else if (family == "poisson"){
             stats::rpois(n = n_cell, lambda = para[x])
+          } else if (family == "zip") {
+            if(is.na(para[x, 2])) {
+              tats::rpois(n = n_cell, lambda = para[x, 1])
+            } else {
+              rZIP(n = n_cell, sigma = para[x, 2], mu = para[x, 1])
+            }
+          } else {
+            stop("Family must be in nb, poisson, or zip.")
           }
         }, mc.cores = nCores)
 

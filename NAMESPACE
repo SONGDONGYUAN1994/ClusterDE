@@ -2,3 +2,8 @@
 
 export(callDE)
 export(constructNull)
+importFrom(gamlss.dist,ZIP)
+importFrom(gamlss.dist,dZIP)
+importFrom(gamlss.dist,pZIP)
+importFrom(gamlss.dist,qZIP)
+importFrom(gamlss.dist,rZIP)

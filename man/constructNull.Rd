@@ -61,5 +61,4 @@ This function constructs the synthetic null data based on the target data (real 
 \examples{
 data(exampleCounts)
 nullData <- constructNull(mat = exampleCounts)
-
 }

@@ -27,7 +27,8 @@ Imports: scDesign3,
          methods,
          pbmcapply,
          coop,
-         scales
+         scales,
+         gamlss.dist
 Suggests: parallel,
           ggplot2,
           knitr,

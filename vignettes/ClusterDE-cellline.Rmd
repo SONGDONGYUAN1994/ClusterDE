@@ -78,7 +78,7 @@ We first generate the synthetic null data based on the target data (real data). 
 ```{r}
 count_mat <- GetAssayData(object = cellline, slot = "counts")
 set.seed(123)
-system.time(synthetic_null <- constructNull(count_mat, nCores = 2, fastVersion = TRUE, family = "nb", ifSparse = FALSE, nRep = 1))
+system.time(synthetic_null <- constructNull(count_mat, nCores = 10, fastVersion = TRUE, family = "nb", ifSparse = FALSE, nRep = 1))
 ```
 
 We perform the same pipeline as we did for target data. Please note we need two clusters here, too. This is straightforward for clustering method with predefined cluster numbers, e.g., K-means. For louvain clustering used in Seurat you may manually adjust the resolution parameter so that we still get two clusters.
