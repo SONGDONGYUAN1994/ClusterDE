@@ -72,6 +72,7 @@ constructNull <- function(mat,
                                       fastmvn = FALSE,
                                       n_rep = nRep)
       newMat <- newData$new_count
+      newMat_list <- newMat
     } else {
       sce <- SingleCellExperiment::SingleCellExperiment(list(counts = mat))
       SummarizedExperiment::colData(sce) <- DataFrame(extraInfo)
@@ -95,6 +96,7 @@ constructNull <- function(mat,
                                       fastmvn = FALSE,
                                       n_rep = nRep)
       newMat <- newData$new_count
+      newMat_list <- newMat
     }
   } else {
     tol <- 1e-5
@@ -189,6 +191,8 @@ constructNull <- function(mat,
     } else {
       stop("FastVersion only supports NB, Poisson or zip.")
     }
+
+    ## Now we get the para matrix. You can modify it here. First column is the dispersion and second column is the mean.
 
     ## Copula fitting
     important_feature <- names(which(rowMeans(mat_filtered!=0) > corrCut))
