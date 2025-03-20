@@ -292,7 +292,7 @@ constructNull <- function(mat,
 
     } else {
       message("No correlation structure. All features are independent.")
-      newMat_list <- lapply(seq_lennRep, function(x) {
+      newMat_list <- lapply(seq_len(nRep), function(x) {
         newMat <- matrix(0, nrow = n_gene, ncol = n_cell)
         rownames(newMat) <- gene_names
         colnames(newMat) <- paste0("Cell", seq_len(n_cell))
