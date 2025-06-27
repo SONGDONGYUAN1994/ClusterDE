@@ -22,6 +22,7 @@
 #' @param ifSparse A logic value. For high-dimensional data (gene number is much larger than cell number), if a sparse correlation estimation will be used. Default is FALSE.
 #' @param BPPARAM A \code{MulticoreParam} object or NULL. When the parameter parallelization = 'mcmapply' or 'pbmcmapply',
 #' this parameter must be NULL. When the parameter parallelization = 'bpmapply',  this parameter must be one of the
+#' @param Approximation A logic value. For a high-latitude counting matrix, Approximation can increase the speed of data generation while ensuring accuracy. Note that it only takes effect if "fastVersion=TRUE, Approximation=TRUE". Default is FALSE.
 #' \code{MulticoreParam} object offered by the package 'BiocParallel. The default value is NULL.
 #'
 #' @return The expression matrix of the synthetic null data.
@@ -41,7 +42,9 @@ constructNull <- function(mat,
                           fastVersion = TRUE,
                           ifSparse = FALSE,
                           corrCut = 0.1,
-                          BPPARAM = NULL) {
+                          BPPARAM = NULL,
+                          Approximation=FALSE
+) {
   if(is.null(rownames(mat))|is.null(colnames(mat))) {
     stop("The matrix must have both row names and col names!")
   }
@@ -167,7 +170,7 @@ constructNull <- function(mat,
       }
 
     } else if (family == "zip") {
-        para <- parallel::mclapply(X = seq_len(dim(mat_filtered)[1]),
+      para <- parallel::mclapply(X = seq_len(dim(mat_filtered)[1]),
                                  FUN = function(x) {
                                    tryCatch({
                                      res <- suppressWarnings(fitdistrplus::fitdist(mat_filtered[x, ], "ZIP", method = "mle", start = list(mu = mean(mat[x, ]), sigma = 0.1))$estimate)
@@ -218,13 +221,92 @@ constructNull <- function(mat,
 
       diag(corr_mat) <- diag(corr_mat) + tol
 
+      ####
+      if (!Approximation){ #get parameters for Cholesky decompostion factor
+        cdf=chol(corr_mat)
+      }else{ # get parameters for block sampling
+
+        #It is guaranteed that non-positive definite matrices can also be Cholesky decomposed
+        approx_chol_eigen_direct <- function(mat, eps = 1e-6, verbose = TRUE) {
+          e <- eigen(mat, symmetric = TRUE)
+          if (any(e$values < eps)) {
+            if (verbose) message("Eigenvalue correction applied.")
+            e$values[e$values < eps] <- eps
+          }
+          sqrt_vals <- sqrt(e$values)
+          chol_factor <- e$vectors %*% diag(sqrt_vals)
+          return(chol_factor)
+        }
+
+        d=nrow(corr_mat)
+        k=ceiling(d / 2)
+
+        L12=corr_mat[1:k, (k+1):d]
+        svd_res <- svd(L12)
+        d_all <- svd_res$d
+        r <- length(d_all)
+
+        U <- svd_res$u[, 1:r]
+        V <- svd_res$v[, 1:r]
+        D_root <- sqrt(d_all[1:r])
+
+        U_t <- sweep(U, 2, D_root, `*`)
+        U_t <- t(U_t)
+
+        V_t <- sweep(V, 2, D_root, `*`)
+        V_t <- t(V_t)
+
+
+        L11 <- corr_mat[1:k, 1:k]-crossprod(U_t)
+        L22 <- corr_mat[(k+1):d, (k+1):d]-crossprod(V_t)
+
+        l_bm11=approx_chol_eigen_direct(L11)#ensure positive definition
+        l_bm22=approx_chol_eigen_direct(L22)#ensure positive definition
+
+
+        block_mvn_sample <- function(n_cell, l_bm11, l_bm22,U_t,V_t, k, d,ncores = ncores) {
+
+          X1 <- mvnfast::rmvn(n_cell,
+                              mu    = rep(0, k),
+                              sigma = l_bm11,
+                              isChol = TRUE,
+                              ncores = ncores)
+          X2 <- mvnfast::rmvn(n_cell,
+                              mu    = rep(0, d-k),
+                              sigma = l_bm22,
+                              isChol = TRUE,
+                              ncores = ncores)
+
+
+          if (!is.null(U_t)) {
+            r <- nrow(U_t)
+            Z <- matrix(rnorm(n_cell * r), nrow = n_cell)
+            Z_proj <- Z %*% cbind(U_t, V_t)
+            X <- cbind(X1, X2) + Z_proj
+          }
+          return(X)
+        }
+      }
       ## Start sampling
       newMat_list <- lapply(seq_len(nRep), function(x) {
-        new_mvn <- mvnfast::rmvn(n_cell,
-                                 mu = rep(0, dim(corr_mat)[1]),
-                                 sigma = corr_mat,
-                                 isChol = FALSE,
-                                 ncores = nCores)
+        if (!Approximation){
+          new_mvn <- mvnfast::rmvn(n_cell,
+                                   mu = rep(0, dim(corr_mat)[1]),
+                                   sigma = cdf,
+                                   isChol = TRUE,
+                                   ncores = nCores)
+        }else{
+          new_mvn <- block_mvn_sample(n_cell= n_cell,
+                                      l_bm11=l_bm11,
+                                      l_bm22=l_bm22,
+                                      U_t=U_t,
+                                      V_t=V_t,
+                                      k=k,
+                                      d=d,
+                                      ncores=nCores)
+
+        }
+
         colnames(new_mvn) <- important_feature
         new_mvp <- stats::pnorm(new_mvn)
 
@@ -266,8 +348,8 @@ constructNull <- function(mat,
             } else {
               stats::qnbinom(p = as.vector(new_mvp[, x]), size = para[x, 1], mu = para[x, 2])
             }
-            } else if (family == "poisson") {
-              stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x])
+          } else if (family == "poisson") {
+            stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x])
           } else if (family == "zip") {
             if(is.na(para[x, 2])) {
               stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x, 1])
