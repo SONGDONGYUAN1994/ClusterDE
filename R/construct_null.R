@@ -222,9 +222,9 @@ constructNull <- function(mat,
       diag(corr_mat) <- diag(corr_mat) + tol
 
       ####
-      if (!Approximation){ #get parameters for Cholesky decompostion factor
-        cdf=chol(corr_mat)
-      }else{ # get parameters for block sampling
+      if (!Approximation){ #get parameters for Cholesky decomposition factor
+        cdf <- chol(corr_mat)
+      } else { # get parameters for block sampling
 
         #It is guaranteed that non-positive definite matrices can also be Cholesky decomposed
         approx_chol_eigen_direct <- function(mat, eps = 1e-6, verbose = TRUE) {
@@ -238,10 +238,10 @@ constructNull <- function(mat,
           return(chol_factor)
         }
 
-        d=nrow(corr_mat)
-        k=ceiling(d / 2)
+        d <- nrow(corr_mat)
+        k <- ceiling(d / 2)
 
-        L12=corr_mat[1:k, (k+1):d]
+        L12 <- corr_mat[1:k, (k+1):d]
         svd_res <- svd(L12)
         d_all <- svd_res$d
         r <- length(d_all)
@@ -256,12 +256,11 @@ constructNull <- function(mat,
         V_t <- sweep(V, 2, D_root, `*`)
         V_t <- t(V_t)
 
-
         L11 <- corr_mat[1:k, 1:k]-crossprod(U_t)
         L22 <- corr_mat[(k+1):d, (k+1):d]-crossprod(V_t)
 
-        l_bm11=approx_chol_eigen_direct(L11)#ensure positive definition
-        l_bm22=approx_chol_eigen_direct(L22)#ensure positive definition
+        l_bm11 <- approx_chol_eigen_direct(L11)#ensure positive definition
+        l_bm22 <- approx_chol_eigen_direct(L22)#ensure positive definition
 
 
         block_mvn_sample <- function(n_cell, l_bm11, l_bm22,U_t,V_t, k, d,ncores = ncores) {
