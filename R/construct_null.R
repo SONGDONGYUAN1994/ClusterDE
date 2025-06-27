@@ -43,7 +43,7 @@ constructNull <- function(mat,
                           ifSparse = FALSE,
                           corrCut = 0.1,
                           BPPARAM = NULL,
-                          Approximation=FALSE
+                          approximation = FALSE
 ) {
   if(is.null(rownames(mat))|is.null(colnames(mat))) {
     stop("The matrix must have both row names and col names!")
@@ -222,7 +222,7 @@ constructNull <- function(mat,
       diag(corr_mat) <- diag(corr_mat) + tol
 
       ####
-      if (!Approximation){ #get parameters for Cholesky decomposition factor
+      if (!approximation){ #get parameters for Cholesky decomposition factor
         cdf <- chol(corr_mat)
       } else { # get parameters for block sampling
 
@@ -288,7 +288,7 @@ constructNull <- function(mat,
       }
       ## Start sampling
       newMat_list <- lapply(seq_len(nRep), function(x) {
-        if (!Approximation){
+        if (!approximation){
           new_mvn <- mvnfast::rmvn(n_cell,
                                    mu = rep(0, dim(corr_mat)[1]),
                                    sigma = cdf,
