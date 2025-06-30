@@ -44,7 +44,7 @@ Suggests: parallel,
           ape,
           BayesSpace,
           spatialLIBD,
-Remotes: SONGDONGYUAN1994/scDesign3
+Remotes: SONGDONGYUAN1994/scDesign3，
          RfastOfficial/Rfast
 biocViews:
          Software,
