@@ -45,6 +45,7 @@ Suggests: parallel,
           BayesSpace,
           spatialLIBD,
 Remotes: SONGDONGYUAN1994/scDesign3
+         RfastOfficial/Rfast
 biocViews:
          Software,
          SingleCell,
