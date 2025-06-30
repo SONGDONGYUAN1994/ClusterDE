@@ -28,7 +28,7 @@ Imports: scDesign3,
          pbmcapply,
          coop,
          scales,
-         gamlss.dist，
+         gamlss.dist,
          Rfast
 Suggests: parallel,
           ggplot2,
