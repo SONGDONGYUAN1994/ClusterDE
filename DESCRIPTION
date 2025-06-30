@@ -29,6 +29,7 @@ Imports: scDesign3,
          coop,
          scales,
          gamlss.dist
+         Rfast
 Suggests: parallel,
           ggplot2,
           knitr,

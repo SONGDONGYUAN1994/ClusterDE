@@ -238,50 +238,63 @@ constructNull <- function(mat,
           return(chol_factor)
         }
 
+        simple_block_chol <- function(mat, eps=1e-6) {#Positive definiteness correction for processing matrices in blocks
+          k <- nrow(mat)
+          idx <- split(1:k, cut(1:k, breaks=4, labels=FALSE))
+
+          L_blocks <- lapply(idx, \(i) approx_chol_eigen_direct(mat[i,i], eps))
+          L <- as.matrix(Matrix::bdiag(L_blocks))
+
+          diag(L) <- diag(L) * (1 + eps)
+          L
+        }
+
         d <- nrow(corr_mat)
         k <- ceiling(d / 2)
 
         L12 <- corr_mat[1:k, (k+1):d]
         svd_res <- svd(L12)
         d_all <- svd_res$d
-        r <- length(d_all)
+        r <- sum(d_all > 1e-3)
 
         U <- svd_res$u[, 1:r]
         V <- svd_res$v[, 1:r]
         D_root <- sqrt(d_all[1:r])
 
-        U_t <- sweep(U, 2, D_root, `*`)
-        U_t <- t(U_t)
+        U_t <- t(U * outer(rep(1, nrow(U)), D_root))
 
-        V_t <- sweep(V, 2, D_root, `*`)
-        V_t <- t(V_t)
+        V_t <- t(V * outer(rep(1, nrow(V)), D_root))
 
         L11 <- corr_mat[1:k, 1:k]-crossprod(U_t)
         L22 <- corr_mat[(k+1):d, (k+1):d]-crossprod(V_t)
 
-        l_bm11 <- approx_chol_eigen_direct(L11)#ensure positive definition
-        l_bm22 <- approx_chol_eigen_direct(L22)#ensure positive definition
+        l_bm11 <- simple_block_chol(L11)#ensure positive definition
+        l_bm22 <-simple_block_chol(L22)#ensure positive definition
+
 
 
         block_mvn_sample <- function(n_cell, l_bm11, l_bm22,U_t,V_t, k, d,ncores = ncores) {
 
-          X1 <- mvnfast::rmvn(n_cell,
-                              mu    = rep(0, k),
-                              sigma = l_bm11,
-                              isChol = TRUE,
-                              ncores = ncores)
-          X2 <- mvnfast::rmvn(n_cell,
-                              mu    = rep(0, d-k),
-                              sigma = l_bm22,
-                              isChol = TRUE,
-                              ncores = ncores)
+          X <- matrix(0, nrow = n_cell, ncol = d)
+          X[, 1:k] <- mvnfast::rmvn(n_cell,
+                                    mu    = rep(0, k),
+                                    sigma = l_bm11,
+                                    isChol = TRUE,
+                                    ncores = ncores)
+          X[, (k+1):d] <- mvnfast::rmvn(n_cell,
+                                        mu    = rep(0, d-k),
+                                        sigma = l_bm22,
+                                        isChol = TRUE,
+                                        ncores = ncores)
 
 
           if (!is.null(U_t)) {
             r <- nrow(U_t)
-            Z <- matrix(rnorm(n_cell * r), nrow = n_cell)
-            Z_proj <- Z %*% cbind(U_t, V_t)
-            X <- cbind(X1, X2) + Z_proj
+            Z <- matrix(Rfast::Rnorm(n_cell * r), nrow = n_cell)
+
+            X[, 1:k] <- X[, 1:k] +  mat.mult(Z, U_t)
+            X[, (k+1):d] <- X[, (k+1):d] + mat.mult(Z, V_t)
+
           }
           return(X)
         }
