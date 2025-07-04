@@ -7,7 +7,7 @@ Authors@R:
     person("Kexin", "Li", , "aileenlikexin@outlook.com",  role = c("aut"),
            comment = c(ORCID = "0000-0002-4955-3832")),
     person("Siqi", "Chen", , "siqichen4477@gmail.com",  role = c("aut"),
-           comment = c(ORCID = "0000−0002−4955−3832")))
+           comment = c(ORCID = "0000-0002-9498-3823")))
 Description: ClusterDE is a post-clustering DE method for controlling the false discovery rate (FDR) of identified DE genes regardless of clustering quality. The core idea of ClusterDE is to generate real-data-based synthetic null data with only one cluster, as a counterfactual in contrast to the real data, for evaluating the whole procedure of clustering followed by a DE test.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -29,7 +29,9 @@ Imports: scDesign3,
          coop,
          scales,
          gamlss.dist,
-         Rfast
+         zigg,
+         Rcpp,
+         RcppArmadillo
 Suggests: parallel,
           ggplot2,
           knitr,
@@ -43,7 +45,9 @@ Suggests: parallel,
           Seurat,
           ape,
           BayesSpace,
-          spatialLIBD,
+          spatialLIBD
+LinkingTo: Rcpp,
+           RcppArmadillo 
 Remotes: SONGDONGYUAN1994/scDesign3
 biocViews:
          Software,

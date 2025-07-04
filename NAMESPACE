@@ -2,8 +2,10 @@
 
 export(callDE)
 export(constructNull)
+importFrom(Rcpp,sourceCpp)
 importFrom(gamlss.dist,ZIP)
 importFrom(gamlss.dist,dZIP)
 importFrom(gamlss.dist,pZIP)
 importFrom(gamlss.dist,qZIP)
 importFrom(gamlss.dist,rZIP)
+useDynLib(ClusterDE, .registration = TRUE)

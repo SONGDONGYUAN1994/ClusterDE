@@ -43,61 +43,64 @@ constructNull <- function(mat,
                           ifSparse = FALSE,
                           corrCut = 0.1,
                           BPPARAM = NULL,
-                          approximation = FALSE
-) {
-  if(is.null(rownames(mat))|is.null(colnames(mat))) {
+                          approximation = FALSE) {
+  if (is.null(rownames(mat)) | is.null(colnames(mat))) {
     stop("The matrix must have both row names and col names!")
   }
   ## Check if we should use sparse matrix.
   isSparse <- methods::is(mat, "sparseMatrix")
 
-  if(!fastVersion) {
-    if(is.null(formula) & is.null(extraInfo)) {
+  if (!fastVersion) {
+    if (is.null(formula) & is.null(extraInfo)) {
       sce <- SingleCellExperiment::SingleCellExperiment(list(counts = mat))
       SummarizedExperiment::colData(sce)$fake_variable <- "1"
-      newData <- scDesign3::scdesign3(sce,
-                                      celltype = "fake_variable",
-                                      pseudotime = NULL,
-                                      spatial = NULL,
-                                      other_covariates = NULL,
-                                      empirical_quantile = FALSE,
-                                      mu_formula = "1",
-                                      sigma_formula = "1",
-                                      corr_formula = "1",
-                                      family_use = family,
-                                      nonzerovar = FALSE,
-                                      n_cores = nCores,
-                                      parallelization = parallelization,
-                                      important_feature = corrCut,
-                                      nonnegative = FALSE,
-                                      copula = "gaussian",
-                                      if_sparse = ifSparse,
-                                      fastmvn = FALSE,
-                                      n_rep = nRep)
+      newData <- scDesign3::scdesign3(
+        sce,
+        celltype = "fake_variable",
+        pseudotime = NULL,
+        spatial = NULL,
+        other_covariates = NULL,
+        empirical_quantile = FALSE,
+        mu_formula = "1",
+        sigma_formula = "1",
+        corr_formula = "1",
+        family_use = family,
+        nonzerovar = FALSE,
+        n_cores = nCores,
+        parallelization = parallelization,
+        important_feature = corrCut,
+        nonnegative = FALSE,
+        copula = "gaussian",
+        if_sparse = ifSparse,
+        fastmvn = FALSE,
+        n_rep = nRep
+      )
       newMat <- newData$new_count
       newMat_list <- newMat
     } else {
       sce <- SingleCellExperiment::SingleCellExperiment(list(counts = mat))
       SummarizedExperiment::colData(sce) <- DataFrame(extraInfo)
       SummarizedExperiment::colData(sce)$fake_variable <- "1"
-      newData <- scDesign3::scdesign3(sce,
-                                      celltype = "fake_variable",
-                                      pseudotime = NULL,
-                                      spatial = NULL,
-                                      other_covariates = colnames(extraInfo),
-                                      empirical_quantile = FALSE,
-                                      mu_formula = formula,
-                                      sigma_formula = "1",
-                                      corr_formula = "1",
-                                      family_use = family,
-                                      nonzerovar = FALSE,
-                                      n_cores = nCores,
-                                      parallelization = parallelization,
-                                      important_feature = corrCut,
-                                      nonnegative = FALSE,
-                                      copula = "gaussian",
-                                      fastmvn = FALSE,
-                                      n_rep = nRep)
+      newData <- scDesign3::scdesign3(
+        sce,
+        celltype = "fake_variable",
+        pseudotime = NULL,
+        spatial = NULL,
+        other_covariates = colnames(extraInfo),
+        empirical_quantile = FALSE,
+        mu_formula = formula,
+        sigma_formula = "1",
+        corr_formula = "1",
+        family_use = family,
+        nonzerovar = FALSE,
+        n_cores = nCores,
+        parallelization = parallelization,
+        important_feature = corrCut,
+        nonnegative = FALSE,
+        copula = "gaussian",
+        fastmvn = FALSE,
+        n_rep = nRep
+      )
       newMat <- newData$new_count
       newMat_list <- newMat
     }
@@ -108,14 +111,19 @@ constructNull <- function(mat,
     n_cell <- dim(mat)[2]
     gene_names <- rownames(mat)
 
-    qc <- apply(mat, 1, function(x){
+    qc <- apply(mat, 1, function(x) {
       return(length(which(x < tol)) > length(x) - 3)
     })
-    if(length(which(qc)) == 0){
+    if (length(which(qc)) == 0) {
       filtered_gene <- NULL
-    }else{
+    } else{
       filtered_gene <- names(which(qc))
-      message(paste0(length(which(qc)), " genes have no more than 2 non-zero values; ignore fitting and return all 0s."))
+      message(
+        paste0(
+          length(which(qc)),
+          " genes have no more than 2 non-zero values; ignore fitting and return all 0s."
+        )
+      )
     }
 
     mat_filtered <- mat[!qc, ]
@@ -123,71 +131,93 @@ constructNull <- function(mat,
 
     ## Marginal fitting
 
-    if(family == "nb") {
-      para <- parallel::mclapply(X = seq_len(dim(mat_filtered)[1]),
-                                 FUN = function(x) {
-                                   tryCatch({
-                                     res <- suppressWarnings(fitdistrplus::fitdist(mat_filtered[x, ], "nbinom", method = "mle")$estimate)
-                                     res},
-                                     error = function(cond) {
-                                       message(paste0(x, " is problematic with NB MLE; using Poisson MME instead."))
-                                       fit_para <- suppressWarnings(fitdistrplus::fitdist(mat_filtered[x, ], "pois", method = "mme")$estimate)
-                                       res <- c(NA, fit_para)
-                                       names(res) <- c("size", "mu")
-                                       res
-                                     })
-                                 },
-                                 mc.cores = nCores)
+    if (family == "nb") {
+      para <- parallel::mclapply(
+        X = seq_len(dim(mat_filtered)[1]),
+        FUN = function(x) {
+          tryCatch({
+            res <- suppressWarnings(fitdistrplus::fitdist(mat_filtered[x, ], "nbinom", method = "mle")$estimate)
+            res
+          }, error = function(cond) {
+            message(paste0(
+              x,
+              " is problematic with NB MLE; using Poisson MME instead."
+            ))
+            fit_para <- suppressWarnings(fitdistrplus::fitdist(mat_filtered[x, ], "pois", method = "mme")$estimate)
+            res <- c(NA, fit_para)
+            names(res) <- c("size", "mu")
+            res
+          })
+        },
+        mc.cores = nCores
+      )
       para <- t(simplify2array(para))
       rownames(para) <- para_feature
 
-      if(sum(is.na(para[, 2])) > 0) {
+      if (sum(is.na(para[, 2])) > 0) {
         warning("NA produces in mean estimate; using 0 instead.")
         para[, 2][is.na(para[, 2])] <- 0
       }
 
     }
     else if (family == "poisson") {
-      para <- parallel::mclapply(X = seq_len(dim(mat_filtered)[1]),
-                                 FUN = function(x) {
-                                   tryCatch({
-                                     res <- fitdistrplus::fitdist(mat_filtered[x, ], "pois", method = "mle")$estimate
-                                     res},
-                                     error = function(cond) {
-                                       message(paste0(x, "is problematic with Poisson MLE; using Poisson MME instead."))
-                                       fit_para <- fitdistrplus::fitdist(mat_filtered[x, ], "pois", method = "mme")$estimate
-                                       #res <- c(NA, mu = fit_para)
-                                       #names(res) <- c("size", "mu")
-                                       res
-                                     })
-                                 },
-                                 mc.cores = nCores)
+      para <- parallel::mclapply(
+        X = seq_len(dim(mat_filtered)[1]),
+        FUN = function(x) {
+          tryCatch({
+            res <- fitdistrplus::fitdist(mat_filtered[x, ], "pois", method = "mle")$estimate
+            res
+          }, error = function(cond) {
+            message(paste0(
+              x,
+              "is problematic with Poisson MLE; using Poisson MME instead."
+            ))
+            fit_para <- fitdistrplus::fitdist(mat_filtered[x, ], "pois", method = "mme")$estimate
+            #res <- c(NA, mu = fit_para)
+            #names(res) <- c("size", "mu")
+            res
+          })
+        },
+        mc.cores = nCores
+      )
       para <- simplify2array(para)
       names(para) <- para_feature
-      if(sum(is.na(para)) > 0) {
+      if (sum(is.na(para)) > 0) {
         warning("NA produces in mean estimate; using 0 instead.")
         para[is.na(para)] <- 0
       }
 
     } else if (family == "zip") {
-      para <- parallel::mclapply(X = seq_len(dim(mat_filtered)[1]),
-                                 FUN = function(x) {
-                                   tryCatch({
-                                     res <- suppressWarnings(fitdistrplus::fitdist(mat_filtered[x, ], "ZIP", method = "mle", start = list(mu = mean(mat[x, ]), sigma = 0.1))$estimate)
-                                     res},
-                                     error = function(cond) {
-                                       message(paste0(x, " is problematic with NB MLE; using Poisson MME instead."))
-                                       fit_para <- suppressWarnings(fitdistrplus::fitdist(mat_filtered[x, ], "pois", method = "mme")$estimate)
-                                       res <- c(fit_para, NA)
-                                       names(res) <- c("mu", "sigma")
-                                       res
-                                     })
-                                 },
-                                 mc.cores = nCores)
+      para <- parallel::mclapply(
+        X = seq_len(dim(mat_filtered)[1]),
+        FUN = function(x) {
+          tryCatch({
+            res <- suppressWarnings(
+              fitdistrplus::fitdist(
+                mat_filtered[x, ],
+                "ZIP",
+                method = "mle",
+                start = list(mu = mean(mat[x, ]), sigma = 0.1)
+              )$estimate
+            )
+            res
+          }, error = function(cond) {
+            message(paste0(
+              x,
+              " is problematic with NB MLE; using Poisson MME instead."
+            ))
+            fit_para <- suppressWarnings(fitdistrplus::fitdist(mat_filtered[x, ], "pois", method = "mme")$estimate)
+            res <- c(fit_para, NA)
+            names(res) <- c("mu", "sigma")
+            res
+          })
+        },
+        mc.cores = nCores
+      )
       para <- t(simplify2array(para))
       rownames(para) <- para_feature
 
-      if(sum(is.na(para[, 1])) > 0) {
+      if (sum(is.na(para[, 1])) > 0) {
         warning("NA produces in mean estimate; using 0 instead.")
         para[, 1][is.na(para[, 1])] <- 0
       }
@@ -198,23 +228,28 @@ constructNull <- function(mat,
     ## Now we get the para matrix. You can modify it here. First column is the dispersion and second column is the mean.
 
     ## Copula fitting
-    important_feature <- names(which(rowMeans(mat_filtered!=0) > corrCut))
+    important_feature <- names(which(rowMeans(mat_filtered != 0) > corrCut))
 
-    if(length(important_feature) > 1) {
+    if (length(important_feature) > 1) {
       unimportant_feature <- setdiff(gene_names, union(important_feature, filtered_gene))
 
       mat_corr <- t(mat_filtered[important_feature, ])
-      corr_prop <- round(length(important_feature)/n_gene, 3)
+      corr_prop <- round(length(important_feature) / n_gene, 3)
       p_obs <- rvinecopulib::pseudo_obs(mat_corr)
       normal_obs <- stats::qnorm(p_obs)
 
-      message(paste0(corr_prop*100, "% of genes are used in correlation modelling."))
+      message(paste0(
+        corr_prop * 100,
+        "% of genes are used in correlation modelling."
+      ))
 
-      if(ifSparse) {
-        corr_mat <- scDesign3::sparse_cov(normal_obs,
-                                          method = 'qiu',
-                                          operator = 'hard',
-                                          corr = TRUE)
+      if (ifSparse) {
+        corr_mat <- scDesign3::sparse_cov(
+          normal_obs,
+          method = 'qiu',
+          operator = 'hard',
+          corr = TRUE
+        )
       } else {
         corr_mat <- coop::pcor(normal_obs)
       }
@@ -222,15 +257,20 @@ constructNull <- function(mat,
       diag(corr_mat) <- diag(corr_mat) + tol
 
       ####
-      if (!approximation){ #get parameters for Cholesky decomposition factor
+      if (!approximation) {
+        #get parameters for Cholesky decomposition factor
         cdf <- chol(corr_mat)
-      } else { # get parameters for block sampling
+      } else {
+        # get parameters for block sampling
 
         #It is guaranteed that non-positive definite matrices can also be Cholesky decomposed
-        approx_chol_eigen_direct <- function(mat, eps = 1e-6, verbose = TRUE) {
+        approx_chol_eigen_direct <- function(mat,
+                                             eps = 1e-6,
+                                             verbose = TRUE) {
           e <- eigen(mat, symmetric = TRUE)
           if (any(e$values < eps)) {
-            if (verbose) message("Eigenvalue correction applied.")
+            if (verbose)
+              message("Eigenvalue correction applied.")
             e$values[e$values < eps] <- eps
           }
           sqrt_vals <- sqrt(e$values)
@@ -238,11 +278,12 @@ constructNull <- function(mat,
           return(chol_factor)
         }
 
-        simple_block_chol <- function(mat, eps=1e-6) {#Positive definiteness correction for processing matrices in blocks
+        simple_block_chol <- function(mat, eps = 1e-6) {
+          #Positive definiteness correction for processing matrices in blocks
           k <- nrow(mat)
-          idx <- split(1:k, cut(1:k, breaks=4, labels=FALSE))
+          idx <- split(1:k, cut(1:k, breaks = 4, labels = FALSE))
 
-          L_blocks <- lapply(idx, \(i) approx_chol_eigen_direct(mat[i,i], eps))
+          L_blocks <- lapply(idx, \(i) approx_chol_eigen_direct(mat[i, i], eps))
           L <- as.matrix(Matrix::bdiag(L_blocks))
 
           diag(L) <- diag(L) * (1 + eps)
@@ -252,7 +293,7 @@ constructNull <- function(mat,
         d <- nrow(corr_mat)
         k <- ceiling(d / 2)
 
-        L12 <- corr_mat[1:k, (k+1):d]
+        L12 <- corr_mat[1:k, (k + 1):d]
         svd_res <- svd(L12)
         d_all <- svd_res$d
         r <- sum(d_all > 1e-3)
@@ -265,124 +306,249 @@ constructNull <- function(mat,
 
         V_t <- t(V * outer(rep(1, nrow(V)), D_root))
 
-        L11 <- corr_mat[1:k, 1:k]-crossprod(U_t)
-        L22 <- corr_mat[(k+1):d, (k+1):d]-crossprod(V_t)
+        L11 <- corr_mat[1:k, 1:k] - crossprod(U_t)
+        L22 <- corr_mat[(k + 1):d, (k + 1):d] - crossprod(V_t)
 
         l_bm11 <- simple_block_chol(L11)#ensure positive definition
-        l_bm22 <-simple_block_chol(L22)#ensure positive definition
+        l_bm22 <- simple_block_chol(L22)#ensure positive definition
 
 
 
-        block_mvn_sample <- function(n_cell, l_bm11, l_bm22,U_t,V_t, k, d,ncores = ncores) {
-
+        block_mvn_sample <- function(n_cell,
+                                     l_bm11,
+                                     l_bm22,
+                                     U_t,
+                                     V_t,
+                                     k,
+                                     d,
+                                     ncores = ncores) {
           X <- matrix(0, nrow = n_cell, ncol = d)
-          X[, 1:k] <- mvnfast::rmvn(n_cell,
-                                    mu    = rep(0, k),
-                                    sigma = l_bm11,
-                                    isChol = TRUE,
-                                    ncores = ncores)
-          X[, (k+1):d] <- mvnfast::rmvn(n_cell,
-                                        mu    = rep(0, d-k),
-                                        sigma = l_bm22,
-                                        isChol = TRUE,
-                                        ncores = ncores)
+          X[, 1:k] <- mvnfast::rmvn(
+            n_cell,
+            mu    = rep(0, k),
+            sigma = l_bm11,
+            isChol = TRUE,
+            ncores = ncores
+          )
+          X[, (k + 1):d] <- mvnfast::rmvn(
+            n_cell,
+            mu    = rep(0, d - k),
+            sigma = l_bm22,
+            isChol = TRUE,
+            ncores = ncores
+          )
 
 
           if (!is.null(U_t)) {
             r <- nrow(U_t)
-            Z <- matrix(Rfast::Rnorm(n_cell * r), nrow = n_cell)
+            Z <- matrix(zigg::zrnorm(n_cell * r), nrow = n_cell)
 
-            X[, 1:k] <- X[, 1:k] +  mat.mult(Z, U_t)
-            X[, (k+1):d] <- X[, (k+1):d] + mat.mult(Z, V_t)
+            X[, 1:k] <- X[, 1:k] + matrix_multiplication_cpp(Z, U_t)
+            X[, (k + 1):d] <- X[, (k + 1):d] + matrix_multiplication_cpp(Z, V_t)
 
           }
           return(X)
         }
       }
       ## Start sampling
-      newMat_list <- lapply(seq_len(nRep), function(x) {
-        if (!approximation){
-          new_mvn <- mvnfast::rmvn(n_cell,
-                                   mu = rep(0, dim(corr_mat)[1]),
-                                   sigma = cdf,
-                                   isChol = TRUE,
-                                   ncores = nCores)
-        }else{
-          new_mvn <- block_mvn_sample(n_cell= n_cell,
-                                      l_bm11=l_bm11,
-                                      l_bm22=l_bm22,
-                                      U_t=U_t,
-                                      V_t=V_t,
-                                      k=k,
-                                      d=d,
-                                      ncores=nCores)
+      if(nRep == 1) {
+        newMat_list <- list()
 
-        }
+          if (!approximation) {
+            new_mvn <- mvnfast::rmvn(
+              n_cell,
+              mu = rep(0, dim(corr_mat)[1]),
+              sigma = cdf,
+              isChol = TRUE,
+              ncores = nCores
+            )
+          } else {
+            new_mvn <- block_mvn_sample(
+              n_cell = n_cell,
+              l_bm11 = l_bm11,
+              l_bm22 = l_bm22,
+              U_t = U_t,
+              V_t = V_t,
+              k = k,
+              d = d,
+              ncores = nCores
+            )
 
-        colnames(new_mvn) <- important_feature
-        new_mvp <- stats::pnorm(new_mvn)
+          }
 
-        newMat <- matrix(0, nrow = n_gene, ncol = n_cell)
-        rownames(newMat) <- gene_names
-        colnames(newMat) <- paste0("Cell", seq_len(n_cell))
+          colnames(new_mvn) <- important_feature
+          new_mvp <- stats::pnorm(new_mvn)
 
-        if(length(unimportant_feature) > 0) {
-          unimportant_mat <- parallel::mclapply(unimportant_feature, function(x) {
-            if(family == "nb") {
-              if(is.na(para[x, 1])) {
-                stats::rpois(n = n_cell, lambda = para[x, 2])
+          newMat <- matrix(0, nrow = n_gene, ncol = n_cell)
+          rownames(newMat) <- gene_names
+          colnames(newMat) <- paste0("Cell", seq_len(n_cell))
+
+          if (length(unimportant_feature) > 0) {
+            unimportant_mat <- parallel::mclapply(unimportant_feature, function(x) {
+              if (family == "nb") {
+                if (is.na(para[x, 1])) {
+                  stats::rpois(n = n_cell, lambda = para[x, 2])
+                } else {
+                  stats::rnbinom(n = n_cell,
+                                 size = para[x, 1],
+                                 mu = para[x, 2])
+                }
+              } else if (family == "poisson") {
+                stats::rpois(n = n_cell, lambda = para[x])
+              } else if (family == "zip") {
+                if (is.na(para[x, 2])) {
+                  stats::rpois(n = n_cell, lambda = para[x, 1])
+                } else {
+                  rZIP(n = n_cell,
+                       sigma = para[x, 2],
+                       mu = para[x, 1])
+                }
               } else {
-                stats::rnbinom(n = n_cell, size = para[x, 1], mu = para[x, 2])
+                stop("Family must be in nb, poisson, or zip.")
               }
-            } else if (family == "poisson"){
-              stats::rpois(n = n_cell, lambda = para[x])
-            } else if (family == "zip") {
-              if(is.na(para[x, 2])) {
-                stats::rpois(n = n_cell, lambda = para[x, 1])
+            }, mc.cores = nCores)
+
+            unimportant_mat <- t(simplify2array(unimportant_mat))
+            rownames(unimportant_mat) <- unimportant_feature
+
+            newMat[unimportant_feature, ] <- unimportant_mat
+          }
+
+          important_mat <- parallel::mclapply(important_feature, function(x) {
+            if (family == "nb") {
+              if (is.na(para[x, 1])) {
+                stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x, 2])
               } else {
-                rZIP(n = n_cell, sigma = para[x, 2], mu = para[x, 1])
+                stats::qnbinom(p = as.vector(new_mvp[, x]),
+                               size = para[x, 1],
+                               mu = para[x, 2])
+              }
+            } else if (family == "poisson") {
+              stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x])
+            } else if (family == "zip") {
+              if (is.na(para[x, 2])) {
+                stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x, 1])
+              } else {
+                qZIP(
+                  p = as.vector(new_mvp[, x]),
+                  sigma = para[x, 2],
+                  mu = para[x, 1]
+                )
               }
             } else {
               stop("Family must be in nb, poisson, or zip.")
             }
           }, mc.cores = nCores)
 
-          unimportant_mat <- t(simplify2array(unimportant_mat))
-          rownames(unimportant_mat) <- unimportant_feature
+          important_mat <- t(simplify2array(important_mat))
+          rownames(important_mat) <- important_feature
 
-          newMat[unimportant_feature, ] <- unimportant_mat
-        }
-
-        important_mat <- parallel::mclapply(important_feature, function(x) {
-          if(family == "nb") {
-            if(is.na(para[x, 1])) {
-              stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x, 2])
-            } else {
-              stats::qnbinom(p = as.vector(new_mvp[, x]), size = para[x, 1], mu = para[x, 2])
-            }
-          } else if (family == "poisson") {
-            stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x])
-          } else if (family == "zip") {
-            if(is.na(para[x, 2])) {
-              stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x, 1])
-            } else {
-              qZIP(p = as.vector(new_mvp[, x]), sigma = para[x, 2], mu = para[x, 1])
-            }
-          } else {
-            stop("Family must be in nb, poisson, or zip.")
+          newMat[important_feature, ] <- important_mat
+          newMat[is.na(newMat)] <- 0
+          if (isSparse) {
+            newMat <- Matrix::Matrix(newMat, sparse = TRUE)
           }
+        newMat_list[[1]] <- newMat
+
+      } else {
+        newMat_list <- parallel::mclapply(seq_len(nRep), function(x) {
+          if (!approximation) {
+            new_mvn <- mvnfast::rmvn(
+              n_cell,
+              mu = rep(0, dim(corr_mat)[1]),
+              sigma = cdf,
+              isChol = TRUE,
+              ncores = 1
+            )
+          } else {
+            new_mvn <- block_mvn_sample(
+              n_cell = n_cell,
+              l_bm11 = l_bm11,
+              l_bm22 = l_bm22,
+              U_t = U_t,
+              V_t = V_t,
+              k = k,
+              d = d,
+              ncores = 1
+            )
+
+          }
+
+          colnames(new_mvn) <- important_feature
+          new_mvp <- stats::pnorm(new_mvn)
+
+          newMat <- matrix(0, nrow = n_gene, ncol = n_cell)
+          rownames(newMat) <- gene_names
+          colnames(newMat) <- paste0("Cell", seq_len(n_cell))
+
+          if (length(unimportant_feature) > 0) {
+            unimportant_mat <- lapply(unimportant_feature, function(x) {
+              if (family == "nb") {
+                if (is.na(para[x, 1])) {
+                  stats::rpois(n = n_cell, lambda = para[x, 2])
+                } else {
+                  stats::rnbinom(n = n_cell,
+                                 size = para[x, 1],
+                                 mu = para[x, 2])
+                }
+              } else if (family == "poisson") {
+                stats::rpois(n = n_cell, lambda = para[x])
+              } else if (family == "zip") {
+                if (is.na(para[x, 2])) {
+                  stats::rpois(n = n_cell, lambda = para[x, 1])
+                } else {
+                  rZIP(n = n_cell,
+                       sigma = para[x, 2],
+                       mu = para[x, 1])
+                }
+              } else {
+                stop("Family must be in nb, poisson, or zip.")
+              }
+            })
+
+            unimportant_mat <- t(simplify2array(unimportant_mat))
+            rownames(unimportant_mat) <- unimportant_feature
+
+            newMat[unimportant_feature, ] <- unimportant_mat
+          }
+
+          important_mat <- lapply(important_feature, function(x) {
+            if (family == "nb") {
+              if (is.na(para[x, 1])) {
+                stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x, 2])
+              } else {
+                stats::qnbinom(p = as.vector(new_mvp[, x]),
+                               size = para[x, 1],
+                               mu = para[x, 2])
+              }
+            } else if (family == "poisson") {
+              stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x])
+            } else if (family == "zip") {
+              if (is.na(para[x, 2])) {
+                stats::qpois(p = as.vector(new_mvp[, x]), lambda = para[x, 1])
+              } else {
+                qZIP(
+                  p = as.vector(new_mvp[, x]),
+                  sigma = para[x, 2],
+                  mu = para[x, 1]
+                )
+              }
+            } else {
+              stop("Family must be in nb, poisson, or zip.")
+            }
+          })
+
+          important_mat <- t(simplify2array(important_mat))
+          rownames(important_mat) <- important_feature
+
+          newMat[important_feature, ] <- important_mat
+          newMat[is.na(newMat)] <- 0
+          if (isSparse) {
+            newMat <- Matrix::Matrix(newMat, sparse = TRUE)
+          }
+          newMat
         }, mc.cores = nCores)
-
-        important_mat <- t(simplify2array(important_mat))
-        rownames(important_mat) <- important_feature
-
-        newMat[important_feature, ] <- important_mat
-        newMat[is.na(newMat)] <- 0
-        if(isSparse){
-          newMat <- Matrix::Matrix(newMat, sparse = TRUE)
-        }
-        newMat
-      })
+      }
 
     } else {
       message("No correlation structure. All features are independent.")
@@ -392,20 +558,26 @@ constructNull <- function(mat,
         colnames(newMat) <- paste0("Cell", seq_len(n_cell))
 
         para_mat <- parallel::mclapply(para_feature, function(x) {
-          if(family == "nb") {
-            if(is.na(para[x, 1])) {
+          if (family == "nb") {
+            if (is.na(para[x, 1])) {
               stats::rpois(n = n_cell, lambda = para[x, 2])
             } else {
-              stats::rnbinom(n = n_cell, size = para[x, 1], mu = para[x, 2])
+              stats::rnbinom(n = n_cell,
+                             size = para[x, 1],
+                             mu = para[x, 2])
             }
-            stats::rnbinom(n = n_cell, size = para[x, 1], mu = para[x, 2])
-          } else if (family == "poisson"){
+            stats::rnbinom(n = n_cell,
+                           size = para[x, 1],
+                           mu = para[x, 2])
+          } else if (family == "poisson") {
             stats::rpois(n = n_cell, lambda = para[x])
           } else if (family == "zip") {
-            if(is.na(para[x, 2])) {
+            if (is.na(para[x, 2])) {
               tats::rpois(n = n_cell, lambda = para[x, 1])
             } else {
-              rZIP(n = n_cell, sigma = para[x, 2], mu = para[x, 1])
+              rZIP(n = n_cell,
+                   sigma = para[x, 2],
+                   mu = para[x, 1])
             }
           } else {
             stop("Family must be in nb, poisson, or zip.")
@@ -415,7 +587,7 @@ constructNull <- function(mat,
         para_mat <- t(simplify2array(para_mat))
         newMat[para_feature, ] <- para_mat
         newMat[is.na(newMat)] <- 0
-        if(isSparse){
+        if (isSparse) {
           newMat <- Matrix::Matrix(newMat, sparse = TRUE)
         }
         newMat
@@ -423,7 +595,7 @@ constructNull <- function(mat,
     }
   } ## End for fastVersion
 
-  if(length(newMat_list) == 1) {
+  if (length(newMat_list) == 1) {
     return(newMat_list[[1]])
   } else {
     return(newMat_list)

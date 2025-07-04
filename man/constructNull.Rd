@@ -15,7 +15,8 @@ constructNull(
   fastVersion = TRUE,
   ifSparse = FALSE,
   corrCut = 0.1,
-  BPPARAM = NULL
+  BPPARAM = NULL,
+  approximation = FALSE
 )
 }
 \arguments{
@@ -46,7 +47,9 @@ Must be one of 'mcmapply', 'bpmapply', or 'pbmcmapply', which corresponds to the
 \item{corrCut}{A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation.}
 
 \item{BPPARAM}{A \code{MulticoreParam} object or NULL. When the parameter parallelization = 'mcmapply' or 'pbmcmapply',
-this parameter must be NULL. When the parameter parallelization = 'bpmapply',  this parameter must be one of the
+this parameter must be NULL. When the parameter parallelization = 'bpmapply',  this parameter must be one of the}
+
+\item{Approximation}{A logic value. For a high-latitude counting matrix, Approximation can increase the speed of data generation while ensuring accuracy. Note that it only takes effect if "fastVersion=TRUE, Approximation=TRUE". Default is FALSE.
 \code{MulticoreParam} object offered by the package 'BiocParallel. The default value is NULL.}
 }
 \value{
