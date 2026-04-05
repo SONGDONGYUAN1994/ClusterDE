@@ -69,7 +69,7 @@ calcNullPval <- function(
         }
       }
       data <- Seurat::ScaleData(data)
-      data <- Seurat::RunPCA(data)
+      data <- Seurat::RunPCA(data, npcs = min(50, ncol(data) - 1, nrow(data) - 1))
       data <- Seurat::FindNeighbors(data)
 
       #### find two clusters in the null data ####
