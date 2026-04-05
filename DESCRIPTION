@@ -33,7 +33,8 @@ Imports: scDesign3,
          gamlss.dist,
          zigg,
          Rcpp,
-         RcppArmadillo
+         RcppArmadillo,
+         bettermc
 Suggests: parallel,
           ggplot2,
           knitr,
