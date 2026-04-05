@@ -45,7 +45,8 @@ constructNull <- function(
   BPPARAM = NULL,
   approximation = FALSE,
   usePca = F,
-  nPcs = 200
+  nPcs = 200,
+  seed = 123
 ) {
   mat <- Seurat::GetAssayData(obj, layer = "counts")
   ## Check if we should use sparse matrix.
@@ -61,6 +62,9 @@ constructNull <- function(
   } else {
     "1"
   }
+
+  # Add fake variable for cell type constraint
+  obj@meta.data$fake_variable <- 1
 
   synthetic_null_list <- if (usePca) {
     # Construct PCA
@@ -89,12 +93,12 @@ constructNull <- function(
 
     pca_sce <- SingleCellExperiment::SingleCellExperiment(list(counts = t(pca_score[, 1:nPcs])), colData = obj@meta.data)
 
-    set.seed(123)
+    set.seed(seed)
     message("Construct scDesign3 data")
     data <- scDesign3::construct_data(
       sce = pca_sce,
       assay_use = "counts",
-      celltype = "seurat_clusters",
+      celltype = "fake_variable",
       pseudotime = NULL,
       spatial = spatial,
       other_covariates = NULL,
@@ -136,7 +140,7 @@ constructNull <- function(
 
     message(paste0("Generate null data of ", nRep, " replicates"))
     new_count_list <- suppressMessages(bettermc::mclapply(1:nRep, function(b) {
-      set.seed(b)
+      set.seed(seed + b)
       new_count <- scDesign3::simu_new(
         sce = pca_sce,
         assay_use = "counts",
