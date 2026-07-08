@@ -67,7 +67,9 @@ callDE <- function(
       if (correct) {
         if (PairedData::yuen.t.test(x = tbl_merge$target, y = tbl_merge$null, alternative = "greater", paired = TRUE, tr = 0.1)$p.value < 0.001) {
           fit <- MASS::rlm(tbl_merge$target ~ tbl_merge$null, maxit = 100)
-          tbl_merge$cs <- fit$residuals
+          cs <- rep(NA, nrow(tbl_merge))
+          cs[as.integer(names(fit$residuals))] <- fit$residuals
+          tbl_merge$cs <- cs
         }
       }
     } else if (contrastScore == 'max') {
