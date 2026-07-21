@@ -34,7 +34,9 @@ Imports: scDesign3,
          zigg,
          Rcpp,
          RcppArmadillo,
-         bettermc
+         bettermc,
+         CellMixS,
+         gson
 Suggests: parallel,
           ggplot2,
           knitr,

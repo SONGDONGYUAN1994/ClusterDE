@@ -17,7 +17,8 @@ constructNull(
   BPPARAM = NULL,
   approximation = FALSE,
   usePca = F,
-  nPcs = 200
+  nPcs = 200,
+  seed = 123
 )
 }
 \arguments{

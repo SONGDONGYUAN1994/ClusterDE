@@ -2,6 +2,7 @@
 
 export(calcNullPval)
 export(callDE)
+export(checkNullData)
 export(constructNull)
 export(dimPlot)
 export(findMarkers)
