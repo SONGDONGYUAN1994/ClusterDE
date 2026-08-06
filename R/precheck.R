@@ -3,22 +3,23 @@
 #' Evaluate simulated null count matrices against ClusterDE's default null-data
 #' baseline using two reference datasets, `A549_seurat` and
 #' `monocyte_10x_v3_seurat`, from the ClusterDE package. The comparison uses
-#' eight metrics that assess the quality of simulated null data from different
+#' eleven metrics that assess the quality of simulated null data from different
 #' perspectives.
 #'
 #' @param new_null_data A list of simulated null count matrices generated base on
 #'   the `A549_seurat` data included in the ClusterDE package. For the fairest
 #'   comparison with the baseline, this should ideally contain 20 elements. One
-#'   matrix is sampled at random for distributional, LISI, and silhouette
-#'   checks; the full list is used to calculate null p-values in ClusterDE.
+#'   matrix is sampled at random for distributional, QQ, PCA, FR, LISI, and
+#'   silhouette checks; the full list is used to calculate null p-values in
+#'   ClusterDE.
 #' @param new_null_data_monocyte A list of simulated null count matrices
 #'   generated base on the `monocyte_10x_v3_seurat` data included in the ClusterDE
 #'   package. For the fairest comparison with the baseline, this should ideally
 #'   contain 20 elements. The full list is used to calculate null p-values in
 #'   ClusterDE for the monocyte differential expression check.
 #' @param threshold A named numeric vector giving pass/fail thresholds for
-#'   `mean`, `var`, `cor`, `lisi`, `silhouette`, `cellline`,
-#'   `monocyte_marker`, and `monocyte_housekeeping`.
+#'   `mean`, `var`, `cor`, `qq_mae`, `pc_mse`, `fr`, `lisi`, `silhouette`,
+#'   `celline`, `monocyte_marker`, and `monocyte_housekeeping`.
 #' @param seed Integer seed used for reproducible sampling, PCA/UMAP, and
 #'   clustering. The default is `123`.
 #' @param housekeeping_gmt Local path or URL to a GMT file containing
@@ -29,7 +30,8 @@
 #'   values supplied in `threshold` and return the overall pass status together
 #'   with a detailed comparison table. If `FALSE`, return only the calculated
 #'   metrics. Defaults to `FALSE`.
-#' @return A list with two elements:
+#' @return If `compare = FALSE`, a named numeric vector containing the eleven
+#'   unrounded calculated metrics. If `compare = TRUE`, a list with two elements:
 #'   \describe{
 #'     \item{pass}{Logical value indicating whether more than five checks pass.}
 #'     \item{comparison_result}{Data frame comparing the default thresholds,
@@ -145,6 +147,91 @@ checkNullData <- function(
 
   gene_gene_cor <- stats::cor(ref_vec, new_vec, method = "pearson")
 
+  ref_obj_metric <- Seurat::CreateSeuratObject(counts = ref_data)
+  new_obj_metric <- Seurat::CreateSeuratObject(counts = new_null_sample)
+  ref_obj_metric <- Seurat::NormalizeData(ref_obj_metric, verbose = FALSE)
+  new_obj_metric <- Seurat::NormalizeData(new_obj_metric, verbose = FALSE)
+  ref_normalized <- as.matrix(
+    Seurat::GetAssayData(ref_obj_metric, assay = "RNA", layer = "data")
+  )
+  new_normalized <- as.matrix(
+    Seurat::GetAssayData(new_obj_metric, assay = "RNA", layer = "data")
+  )
+
+  qq_markers <- Seurat::FindMarkers(
+    A549_seurat,
+    ident.1 = 0,
+    ident.2 = 1,
+    min.pct = 0,
+    logfc.threshold = 0
+  )
+  qq_marker_order <- order(qq_markers$p_val_adj)
+  qq_genes <- rownames(qq_markers)[qq_marker_order][seq_len(5)]
+  n_quantiles <- min(ncol(ref_normalized), ncol(new_normalized))
+  quantile_probs <- seq(0, 1, length.out = n_quantiles)
+  gene_qq_mae <- vapply(qq_genes, function(gene) {
+    ref_quantiles <- stats::quantile(
+      ref_normalized[gene,],
+      probs = quantile_probs,
+      na.rm = TRUE,
+      names = FALSE
+    )
+    new_quantiles <- stats::quantile(
+      new_normalized[gene,],
+      probs = quantile_probs,
+      na.rm = TRUE,
+      names = FALSE
+    )
+    mean(abs(ref_quantiles - new_quantiles), na.rm = TRUE)
+  }, numeric(1))
+  qq_mae <- mean(gene_qq_mae, na.rm = TRUE)
+
+  ref_pca_mat <- ref_normalized[
+    matrixStats::rowVars(ref_normalized) > 0,
+    ,
+    drop = FALSE
+  ]
+  new_pca_mat <- new_normalized[
+    matrixStats::rowVars(new_normalized) > 0,
+    ,
+    drop = FALSE
+  ]
+  n_pc_variance <- 10L
+  if (
+    min(dim(ref_pca_mat)) <= n_pc_variance ||
+      min(dim(new_pca_mat)) <= n_pc_variance
+  ) {
+    stop("At least 11 cells and non-zero-variance genes are required for the PCA check.")
+  }
+  ref_pca_variance <- irlba::prcomp_irlba(
+    t(ref_pca_mat),
+    center = TRUE,
+    scale. = TRUE,
+    n = n_pc_variance
+  )
+  new_pca_variance <- irlba::prcomp_irlba(
+    t(new_pca_mat),
+    center = TRUE,
+    scale. = TRUE,
+    n = n_pc_variance
+  )
+  ref_variance_explained <- ref_pca_variance$sdev^2 /
+    sum(ref_pca_variance$sdev^2) * 100
+  new_variance_explained <- new_pca_variance$sdev^2 /
+    sum(new_pca_variance$sdev^2) * 100
+  pc_mse <- mean((ref_variance_explained - new_variance_explained)^2)
+
+  hvg_names <- Seurat::VariableFeatures(A549_seurat)
+  if (length(hvg_names) == 0L) {
+    stop("No highly variable genes were found in A549_seurat.")
+  }
+  fr_res <- FRmatch::FRtest(
+    samp1 = ref_normalized[hvg_names, , drop = FALSE],
+    samp2 = new_normalized[hvg_names, , drop = FALSE],
+    plot.MST = FALSE
+  )
+  fr_p_value <- unname(fr_res[["p.value"]])
+
   mean_lisi_res <- computeUmapLisi(ref_data, new_null_sample, seed = seed)
   mean_lisi <- mean_lisi_res$mLISI
 
@@ -216,9 +303,12 @@ checkNullData <- function(
   hkp_count <- sum(deg %in% hkp_geneset$gene)
 
   curr_metric <- c(
-    mean = round(mean_cor, 3),
-    var = round(var_cor, 3),
-    cor = round(gene_gene_cor, 3),
+    mean = mean_cor,
+    var = var_cor,
+    cor = gene_gene_cor,
+    qq_mae = qq_mae,
+    pc_mse = pc_mse,
+    fr = fr_p_value,
     lisi = mean_lisi,
     silhouette = sil,
     cellline = cellline_deg_num,
@@ -228,7 +318,7 @@ checkNullData <- function(
 
   if (compare) {
     if (is.null(threshold)) {
-      stop("`threshold` must be provided when `check = TRUE`.")
+      stop("`threshold` must be provided when `compare = TRUE`.")
     }
     if (
       is.null(names(threshold)) ||
@@ -240,18 +330,24 @@ checkNullData <- function(
       ClusterDE_default = threshold,
       Current_null_data = curr_metric,
       Check = c(
-        rep("Current_null_data >= ClusterDE_default", 4),
+        rep("Current_null_data >= ClusterDE_default", 3),
+        rep("Current_null_data <= ClusterDE_default", 2),
+        "Current_null_data >= 0.05",
+        "Current_null_data >= ClusterDE_default",
         "Current_null_data <= ClusterDE_default",
-        "Current_null_data = ClusterDE_default = 0",
+        "Current_null_data = 0",
         "Current_null_data >= ClusterDE_default",
         "Current_null_data <= ClusterDE_default"
       ),
       Pass = c(
-        curr_metric[1:4] >= threshold[1:4],
-        curr_metric[5] <= threshold[5],
-        curr_metric[6] == threshold[6],
+        curr_metric[1:3] >= threshold[1:3],
+        curr_metric[4:5] <= threshold[4:5],
+        curr_metric[6] >= 0.05,
         curr_metric[7] >= threshold[7],
-        curr_metric[8] <= threshold[8]
+        curr_metric[8] <= threshold[8],
+        curr_metric[9] == 0,
+        curr_metric[10] >= threshold[10],
+        curr_metric[11] <= threshold[11]
       )
     )
 
@@ -370,9 +466,9 @@ computeUmapLisi <- function(
     dim_red = "UMAP"
   )
 
-  UMAP_lisi <- round(
-    mean(SummarizedExperiment::colData(sce_umap)$weighted_isi, na.rm = TRUE),
-    2
+  UMAP_lisi <- mean(
+    SummarizedExperiment::colData(sce_umap)$weighted_isi,
+    na.rm = TRUE
   )
 
   list(mLISI = UMAP_lisi, simu_PCA = new_pca)
@@ -389,7 +485,7 @@ computeUmapLisi <- function(
 #' @param pca PCA coordinates for the simulated null cells.
 #' @param seed Integer seed used for reproducibility.
 #'
-#' @return Numeric mean silhouette score rounded to two decimal places.
+#' @return Numeric mean silhouette score.
 #'
 #' @keywords internal
 computeSilhouetteScore <- function(count_mat, pca, seed = 123) {
@@ -431,9 +527,9 @@ computeSilhouetteScore <- function(count_mat, pca, seed = 123) {
   }
   cl <- as.numeric(data@meta.data[, cluster_col])
 
-  sil_score <- round(
-    mean(cluster::silhouette(cl, stats::dist(coords))[, "sil_width"], na.rm = TRUE),
-    2
+  sil_score <- mean(
+    cluster::silhouette(cl, stats::dist(coords))[, "sil_width"],
+    na.rm = TRUE
   )
 
   sil_score

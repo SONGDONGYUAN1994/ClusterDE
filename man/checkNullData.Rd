@@ -18,8 +18,9 @@ checkNullData(
 \item{new_null_data}{A list of simulated null count matrices generated base on
 the \code{A549_seurat} data included in the ClusterDE package. For the fairest
 comparison with the baseline, this should ideally contain 20 elements. One
-matrix is sampled at random for distributional, LISI, and silhouette
-checks; the full list is used to calculate null p-values in ClusterDE.}
+matrix is sampled at random for distributional, QQ, PCA, FR, LISI, and
+silhouette checks; the full list is used to calculate null p-values in
+ClusterDE.}
 
 \item{new_null_data_monocyte}{A list of simulated null count matrices
 generated base on the \code{monocyte_10x_v3_seurat} data included in the ClusterDE
@@ -28,8 +29,8 @@ contain 20 elements. The full list is used to calculate null p-values in
 ClusterDE for the monocyte differential expression check.}
 
 \item{threshold}{A named numeric vector giving pass/fail thresholds for
-\code{mean}, \code{var}, \code{cor}, \code{lisi}, \code{silhouette}, \code{cellline},
-\code{monocyte_marker}, and \code{monocyte_housekeeping}.}
+\code{mean}, \code{var}, \code{cor}, \code{qq_mae}, \code{pc_mse}, \code{fr}, \code{lisi}, \code{silhouette},
+\code{celline}, \code{monocyte_marker}, and \code{monocyte_housekeeping}.}
 
 \item{seed}{Integer seed used for reproducible sampling, PCA/UMAP, and
 clustering. The default is \code{123}.}
@@ -45,7 +46,8 @@ with a detailed comparison table. If \code{FALSE}, return only the calculated
 metrics. Defaults to \code{FALSE}.}
 }
 \value{
-A list with two elements:
+If \code{compare = FALSE}, a named numeric vector containing the eleven
+unrounded calculated metrics. If \code{compare = TRUE}, a list with two elements:
 \describe{
 \item{pass}{Logical value indicating whether more than five checks pass.}
 \item{comparison_result}{Data frame comparing the default thresholds,
@@ -56,7 +58,7 @@ observed metrics, check directions, and pass/fail results.}
 Evaluate simulated null count matrices against ClusterDE's default null-data
 baseline using two reference datasets, \code{A549_seurat} and
 \code{monocyte_10x_v3_seurat}, from the ClusterDE package. The comparison uses
-eight metrics that assess the quality of simulated null data from different
+eleven metrics that assess the quality of simulated null data from different
 perspectives.
 }
 \examples{

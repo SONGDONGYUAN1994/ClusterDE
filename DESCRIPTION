@@ -36,7 +36,8 @@ Imports: scDesign3,
          RcppArmadillo,
          bettermc,
          CellMixS,
-         gson
+         gson,
+         FRmatch
 Suggests: parallel,
           ggplot2,
           knitr,
@@ -56,7 +57,8 @@ LinkingTo: Rcpp,
 Remotes:
     SONGDONGYUAN1994/scDesign3,
     immunogenomics/presto,
-    gfkse/bettermc
+    gfkse/bettermc,
+    NLM-DIR/FRmatch
 biocViews:
          Software,
          SingleCell,

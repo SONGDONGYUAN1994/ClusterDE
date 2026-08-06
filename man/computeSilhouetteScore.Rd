@@ -15,7 +15,7 @@ columns.}
 \item{seed}{Integer seed used for reproducibility.}
 }
 \value{
-Numeric mean silhouette score rounded to two decimal places.
+Numeric mean silhouette score.
 }
 \description{
 Cluster a simulated null count matrix with Seurat and calculate the mean
