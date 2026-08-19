@@ -1,12 +1,14 @@
-pandoc: 2.0.6
-pkgdown: 2.2.0
+pandoc: '2.13'
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   ClusterDE-cellline: ClusterDE-cellline.html
+  ClusterDE-microbiome: ClusterDE-microbiome.html
   ClusterDE-onedomain: ClusterDE-onedomain.html
   ClusterDE-PBMC: ClusterDE-PBMC.html
   ClusterDE-twodomains: ClusterDE-twodomains.html
-last_built: 2025-12-11T17:54Z
+last_built: 2026-08-19T08:20Z
 urls:
   reference: https://songdongyuan1994.github.io/ClusterDE/reference
   article: https://songdongyuan1994.github.io/ClusterDE/articles
+

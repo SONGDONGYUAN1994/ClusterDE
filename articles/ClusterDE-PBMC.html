@@ -5,63 +5,80 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="ClusterDE">
 <title>Perform ClusterDE on a PBMC dataset • ClusterDE</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Perform ClusterDE on a PBMC dataset">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Perform ClusterDE on a PBMC dataset">
+<meta property="og:description" content="ClusterDE">
+<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    
 
-
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
-
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
+    
     <a class="navbar-brand me-2" href="../index.html">ClusterDE</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.4</small>
 
-
+    
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
 <li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/ClusterDE-cellline.html">Perform ClusterDE on a cell line dataset</a></li>
-    <li><a class="dropdown-item" href="../articles/ClusterDE-onedomain.html">Perform ClusterDE on a single-domain spatial dataset</a></li>
-    <li><a class="dropdown-item" href="../articles/ClusterDE-PBMC.html">Perform ClusterDE on a PBMC dataset</a></li>
-    <li><a class="dropdown-item" href="../articles/ClusterDE-twodomains.html">Perform ClusterDE on a two-domain spatial dataset</a></li>
-  </ul>
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/ClusterDE-cellline.html">Perform ClusterDE on a cell line dataset</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-microbiome.html">Perform ClusterDE on a microbiome dataset</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-onedomain.html">Perform ClusterDE on a single-domain spatial dataset</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-PBMC.html">Perform ClusterDE on a PBMC dataset</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-twodomains.html">Perform ClusterDE on a two-domain spatial dataset</a>
+  </div>
 </li>
       </ul>
-<ul class="navbar-nav">
-<li class="nav-item"><form class="form-inline" role="search">
- <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
-</form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/SONGDONGYUAN1994/ClusterDE/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/SONGDONGYUAN1994/ClusterDE/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
 </div>
 
-
+    
   </div>
 </nav><div class="container template-article">
 
+
+
+
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Perform ClusterDE on a PBMC dataset</h1>
+      <img src="" class="logo" alt=""><h1>Perform ClusterDE on a PBMC dataset</h1>
                         <h4 data-toc-skip class="author">Dongyuan Song</h4>
             <address class="author_afil">
-      Department of Genetics &amp; Genome Sciences, UConn Health<br><a class="author_email" href="mailto:#"></a><a href="mailto:dongyuansong@ucla.edu">dongyuansong@ucla.edu</a>
+      Department of Genetics &amp; Genome Sciences, UConn HealthBioinformatics IDP, University of California, Los Angeles<br><a class="author_email" href="mailto:#"></a><a href="mailto:dongyuansong@ucla.edu" class="email">dongyuansong@ucla.edu</a>
       </address>
                   
-            <h4 data-toc-skip class="date">11 December 2025</h4>
+            <h4 data-toc-skip class="date">19 August 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SONGDONGYUAN1994/ClusterDE/blob/HEAD/vignettes/ClusterDE-PBMC.Rmd" class="external-link"><code>vignettes/ClusterDE-PBMC.Rmd</code></a></small>
       <div class="d-none name"><code>ClusterDE-PBMC.Rmd</code></div>
@@ -147,38 +164,37 @@
 <span><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Number of nodes: 3222</span></span>
-<span><span class="co">#&gt; Number of edges: 108605</span></span>
+<span><span class="co">#&gt; Number of edges: 108633</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Running Louvain algorithm...</span></span>
-<span><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9363</span></span>
+<span><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9372</span></span>
 <span><span class="co">#&gt; Number of communities: 10</span></span>
 <span><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span><span class="va">pbmc</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric</span></span>
 <span><span class="co">#&gt; To use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to 'correlation'</span></span>
 <span><span class="co">#&gt; This message will be shown once per session</span></span>
-<span><span class="co">#&gt; 13:01:52 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
-<span><span class="co">#&gt; 13:01:52 Read 3222 rows and found 10 numeric columns</span></span>
-<span><span class="co">#&gt; 13:01:52 Using Annoy for neighbor search, n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 13:01:52 Building Annoy index with metric = cosine, n_trees = 50</span></span>
+<span><span class="co">#&gt; 01:30:12 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
+<span><span class="co">#&gt; 01:30:12 Read 3222 rows and found 10 numeric columns</span></span>
+<span><span class="co">#&gt; 01:30:12 Using Annoy for neighbor search, n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 01:30:12 Building Annoy index with metric = cosine, n_trees = 50</span></span>
 <span><span class="co">#&gt; 0%   10   20   30   40   50   60   70   80   90   100%</span></span>
 <span><span class="co">#&gt; [----|----|----|----|----|----|----|----|----|----|</span></span>
 <span><span class="co">#&gt; **************************************************|</span></span>
-<span><span class="co">#&gt; 13:01:53 Writing NN index file to temp file /tmp/RtmpOiKPy2/file254f2c54b65e71</span></span>
-<span><span class="co">#&gt; 13:01:53 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">#&gt; 13:01:53 Annoy recall = 100%</span></span>
-<span><span class="co">#&gt; 13:01:54 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 13:01:55 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
-<span><span class="co">#&gt; 13:01:55 Commencing optimization for 500 epochs, with 126446 positive edges</span></span>
-<span><span class="co">#&gt; 13:01:55 Using rng type: pcg</span></span>
-<span><span class="co">#&gt; 13:01:59 Optimization finished</span></span>
+<span><span class="co">#&gt; 01:30:13 Writing NN index file to temp file /loc/scratch/65222922/Rtmp933UyM/file64e9583fcb3d</span></span>
+<span><span class="co">#&gt; 01:30:13 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">#&gt; 01:30:14 Annoy recall = 100%</span></span>
+<span><span class="co">#&gt; 01:30:14 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 01:30:14 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
+<span><span class="co">#&gt; 01:30:15 Commencing optimization for 500 epochs, with 126438 positive edges</span></span>
+<span><span class="co">#&gt; 01:30:18 Optimization finished</span></span>
 <span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, label <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Clustering result"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span> <span class="st">"CellType"</span>, label <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span></span></code></pre></div>
-<p><img src="ClusterDE-PBMC_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="1152"></p>
+<p><img src="ClusterDE-PBMC_files/figure-html/unnamed-chunk-3-1.png" alt="" width="1152"></p>
 <p>In this vignette, we are interested in cluster 2 vs 8, which approximately represent CD14+/CD16+ monocytes. Please note that ClusterDE is designed for 1 vs 1 comparison. Therefore, users may (1) choose the two interested clusters manually based on their knowledge or (2) use the two locally closest clusters from computation (e.g., <code>BuildClusterTree</code> in <code>Seurat</code>).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
@@ -191,7 +207,7 @@
 <span><span class="co">#&gt;     intersect, t</span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/BuildClusterTree.html" class="external-link">BuildClusterTree</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/PlotClusterTree.html" class="external-link">PlotClusterTree</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ClusterDE-PBMC_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="700"></p>
+<p><img src="ClusterDE-PBMC_files/figure-html/unnamed-chunk-4-1.png" alt="" width="700"></p>
 <p>We perform the DE test between cluster 2 and 8. We subset the cluster 2 and 8 (<code>pbmc_sub</code>).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pbmc_sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pbmc</span>, idents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span>
@@ -214,74 +230,83 @@
 <p>We can use <code><a href="../reference/findMarkers.html">findMarkers()</a></code> to perform null-calibrated post-clustering differential expression. The result table is sorted by contrast scores.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/findMarkers.html">findMarkers</a></span><span class="op">(</span><span class="va">pbmc_sub</span>, ident.1 <span class="op">=</span> <span class="fl">8</span>, ident.2 <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 107 genes have no more than 2 non-zero values; ignore fitting and return all 0s.</span></span>
-<span><span class="co">#&gt; 64.7% of genes are used in correlation modelling.</span></span>
+<span><span class="co">#&gt; 36 genes have no more than 2 non-zero values; ignore fitting and return all 0s.</span></span>
+<span><span class="co">#&gt; 55.3% of genes are used in correlation modelling.</span></span>
 <span><span class="co">#&gt; 0/1: Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
 <span><span class="co">#&gt; 0/1: </span></span>
-<span><span class="co">#&gt; 0/1: Number of nodes: 453</span></span>
-<span><span class="co">#&gt; 0/1: Number of edges: 18845</span></span>
+<span><span class="co">#&gt; 0/1: Number of nodes: 510</span></span>
+<span><span class="co">#&gt; 0/1: Number of edges: 21156</span></span>
 <span><span class="co">#&gt; 0/1: </span></span>
 <span><span class="co">#&gt; 0/1: Running Louvain algorithm...</span></span>
-<span><span class="co">#&gt; 0/1: Maximum modularity in 10 random starts: 0.7221</span></span>
+<span><span class="co">#&gt; 0/1: Maximum modularity in 10 random starts: 0.7884</span></span>
+<span><span class="co">#&gt; 0/1: Number of communities: 3</span></span>
+<span><span class="co">#&gt; 0/1: Elapsed time: 0 seconds</span></span>
+<span><span class="co">#&gt; 0/1: Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span><span class="co">#&gt; 0/1: </span></span>
+<span><span class="co">#&gt; 0/1: Number of nodes: 510</span></span>
+<span><span class="co">#&gt; 0/1: Number of edges: 21156</span></span>
+<span><span class="co">#&gt; 0/1: </span></span>
+<span><span class="co">#&gt; 0/1: Running Louvain algorithm...</span></span>
+<span><span class="co">#&gt; 0/1: Maximum modularity in 10 random starts: 0.8671</span></span>
 <span><span class="co">#&gt; 0/1: Number of communities: 2</span></span>
 <span><span class="co">#&gt; 0/1: Elapsed time: 0 seconds</span></span>
 <span><span class="co">#&gt; 0/1: Normalizing layer: counts</span></span>
 <span><span class="co">#&gt; 0/1: Finding variable features for layer counts</span></span>
 <span><span class="co">#&gt; 0/1: Centering and scaling data matrix</span></span>
 <span><span class="co">#&gt; 0/1: PC_ 1 </span></span>
-<span><span class="co">#&gt; Positive:  RPS19, PFN1, LST1, YBX1, AIF1, IFITM3, RPL8, RPS27, FTL, FCER1G </span></span>
-<span><span class="co">#&gt;     RPL41, B2M, RNASET2, RPL10, FTH1, NACA, COTL1, HLA-C, FCGR3A, EEF1A1 </span></span>
-<span><span class="co">#&gt;     HLA-B, RPL15, RPL19, TYROBP, RPL7A, CORO1A, TMSB10, SOD1, RPL11, RHOC </span></span>
-<span><span class="co">#&gt; Negative:  VCAN, S100A8, S100A9, FOS, LYZ, CD14, SLC2A3, S100A12, CSF3R, GPX1 </span></span>
-<span><span class="co">#&gt;     MS4A6A, IRF2BP2, FOSB, ITGAM, RGS2, THBS1, CD36, PPIF, DUSP6, ZFP36L1 </span></span>
-<span><span class="co">#&gt;     IER3, KLF10, CD93, NCF1, SELL, NFKBIA, SGK1, CEBPD, LUCAT1, CYP1B1 </span></span>
+<span><span class="co">#&gt; Positive:  IL32, CCL5, NKG7, ZFP36L2, DUSP2, CTSW, CD69, TRBC2, JUN, GZMA </span></span>
+<span><span class="co">#&gt;     TNFAIP3, IL7R, EEF1A1, GZMK, RORA, SYNE2, CD8A, AC092580.4, TRAC, CD7 </span></span>
+<span><span class="co">#&gt;     KLRD1, KLRB1, MALAT1, PRF1, TRBC1, TRGC2, NR4A2, MYBL1, CREM, CD2 </span></span>
+<span><span class="co">#&gt; Negative:  SPI1, FCER1G, AIF1, CST3, SERPINA1, CYBB, CFD, MS4A7, CD68, FCGR3A </span></span>
+<span><span class="co">#&gt;     TYROBP, LMO2, LYN, LRRC25, PECAM1, FGR, WARS, HCK, LILRB2, LST1 </span></span>
+<span><span class="co">#&gt;     CSF1R, IFITM3, LYZ, MAFB, RXRA, SH3BP2, CLEC12A, NPC2, HES4, MARCKS </span></span>
 <span><span class="co">#&gt; PC_ 2 </span></span>
-<span><span class="co">#&gt; Positive:  TPT1, RPS13, RPS3A, RPL18A, S100A10, RPS18, GAPDH, RPS23, RPS8, HLA-DRA </span></span>
-<span><span class="co">#&gt;     RPLP0, RPL3, RPS6, VIM, FCN1, BTF3, RPS2, LYZ, GPX1, RPL6 </span></span>
-<span><span class="co">#&gt;     GRN, RPL37A, EEF1A1, LGALS3, RPS4X, RPL21, RPL30, RPL23A, RPL15, RPS15 </span></span>
-<span><span class="co">#&gt; Negative:  CDKN1C, FCGR3A, CD79B, MTSS1, CTSL, ADA, RNF144B, RHOC, CKB, HES4 </span></span>
-<span><span class="co">#&gt;     PECAM1, PIK3CG, CSF1R, SLC2A6, POU2F2, RRAS, SSH2, IFITM2, C3AR1, MS4A7 </span></span>
-<span><span class="co">#&gt;     FAM126A, TSPAN32, PTPN6, TCF7L2, PKN1, KLF2, SAT1, DRAP1, SOD1, SFMBT2 </span></span>
+<span><span class="co">#&gt; Positive:  TMSB10, ACTB, TMSB4X, PFN1, SH3BGRL3, MYL6, H3F3A, S100A4, YBX1, ARPC2 </span></span>
+<span><span class="co">#&gt;     ACTG1, SRGN, PABPC1, ARPC3, FTL, TPM3, RHOA, ITGB2, S100A6, OAZ1 </span></span>
+<span><span class="co">#&gt;     LCP1, CDC42, NEAT1, PTP4A2, FTH1, ALDOA, LY6E, ARPC1B, RPS19, EMP3 </span></span>
+<span><span class="co">#&gt; Negative:  FCER1G, AIF1, SERPINA1, SPI1, LILRB2, CSF1R, MS4A7, LMO2, CST3, PILRA </span></span>
+<span><span class="co">#&gt;     MAFB, CLEC12A, CFD, CD68, LRRC25, HCK, FCGR2A, FCGR3A, SLC7A7, CYBB </span></span>
+<span><span class="co">#&gt;     HMOX1, SLC11A1, CPVL, POU2F2, PECAM1, IFI30, CPPED1, MARCKS, CDKN1C, CLEC7A </span></span>
 <span><span class="co">#&gt; PC_ 3 </span></span>
-<span><span class="co">#&gt; Positive:  HMGB2, IRS2, CLEC2D, S100A12, ZFP36L2, LINC00657, HSPA8, QPCT, TNFSF10, PPP2R5E </span></span>
-<span><span class="co">#&gt;     BST1, RPS3, NSMCE3, VCAN, RNF144B, JUN, RBP7, CES1, RAB27A, SOX4 </span></span>
-<span><span class="co">#&gt;     RPS8, RGS2, RPL23A, PLBD1, S100A8, YPEL3, LUC7L3, RPL6, LRMP, RPL34 </span></span>
-<span><span class="co">#&gt; Negative:  HLA-DPA1, HLA-DRA, HLA-DPB1, EMP3, APOBEC3A, RGCC, HLA-DRB1, MARCKS, DUSP6, INSIG1 </span></span>
-<span><span class="co">#&gt;     C5AR1, CD74, CTNNB1, HMOX1, HIC1, BHLHE40, XYLT1, CALM2, S100A11, MAFB </span></span>
-<span><span class="co">#&gt;     TLE3, MARCKSL1, FUCA1, HLA-DQB1, EZR, FCER1G, PPIF, RASGEF1B, CST3, SMAD7 </span></span>
+<span><span class="co">#&gt; Positive:  MALAT1, GZMH, CCL5, CD8B, FYB, TXNIP, FGFBP2, TMSB10, CD2, HLA-DRB1 </span></span>
+<span><span class="co">#&gt;     NKG7, TMSB4X, HLA-DPA1, STAT1, KLRD1, DYRK2, CMC1, SETD4, ITGB2, HLA-DPB1 </span></span>
+<span><span class="co">#&gt;     NHLRC3, ATP9B, FAM89B, TRPS1, CEPT1, YBX3, ARPC2, ZFYVE16, TRBC1, ZNF106 </span></span>
+<span><span class="co">#&gt; Negative:  KLRB1, LTB, NFKBIA, FOS, TNFAIP3, NCR3, DUSP1, IL7R, AQP3, TOB1 </span></span>
+<span><span class="co">#&gt;     FTH1, BHLHE40, CD69, EEF1A1, SRGN, IER5, RORA, CEBPD, FURIN, PDE4D </span></span>
+<span><span class="co">#&gt;     TLE1, S100A6, GTF3C1, RCAN3, GRASP, TNFRSF25, ZFP36L2, S100A4, PABPC1, SLC7A5 </span></span>
 <span><span class="co">#&gt; PC_ 4 </span></span>
-<span><span class="co">#&gt; Positive:  WDR74, SERPINA1, ACTB, S100A4, FTL, TMSB4X, BCL2A1, FTH1, S100A8, GAPDH </span></span>
-<span><span class="co">#&gt;     RGS2, S100A9, AP1S2, FOS, S100A12, TYROBP, COTL1, CCDC109B, AIF1, JUNB </span></span>
-<span><span class="co">#&gt;     S100A11, H1FX, EGR1, CD14, LYZ, SERF2, RBP7, FCER1G, BASP1, NFKBIZ </span></span>
-<span><span class="co">#&gt; Negative:  ARL4C, DNAJB14, MAP3K8, IL2RG, DDIT4, PNPT1, HLA-DQB1, ANKLE2, APOL6, NSMCE3 </span></span>
-<span><span class="co">#&gt;     SMAD7, RBM17, HLA-DPB1, MRE11A, MPRIP, CNIH1, TNFSF12, DDX6, ZCCHC11, NKG7 </span></span>
-<span><span class="co">#&gt;     C1orf56, DDHD1, HLA-DPA1, KMT2A, RUNX3, ISG20L2, MGAT4A, KCNQ1, RP11-796E2.4, ARHGAP15 </span></span>
+<span><span class="co">#&gt; Positive:  MT-ND3, HHEX, MTSS1, MT-CO3, MT-ATP6, MT-CO2, TNFSF10, MT-ND2, RGS2, MT-CO1 </span></span>
+<span><span class="co">#&gt;     CKB, GIMAP4, FCGR2A, CHST2, RP5-1171I10.5, ANXA4, CDKN1C, TKT, RNF144B, FBXL3 </span></span>
+<span><span class="co">#&gt;     ZFYVE16, RRBP1, CEBPD, FAM110A, GPR155, CACUL1, CTBS, BEST1, LEMD2, GLUL </span></span>
+<span><span class="co">#&gt; Negative:  CD63, NDUFS6, HLA-DRA, HLA-DRB1, FCN1, ANKDD1A, TRAF5, FGL2, TPP1, HLA-DPB1 </span></span>
+<span><span class="co">#&gt;     IFI35, TNFAIP2, MARCKS, SAMHD1, CD7, GRN, DUSP6, PLAC8, IL10RB, MINOS1 </span></span>
+<span><span class="co">#&gt;     CARD19, IFI44, C20orf27, MYD88, DNAJB2, GNAQ, CD8B, AOAH, PGD, CD74 </span></span>
 <span><span class="co">#&gt; PC_ 5 </span></span>
-<span><span class="co">#&gt; Positive:  HLA-DMA, FAM26F, MRPS36, CD74, HLA-DRB1, RGS19, HLA-DQB1, HLA-DMB, CAMK1, MT2A </span></span>
-<span><span class="co">#&gt;     HIGD2A, SERTAD3, CHCHD10, PPCDC, FAM49A, LILRA5, NABP1, CPVL, MAT2A, KYNU </span></span>
-<span><span class="co">#&gt;     PID1, TEX261, CST3, IRF7, SNIP1, RPS2, STK26, DNAJC18, CAT, GALNS </span></span>
-<span><span class="co">#&gt; Negative:  CD63, ZBTB7A, LINC00969, LINC00657, SSBP4, MGAT4A, ZNF654, VIM, ITGAL, ID2 </span></span>
-<span><span class="co">#&gt;     VEGFA, FBXO7, PRPF38B, CEBPB, YY1, CSTB, SNRPA1, HSD17B4, PAG1, PDP1 </span></span>
-<span><span class="co">#&gt;     TFRC, NPEPPS, COMMD2, PLEC, RAB22A, ZDHHC17, BRWD1, DNASE2, GABARAPL1, TLR2</span></span>
+<span><span class="co">#&gt; Positive:  LFNG, PHF19, EVI5, MANBA, SYNE3, HES4, KIF1B, LILRA1, SCPEP1, RYBP </span></span>
+<span><span class="co">#&gt;     RNF141, GNB4, LGALS9, SART3, RP2, ATG16L2, AGPAT2, CDKN2D, SLC6A6, RAB11FIP4 </span></span>
+<span><span class="co">#&gt;     ACOT9, SKAP2, HSF1, APOBEC3A, ACTN4, SPOPL, WDR1, KMT5B, ARRDC3, MARCH1 </span></span>
+<span><span class="co">#&gt; Negative:  TM9SF4, UPP1, SCLT1, KLHL5, DICER1, VPS35, TLE3, MAP3K11, LACTB, SLC12A9 </span></span>
+<span><span class="co">#&gt;     CXCL16, BCL11B, NDUFB3, LIMS1, GLUL, CCT5, RPS19, IL17RA, UBE2R2, OMA1 </span></span>
+<span><span class="co">#&gt;     HDAC5, ZNF106, ATP6AP1, C5AR2, PDCD6IP, FAM32A, SIDT2, CDC42EP3, RAD23B, RPS27L</span></span>
 <span><span class="co">#&gt; 0/1: Computing nearest neighbor graph</span></span>
 <span><span class="co">#&gt; 0/1: Computing SNN</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
-<span><span class="co">#&gt;   gene        cs record</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CDKN1C    39.9      1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> CD79B     38.6      1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> FCGR3A    33.8      1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> CKB       32.3      1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> SIGLEC10  24.4      1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> MTSS1     23.8      1</span></span></code></pre></div>
+<span><span class="co">#&gt;   gene       cs record</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> BTK      51.0      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> CD300LF  50.9      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> MTSS1    50.7      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> ADAP2    48.1      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> LPCAT2   47.9      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> CDKN1C   47.9      1</span></span></code></pre></div>
 <p>To compare the result from the naive Seurat pipeline and ClusterDE, we first visualize the top 6 DE genes from Seurat. Genes <em>LST1</em> and <em>RPS19</em> are both highly expressed in two clusters. In addition, <em>RPS19</em> is reported as a stable housekeeping genes in several studies. Note that it does not mean the expression levels of <em>LST1</em> and <em>RPS19</em> are the same between the two cell types. It means that they are not good cell type markers. Philosophically speaking, it means that <strong>conditional on the two clusters are obtained by clustering algorithm, LST1 and RPS19 are less likely to be the cell type markers between the two cell types</strong>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">[</span>, <span class="va">pbmc</span><span class="op">$</span><span class="va">seurat_clusters</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">8</span><span class="op">)</span><span class="op">]</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">original_markers</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ClusterDE-PBMC_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="960"> In contrast, the genes from ClusterDE do not have <em>LST1</em> and <em>RPS19</em> anymore.</p>
+<p><img src="ClusterDE-PBMC_files/figure-html/unnamed-chunk-7-1.png" alt="" width="960"> In contrast, the genes from ClusterDE do not have <em>LST1</em> and <em>RPS19</em> anymore.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">[</span>, <span class="va">pbmc</span><span class="op">$</span><span class="va">seurat_clusters</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">8</span><span class="op">)</span><span class="op">]</span>, features <span class="op">=</span> <span class="va">res</span><span class="op">$</span><span class="va">gene</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ClusterDE-PBMC_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="960"></p>
+<p><img src="ClusterDE-PBMC_files/figure-html/unnamed-chunk-8-1.png" alt="" width="960"></p>
 </div>
 <div class="section level2">
 <h2 id="customize-null-data-generation">Customize null data generation<a class="anchor" aria-label="anchor" href="#customize-null-data-generation"></a>
@@ -289,65 +314,72 @@
 <p>Here we show how ClusterDE generates and calculates the synthetic null data p-values. The synthetic null data is first generated based on the target data (real subset data, pbmc_sub, which contains the two clusters you are interested in). You can increase the number of cores (CPUs) to speed it up.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">null_data</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/constructNull.html">constructNull</a></span><span class="op">(</span><span class="va">pbmc_sub</span>, nCores <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 107 genes have no more than 2 non-zero values; ignore fitting and return all 0s.</span></span>
-<span><span class="co">#&gt; 64.7% of genes are used in correlation modelling.</span></span></code></pre></div>
+<span><span class="co">#&gt; 36 genes have no more than 2 non-zero values; ignore fitting and return all 0s.</span></span>
+<span><span class="co">#&gt; 55.3% of genes are used in correlation modelling.</span></span></code></pre></div>
 <p>Next we perform the same preprocess pipeline for the null data as the target data, which is wrapped in <code><a href="../reference/calcNullPval.html">calcNullPval()</a></code>. This uses Louvain clustering in Seurat to adjust resolution until two clusters are found.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">null_pval</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/calcNullPval.html">calcNullPval</a></span><span class="op">(</span><span class="va">null_data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 0/1: Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
 <span><span class="co">#&gt; 0/1: </span></span>
-<span><span class="co">#&gt; 0/1: Number of nodes: 453</span></span>
-<span><span class="co">#&gt; 0/1: Number of edges: 18061</span></span>
+<span><span class="co">#&gt; 0/1: Number of nodes: 510</span></span>
+<span><span class="co">#&gt; 0/1: Number of edges: 20983</span></span>
 <span><span class="co">#&gt; 0/1: </span></span>
 <span><span class="co">#&gt; 0/1: Running Louvain algorithm...</span></span>
-<span><span class="co">#&gt; 0/1: Maximum modularity in 10 random starts: 0.7460</span></span>
+<span><span class="co">#&gt; 0/1: Maximum modularity in 10 random starts: 0.7963</span></span>
+<span><span class="co">#&gt; 0/1: Number of communities: 3</span></span>
+<span><span class="co">#&gt; 0/1: Elapsed time: 0 seconds</span></span>
+<span><span class="co">#&gt; 0/1: Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span><span class="co">#&gt; 0/1: </span></span>
+<span><span class="co">#&gt; 0/1: Number of nodes: 510</span></span>
+<span><span class="co">#&gt; 0/1: Number of edges: 20983</span></span>
+<span><span class="co">#&gt; 0/1: </span></span>
+<span><span class="co">#&gt; 0/1: Running Louvain algorithm...</span></span>
+<span><span class="co">#&gt; 0/1: Maximum modularity in 10 random starts: 0.8761</span></span>
 <span><span class="co">#&gt; 0/1: Number of communities: 2</span></span>
 <span><span class="co">#&gt; 0/1: Elapsed time: 0 seconds</span></span>
 <span><span class="co">#&gt; 0/1: Normalizing layer: counts</span></span>
 <span><span class="co">#&gt; 0/1: Finding variable features for layer counts</span></span>
 <span><span class="co">#&gt; 0/1: Centering and scaling data matrix</span></span>
 <span><span class="co">#&gt; 0/1: PC_ 1 </span></span>
-<span><span class="co">#&gt; Positive:  RPS19, AIF1, YBX1, COTL1, FTL, LST1, NACA, PFN1, FTH1, RPL8 </span></span>
-<span><span class="co">#&gt;     HLA-C, RPS27, FCER1G, RPL41, RPL10, TMSB4X, HLA-B, IFITM3, B2M, ARPC3 </span></span>
-<span><span class="co">#&gt;     RPL11, RPL19, TMSB10, IFITM2, EEF1A1, RNASET2, ACTB, RPL15, FCGR3A, CFD </span></span>
-<span><span class="co">#&gt; Negative:  S100A8, VCAN, S100A9, S100A12, CD14, CSF3R, LYZ, FOS, SLC2A3, NCF1 </span></span>
-<span><span class="co">#&gt;     CYP1B1, MS4A6A, SELL, PTPRE, CCR1, RGS2, SGK1, IRF2BP2, GPX1, HIF1A </span></span>
-<span><span class="co">#&gt;     RNASE6, IER3, DUSP6, CD36, MGST1, JARID2, CRTAP, PPIF, STAB1, FOSB </span></span>
+<span><span class="co">#&gt; Positive:  CCL5, IL32, NKG7, DUSP2, ZFP36L2, JUN, CD69, SPOCK2, IL7R, TRBC2 </span></span>
+<span><span class="co">#&gt;     GZMK, TNFAIP3, TRAC, RORA, MALAT1, TRBC1, CD8A, CD7, PRF1, AC092580.4 </span></span>
+<span><span class="co">#&gt;     HOPX, CREM, TRGC2, KLRB1, GNLY, CD2, KLRD1, SYTL2, CD8B, AQP3 </span></span>
+<span><span class="co">#&gt; Negative:  AIF1, SPI1, SERPINA1, FCER1G, FCGR3A, CD68, CST3, PECAM1, WARS, TYROBP </span></span>
+<span><span class="co">#&gt;     CSF1R, IFITM3, CFD, MS4A7, CYBB, LRRC25, LYN, LYZ, LMO2, FGR </span></span>
+<span><span class="co">#&gt;     LILRB2, LST1, TYMP, VASP, MAFB, HES4, HCK, MARCKS, CLEC7A, IFI30 </span></span>
 <span><span class="co">#&gt; PC_ 2 </span></span>
-<span><span class="co">#&gt; Positive:  MALAT1, CDKN1C, KLF2, FCGR3A, PECAM1, FAM110A, SLC2A6, POU2F2, CD79B, MTSS1 </span></span>
-<span><span class="co">#&gt;     TCF7L2, RRAS, SIGLEC10, PAG1, CAT, HES4, SLC44A2, RHOC, IFITM2, SNX9 </span></span>
-<span><span class="co">#&gt;     MS4A7, YPEL2, CYTIP, PKN1, LYST, SFMBT2, ADA, PIK3CG, LYL1, WARS </span></span>
-<span><span class="co">#&gt; Negative:  TPT1, RPS13, GAPDH, VIM, RPS3A, RPL3, LYZ, RPS23, RPL18A, RPS18 </span></span>
-<span><span class="co">#&gt;     RPL28, RPS14, RPS2, HLA-DRA, RPS12, GPX1, RPS6, RPS8, EEF1A1, RPS15 </span></span>
-<span><span class="co">#&gt;     RPL37A, RPL5, RPL23A, FCN1, RPL30, S100A9, RPL10A, RPL37, S100A10, RPL11 </span></span>
+<span><span class="co">#&gt; Positive:  TMSB10, ACTB, PFN1, ARPC2, CFL1, H3F3A, TMSB4X, S100A6, LCP1, RPS19 </span></span>
+<span><span class="co">#&gt;     S100A4, FTL, CYBA, TPM3, ACTG1, MT-ND2, VIM, ARPC3, EMP3, NEAT1 </span></span>
+<span><span class="co">#&gt;     GNAI2, DUSP1, CORO1A, ALDOA, CD74, MT-CO1, OAZ1, MT-CO2, SH3BGRL, PTP4A2 </span></span>
+<span><span class="co">#&gt; Negative:  SERPINA1, MARCKS, SPI1, FCER1G, MAFB, CD68, HMOX1, AIF1, CYBB, C5AR1 </span></span>
+<span><span class="co">#&gt;     CST3, CSF1R, CDKN1C, LILRB2, HCK, MS4A7, CLEC12A, CFD, CLEC7A, IFNGR2 </span></span>
+<span><span class="co">#&gt;     CPVL, HES4, FGL2, LRRC25, CSTA, LMO2, GZMK, SLC7A7, LYZ, IFI30 </span></span>
 <span><span class="co">#&gt; PC_ 3 </span></span>
-<span><span class="co">#&gt; Positive:  HLA-DRA, HLA-DRB1, HLA-DPB1, HLA-DQB1, EMP3, HLA-DPA1, MARCKS, DUSP6, CD74, APOBEC3A </span></span>
-<span><span class="co">#&gt;     CPVL, CST3, MARCKSL1, IFI30, HLA-DMB, ISG15, NAAA, CDKN1A, CD300E, GPX1 </span></span>
-<span><span class="co">#&gt;     BHLHE40, HIC1, LGALS3, IFITM3, FUCA1, SRC, LIPA, HLA-DMA, EZR, HMOX1 </span></span>
-<span><span class="co">#&gt; Negative:  HMGB2, IRS2, RGS2, RPL30, BTG1, RPS15A, PIK3IP1, ZFP36L2, RPS3A, HSPA8 </span></span>
-<span><span class="co">#&gt;     RPS27, EGR1, SELL, S100A12, RPS3, PLBD1, JUN, LEPROTL1, C12orf57, SOD2 </span></span>
-<span><span class="co">#&gt;     RPSA, EFCAB2, RPL23A, SLU7, VCAN, ALOX5AP, RPL5, RPS6, TNFSF10, RPS4X </span></span>
+<span><span class="co">#&gt; Positive:  MALAT1, S1PR4, MTSS1, CKB, TRAC, FAM110A, GZMH, MS4A7, GPR155, TMSB4X </span></span>
+<span><span class="co">#&gt;     PELI1, CDKN1C, TESC, CD8B, CD2, EPN1, CACUL1, CMC1, CHST2, LYST </span></span>
+<span><span class="co">#&gt;     FGFBP2, CCL5, MANBA, KMT5B, SNX20, CD160, FYB, TALDO1, ARRB1, TXNIP </span></span>
+<span><span class="co">#&gt; Negative:  KLRB1, FOS, LGALS3, VAMP8, AQP3, NFKBIA, DUSP1, NCR3, LTB, BHLHE40 </span></span>
+<span><span class="co">#&gt;     GRN, CH17-373J23.1, SNHG15, TNFRSF25, TNFAIP3, IFI44L, TRGC1, TLE3, DDIT4, ZNF385A </span></span>
+<span><span class="co">#&gt;     CD69, EPSTI1, TPP1, CD63, PLSCR1, GRASP, LARP1, ISG15, LIPA, ZBTB16 </span></span>
 <span><span class="co">#&gt; PC_ 4 </span></span>
-<span><span class="co">#&gt; Positive:  RPS14, ARPC1B, ATF3, RPL5, DSTYK, KRI1, C12orf76, RPL37, RPL28, RPL19 </span></span>
-<span><span class="co">#&gt;     HIF1AN, DAPP1, TRRAP, CASP7, DCTPP1, AIF1, RPL29, RPS2, IL6R, USP1 </span></span>
-<span><span class="co">#&gt;     RPL10, KIF20B, TMEM18, AACS, RPL41, C5AR1, RPS13, ZBTB14, RPL8, RPS19 </span></span>
-<span><span class="co">#&gt; Negative:  CALM1, SNRK, LYAR, SSBP3, MALAT1, PRPF38B, DDX6, ARL4C, NKG7, ITGB1 </span></span>
-<span><span class="co">#&gt;     TMEM2, KLF10, SRSF7, IMPAD1, TPST2, ABCC3, DNMT1, LINC00969, LINC-PINT, DDIT4 </span></span>
-<span><span class="co">#&gt;     JARID2, MAP3K2, HBEGF, ASH1L, CYTIP, MAP3K8, APOBEC3A, INSIG1, EML4, DDHD1 </span></span>
+<span><span class="co">#&gt; Positive:  KLRB1, LTB, NFKBIA, NCR3, RPS19, FTH1, AQP3, CEBPD, TNFAIP3, PDE4D </span></span>
+<span><span class="co">#&gt;     FOS, FURIN, IRS2, S100A4, RORA, ZFP36L1, S100A6, IER5, RGS2, TOB1 </span></span>
+<span><span class="co">#&gt;     CHST2, TNFRSF25, DUSP1, ZBTB16, LST1, S1PR4, NOSIP, SLC7A5, DBNL, TLE1 </span></span>
+<span><span class="co">#&gt; Negative:  MALAT1, EPSTI1, CCL5, CD8B, TXNIP, HLA-DPB1, HLA-DRB1, GZMH, HLA-DPA1, VCL </span></span>
+<span><span class="co">#&gt;     GRN, FGFBP2, CXCR3, CD2, TMSB10, TUBA4A, RREB1, TMSB4X, HLA-DMA, SRGAP2 </span></span>
+<span><span class="co">#&gt;     NSMF, ISG15, HLA-DQB1, NKG7, IFNAR2, LIPA, OASL, MKLN1, STX7, CECR1 </span></span>
 <span><span class="co">#&gt; PC_ 5 </span></span>
-<span><span class="co">#&gt; Positive:  UHMK1, CTB-50L17.10, ANKRD9, CEP44, LPAR6, PPM1K, VPS41, TANGO2, C6orf1, INIP </span></span>
-<span><span class="co">#&gt;     MARCH9, TIMM23B, BBC3, AGPAT5, TAGLN2, CITED2, USP1, NDUFAF4, TMEM107, CLN3 </span></span>
-<span><span class="co">#&gt;     PSMB9, RPL14, BRI3BP, PRPF38B, BLMH, UBE2D4, LYRM5, SMU1, C16orf74, LINC00877 </span></span>
-<span><span class="co">#&gt; Negative:  SLC2A3, ACTB, WDR11, PLAUR, WDFY2, ICAM3, S100A8, ACTG1, PLBD1, S100A9 </span></span>
-<span><span class="co">#&gt;     UNC119, MAFG, WDR62, RBAK, VPS13A, C19orf38, CUX1, S100A12, SRGAP2B, SELL </span></span>
-<span><span class="co">#&gt;     BAX, MRPL2, VIM, CLEC4E, EMP3, RAB34, PTGER2, GAPDH, ACSL4, HCST</span></span>
+<span><span class="co">#&gt; Positive:  LTB, IFIT3, CXCL16, NOSIP, CD300A, ARHGAP27, GRIPAP1, WAS, HLA-DMA, CAT </span></span>
+<span><span class="co">#&gt;     SOD2, COA1, RNF141, IRF8, NCOA4, STX7, OGDH, PDLIM5, GRASP, IFI35 </span></span>
+<span><span class="co">#&gt;     MPP1, FAM110A, ATP6AP1, MCTS1, PILRA, PRF1, GNG5, ARRB1, ZNF621, FAM26F </span></span>
+<span><span class="co">#&gt; Negative:  SYNE3, TTYH3, MT-CO2, MT-CO3, AOAH, CHP1, GLYR1, PIK3CG, FCN1, TPMT </span></span>
+<span><span class="co">#&gt;     KIAA2013, KIAA0232, PLEKHB2, PLXNC1, UROS, FLOT2, LAMTOR3, MAP4K4, SAMD8, MEF2A </span></span>
+<span><span class="co">#&gt;     PHF19, S100A9, HADHB, RAB11FIP1, DCP2, UBE2J1, P2RY11, MAP3K11, TESPA1, ARHGAP17</span></span>
 <span><span class="co">#&gt; 0/1: Computing nearest neighbor graph</span></span>
 <span><span class="co">#&gt; 0/1: Computing SNN</span></span></code></pre></div>
 <p>You can use <code><a href="../reference/dimPlot.html">dimPlot()</a></code> to compare the reference (real) dataset and the synthetic null datasets generated by ClusterDE.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/dimPlot.html">dimPlot</a></span><span class="op">(</span><span class="va">pbmc_sub</span>, <span class="va">null_pval</span><span class="op">$</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'S4Arrays::makeNindexFromArrayViewport' by</span></span>
-<span><span class="co">#&gt; 'DelayedArray::makeNindexFromArrayViewport' when loading 'SummarizedExperiment'</span></span>
 <span><span class="co">#&gt; Registered S3 method overwritten by 'scDesign3':</span></span>
 <span><span class="co">#&gt;   method         from  </span></span>
 <span><span class="co">#&gt;   predict.gamlss gamlss</span></span>
@@ -355,7 +387,7 @@
 <span><span class="co">#&gt; Also defined by 'BiocGenerics'</span></span>
 <span><span class="co">#&gt; Found more than one class "dist" in cache; using the first, from namespace 'spam'</span></span>
 <span><span class="co">#&gt; Also defined by 'BiocGenerics'</span></span></code></pre></div>
-<p><img src="ClusterDE-PBMC_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="960"></p>
+<p><img src="ClusterDE-PBMC_files/figure-html/unnamed-chunk-11-1.png" alt="" width="960"></p>
 <p>We extract the p-values from both original data and synthetic null data, then use ClusterDE to “compare” them.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">original_pval</span> <span class="op">&lt;-</span> <span class="va">original_markers</span><span class="op">$</span><span class="va">p_val</span></span>
@@ -365,14 +397,14 @@
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
-<span><span class="co">#&gt;   gene      cs record</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CDKN1C  33.2      1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> CD79B   31.4      1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> FCGR3A  29.7      1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> HES4    24.1      1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> PLD4    23.6      1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> CYFIP2  22.6      1</span></span></code></pre></div>
+<span><span class="co">#&gt;   gene        cs record</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> HMOX1     65.7      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> LILRB2    65.6      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> CLEC12A   65.4      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> CYBB      64.6      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> MARCKS    64.0      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> SERPINA1  63.2      1</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="pca-approximation-for-faster-null-data-generation">PCA approximation for faster null data generation<a class="anchor" aria-label="anchor" href="#pca-approximation-for-faster-null-data-generation"></a>
@@ -395,18 +427,18 @@
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
-<span><span class="co">#&gt;   gene      cs record</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CDKN1C  27.9  0.9  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> FCGR3A  27.0  0.9  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> CD79B   25.9  0.725</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> RHOC    23.0  0.9  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> CKB     21.3  0.85 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> TCF7L2  18.8  0.925</span></span></code></pre></div>
+<span><span class="co">#&gt;   gene       cs record</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CSF1R    43.9  0.2  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> CLEC12A  40.6  0.275</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> CYBB     40.5  0.1  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> LRRC25   40.2  0.225</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> CLEC7A   40.1  0.2  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> MS4A7    39.8  0.325</span></span></code></pre></div>
 <p>We can also visualize the genes found by ClusterDE with multiple replicates and PCA approximation.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">[</span>, <span class="va">pbmc</span><span class="op">$</span><span class="va">seurat_clusters</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">8</span><span class="op">)</span><span class="op">]</span>, features <span class="op">=</span> <span class="va">res</span><span class="op">$</span><span class="va">gene</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ClusterDE-PBMC_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" width="960"></p>
+<p><img src="ClusterDE-PBMC_files/figure-html/unnamed-chunk-16-1.png" alt="" width="960"></p>
 <p>To explicitly construct null data using PCA approximation, you can specify <code>usePca = T</code> and adjust number of PCs by changing <code>nPcs</code> in <code><a href="../reference/constructNull.html">constructNull()</a></code>.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">null_data</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/constructNull.html">constructNull</a></span><span class="op">(</span><span class="va">pbmc_sub</span>, usePca <span class="op">=</span> <span class="cn">T</span>, nCores <span class="op">=</span> <span class="fl">8</span>, nRep <span class="op">=</span> <span class="fl">40</span>, nPcs <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
@@ -445,20 +477,19 @@
 <span><span class="co">#&gt; Also defined by 'BiocGenerics'</span></span>
 <span><span class="co">#&gt; Found more than one class "dist" in cache; using the first, from namespace 'spam'</span></span>
 <span><span class="co">#&gt; Also defined by 'BiocGenerics'</span></span></code></pre></div>
-<p><img src="ClusterDE-PBMC_files/figure-html/unnamed-chunk-19-1.png" class="r-plt" width="864"></p>
+<p><img src="ClusterDE-PBMC_files/figure-html/unnamed-chunk-19-1.png" alt="" width="864"></p>
 </div>
 <div class="section level2">
 <h2 id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
 </h2>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R version 4.3.1 (2023-06-16)</span></span>
-<span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
-<span><span class="co">#&gt; Running under: Red Hat Enterprise Linux 8.10 (Ootpa)</span></span>
+<span><span class="co">#&gt; R version 4.4.0 (2024-04-24)</span></span>
+<span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
+<span><span class="co">#&gt; Running under: Ubuntu 18.04.6 LTS</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
-<span><span class="co">#&gt; BLAS:   /sw/pkgs/arc/stacks/gcc/10.3.0/R/4.3.1/lib64/R/lib/libRblas.so </span></span>
-<span><span class="co">#&gt; LAPACK: /sw/pkgs/arc/stacks/gcc/10.3.0/R/4.3.1/lib64/R/lib/libRlapack.so;  LAPACK version 3.11.0</span></span>
+<span><span class="co">#&gt; BLAS/LAPACK: FlexiBLAS OPENBLAS;  LAPACK version 3.11.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Random number generation:</span></span>
 <span><span class="co">#&gt;  RNG:     L'Ecuyer-CMRG </span></span>
@@ -473,101 +504,101 @@
 <span><span class="co">#&gt;  [9] LC_ADDRESS=C               LC_TELEPHONE=C            </span></span>
 <span><span class="co">#&gt; [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; time zone: America/Detroit</span></span>
+<span><span class="co">#&gt; time zone: America/Los_Angeles</span></span>
 <span><span class="co">#&gt; tzcode source: system (glibc)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; attached base packages:</span></span>
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] Seurat_5.3.1       SeuratObject_5.2.0 sp_2.2-0           future_1.67.0     </span></span>
-<span><span class="co">#&gt; [5] BiocStyle_2.30.0  </span></span>
+<span><span class="co">#&gt; [1] Seurat_5.1.0       SeuratObject_5.0.2 sp_2.1-4           BiocStyle_2.32.0  </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;   [1] RcppAnnoy_0.0.22            splines_4.3.1              </span></span>
-<span><span class="co">#&gt;   [3] later_1.4.4                 bitops_1.0-9               </span></span>
-<span><span class="co">#&gt;   [5] tibble_3.3.0                polyclip_1.10-7            </span></span>
-<span><span class="co">#&gt;   [7] gamlss.data_6.0-7           fastDummies_1.7.5          </span></span>
-<span><span class="co">#&gt;   [9] lifecycle_1.0.4             globals_0.18.0             </span></span>
-<span><span class="co">#&gt;  [11] lattice_0.21-8              MASS_7.3-60                </span></span>
-<span><span class="co">#&gt;  [13] backports_1.5.0             magrittr_2.0.4             </span></span>
-<span><span class="co">#&gt;  [15] limma_3.58.1                plotly_4.11.0              </span></span>
-<span><span class="co">#&gt;  [17] sass_0.4.10                 rmarkdown_2.30             </span></span>
-<span><span class="co">#&gt;  [19] jquerylib_0.1.4             yaml_2.3.10                </span></span>
-<span><span class="co">#&gt;  [21] httpuv_1.6.16               otel_0.2.0                 </span></span>
-<span><span class="co">#&gt;  [23] sctransform_0.4.2           askpass_1.2.1              </span></span>
-<span><span class="co">#&gt;  [25] spam_2.11-1                 spatstat.sparse_3.1-0      </span></span>
-<span><span class="co">#&gt;  [27] reticulate_1.44.0           cowplot_1.2.0              </span></span>
-<span><span class="co">#&gt;  [29] pbapply_1.7-4               RColorBrewer_1.1-3         </span></span>
-<span><span class="co">#&gt;  [31] zlibbioc_1.48.2             abind_1.4-8                </span></span>
-<span><span class="co">#&gt;  [33] Rtsne_0.17                  GenomicRanges_1.54.1       </span></span>
-<span><span class="co">#&gt;  [35] purrr_1.1.0                 presto_1.0.0               </span></span>
-<span><span class="co">#&gt;  [37] BiocGenerics_0.48.1         kde1d_1.1.1                </span></span>
-<span><span class="co">#&gt;  [39] RCurl_1.98-1.17             GenomeInfoDbData_1.2.11    </span></span>
-<span><span class="co">#&gt;  [41] IRanges_2.36.0              S4Vectors_0.40.2           </span></span>
-<span><span class="co">#&gt;  [43] ggrepel_0.9.6               irlba_2.3.5.1              </span></span>
-<span><span class="co">#&gt;  [45] listenv_0.9.1               spatstat.utils_3.2-0       </span></span>
-<span><span class="co">#&gt;  [47] umap_0.2.10.0               goftest_1.2-3              </span></span>
-<span><span class="co">#&gt;  [49] RSpectra_0.16-2             spatstat.random_3.4-2      </span></span>
-<span><span class="co">#&gt;  [51] fitdistrplus_1.2-4          parallelly_1.45.1          </span></span>
-<span><span class="co">#&gt;  [53] pkgdown_2.2.0               DelayedArray_0.28.0        </span></span>
-<span><span class="co">#&gt;  [55] codetools_0.2-19            tidyselect_1.2.1           </span></span>
-<span><span class="co">#&gt;  [57] farver_2.1.2                randtoolbox_2.0.5          </span></span>
-<span><span class="co">#&gt;  [59] matrixStats_1.5.0           stats4_4.3.1               </span></span>
-<span><span class="co">#&gt;  [61] spatstat.explore_3.5-3      jsonlite_2.0.0             </span></span>
-<span><span class="co">#&gt;  [63] progressr_0.17.0            ggridges_0.5.7             </span></span>
-<span><span class="co">#&gt;  [65] survival_3.5-5              systemfonts_1.3.1          </span></span>
-<span><span class="co">#&gt;  [67] bettermc_1.2.2.9000         tools_4.3.1                </span></span>
-<span><span class="co">#&gt;  [69] ragg_1.5.0                  ica_1.0-3                  </span></span>
-<span><span class="co">#&gt;  [71] Rcpp_1.1.0                  glue_1.8.0                 </span></span>
-<span><span class="co">#&gt;  [73] SparseArray_1.2.4           gridExtra_2.3              </span></span>
-<span><span class="co">#&gt;  [75] xfun_0.53                   mvnfast_0.2.8              </span></span>
-<span><span class="co">#&gt;  [77] MatrixGenerics_1.14.0       scDesign3_1.7.6            </span></span>
-<span><span class="co">#&gt;  [79] GenomeInfoDb_1.38.8         dplyr_1.1.4                </span></span>
-<span><span class="co">#&gt;  [81] withr_3.0.2                 BiocManager_1.30.26        </span></span>
-<span><span class="co">#&gt;  [83] fastmap_1.2.0               openssl_2.3.4              </span></span>
-<span><span class="co">#&gt;  [85] digest_0.6.37               gamlss_5.5-0               </span></span>
-<span><span class="co">#&gt;  [87] R6_2.6.1                    mime_0.13                  </span></span>
-<span><span class="co">#&gt;  [89] textshaping_1.0.4           scattermore_1.2            </span></span>
-<span><span class="co">#&gt;  [91] tensor_1.5.1                spatstat.data_3.1-9        </span></span>
-<span><span class="co">#&gt;  [93] utf8_1.2.6                  tidyr_1.3.1                </span></span>
-<span><span class="co">#&gt;  [95] generics_0.1.4              data.table_1.17.8          </span></span>
-<span><span class="co">#&gt;  [97] S4Arrays_1.2.1              httr_1.4.7                 </span></span>
-<span><span class="co">#&gt;  [99] htmlwidgets_1.6.4           rngWELL_0.10-10            </span></span>
-<span><span class="co">#&gt; [101] uwot_0.2.3                  pkgconfig_2.0.3            </span></span>
-<span><span class="co">#&gt; [103] gtable_0.3.6                lmtest_0.9-40              </span></span>
-<span><span class="co">#&gt; [105] S7_0.2.0                    SingleCellExperiment_1.24.0</span></span>
-<span><span class="co">#&gt; [107] XVector_0.42.0              htmltools_0.5.8.1          </span></span>
-<span><span class="co">#&gt; [109] dotCall64_1.2               bookdown_0.45              </span></span>
-<span><span class="co">#&gt; [111] Biobase_2.62.0              scales_1.4.0               </span></span>
-<span><span class="co">#&gt; [113] png_0.1-8                   spatstat.univar_3.1-4      </span></span>
-<span><span class="co">#&gt; [115] knitr_1.50                  reshape2_1.4.4             </span></span>
-<span><span class="co">#&gt; [117] checkmate_2.3.3             nlme_3.1-162               </span></span>
-<span><span class="co">#&gt; [119] cachem_1.1.0                zoo_1.8-14                 </span></span>
-<span><span class="co">#&gt; [121] stringr_1.5.2               KernSmooth_2.23-21         </span></span>
-<span><span class="co">#&gt; [123] parallel_4.3.1              miniUI_0.1.2               </span></span>
-<span><span class="co">#&gt; [125] desc_1.4.3                  pillar_1.11.1              </span></span>
-<span><span class="co">#&gt; [127] grid_4.3.1                  vctrs_0.6.5                </span></span>
-<span><span class="co">#&gt; [129] RANN_2.6.2                  promises_1.4.0             </span></span>
-<span><span class="co">#&gt; [131] xtable_1.8-4                cluster_2.1.4              </span></span>
-<span><span class="co">#&gt; [133] gamlss.dist_6.1-1           evaluate_1.0.5             </span></span>
-<span><span class="co">#&gt; [135] cli_3.6.5                   compiler_4.3.1             </span></span>
-<span><span class="co">#&gt; [137] crayon_1.5.3                rlang_1.1.6                </span></span>
-<span><span class="co">#&gt; [139] future.apply_1.20.0         labeling_0.4.3             </span></span>
-<span><span class="co">#&gt; [141] mclust_6.1.1                plyr_1.8.9                 </span></span>
-<span><span class="co">#&gt; [143] fs_1.6.6                    stringi_1.8.7              </span></span>
-<span><span class="co">#&gt; [145] viridisLite_0.4.2           deldir_2.0-4               </span></span>
-<span><span class="co">#&gt; [147] assertthat_0.2.1            rvinecopulib_0.7.3.1.0     </span></span>
+<span><span class="co">#&gt;   [1] RcppAnnoy_0.0.22            splines_4.4.0              </span></span>
+<span><span class="co">#&gt;   [3] later_1.3.2                 tibble_3.2.1               </span></span>
+<span><span class="co">#&gt;   [5] polyclip_1.10-6             gamlss.data_6.0-7          </span></span>
+<span><span class="co">#&gt;   [7] fastDummies_1.7.3           lifecycle_1.0.4            </span></span>
+<span><span class="co">#&gt;   [9] globals_0.16.3              lattice_0.22-6             </span></span>
+<span><span class="co">#&gt;  [11] MASS_7.3-60.2               backports_1.4.1            </span></span>
+<span><span class="co">#&gt;  [13] magrittr_2.0.3              limma_3.60.6               </span></span>
+<span><span class="co">#&gt;  [15] plotly_4.10.4               sass_0.4.9                 </span></span>
+<span><span class="co">#&gt;  [17] rmarkdown_2.30              jquerylib_0.1.4            </span></span>
+<span><span class="co">#&gt;  [19] yaml_2.3.12                 httpuv_1.6.15              </span></span>
+<span><span class="co">#&gt;  [21] sctransform_0.4.1           askpass_1.2.0              </span></span>
+<span><span class="co">#&gt;  [23] spam_2.10-0                 spatstat.sparse_3.0-3      </span></span>
+<span><span class="co">#&gt;  [25] reticulate_1.46.0           cowplot_1.1.3              </span></span>
+<span><span class="co">#&gt;  [27] pbapply_1.7-2               RColorBrewer_1.1-3         </span></span>
+<span><span class="co">#&gt;  [29] zlibbioc_1.50.0             abind_1.4-5                </span></span>
+<span><span class="co">#&gt;  [31] Rtsne_0.17                  GenomicRanges_1.56.0       </span></span>
+<span><span class="co">#&gt;  [33] purrr_1.0.2                 presto_1.0.0               </span></span>
+<span><span class="co">#&gt;  [35] BiocGenerics_0.50.0         kde1d_1.1.1                </span></span>
+<span><span class="co">#&gt;  [37] GenomeInfoDbData_1.2.12     IRanges_2.38.0             </span></span>
+<span><span class="co">#&gt;  [39] S4Vectors_0.42.0            ggrepel_0.9.5              </span></span>
+<span><span class="co">#&gt;  [41] irlba_2.3.5.1               listenv_0.9.1              </span></span>
+<span><span class="co">#&gt;  [43] spatstat.utils_3.0-4        umap_0.2.10.0              </span></span>
+<span><span class="co">#&gt;  [45] goftest_1.2-3               RSpectra_0.16-1            </span></span>
+<span><span class="co">#&gt;  [47] spatstat.random_3.2-3       fitdistrplus_1.2-1         </span></span>
+<span><span class="co">#&gt;  [49] parallelly_1.37.1           pkgdown_2.0.9              </span></span>
+<span><span class="co">#&gt;  [51] DelayedArray_0.30.1         leiden_0.4.3.1             </span></span>
+<span><span class="co">#&gt;  [53] codetools_0.2-20            tidyselect_1.2.1           </span></span>
+<span><span class="co">#&gt;  [55] UCSC.utils_1.0.0            farver_2.1.2               </span></span>
+<span><span class="co">#&gt;  [57] randtoolbox_2.0.5           matrixStats_1.3.0          </span></span>
+<span><span class="co">#&gt;  [59] stats4_4.4.0                spatstat.explore_3.2-7     </span></span>
+<span><span class="co">#&gt;  [61] jsonlite_1.8.8              progressr_0.14.0           </span></span>
+<span><span class="co">#&gt;  [63] ggridges_0.5.6              survival_3.6-4             </span></span>
+<span><span class="co">#&gt;  [65] systemfonts_1.1.0           bettermc_1.2.2.9000        </span></span>
+<span><span class="co">#&gt;  [67] tools_4.4.0                 ragg_1.3.1                 </span></span>
+<span><span class="co">#&gt;  [69] ica_1.0-3                   Rcpp_1.0.12                </span></span>
+<span><span class="co">#&gt;  [71] glue_1.7.0                  SparseArray_1.4.3          </span></span>
+<span><span class="co">#&gt;  [73] gridExtra_2.3               xfun_0.56                  </span></span>
+<span><span class="co">#&gt;  [75] mvnfast_0.2.8               MatrixGenerics_1.16.0      </span></span>
+<span><span class="co">#&gt;  [77] scDesign3_1.7.6             GenomeInfoDb_1.40.0        </span></span>
+<span><span class="co">#&gt;  [79] dplyr_1.1.4                 withr_3.0.0                </span></span>
+<span><span class="co">#&gt;  [81] BiocManager_1.30.27         fastmap_1.2.0              </span></span>
+<span><span class="co">#&gt;  [83] fansi_1.0.6                 openssl_2.1.2              </span></span>
+<span><span class="co">#&gt;  [85] digest_0.6.35               gamlss_5.5-0               </span></span>
+<span><span class="co">#&gt;  [87] R6_2.5.1                    mime_0.12                  </span></span>
+<span><span class="co">#&gt;  [89] textshaping_0.3.7           colorspace_2.1-0           </span></span>
+<span><span class="co">#&gt;  [91] scattermore_1.2             tensor_1.5                 </span></span>
+<span><span class="co">#&gt;  [93] spatstat.data_3.0-4         utf8_1.2.4                 </span></span>
+<span><span class="co">#&gt;  [95] tidyr_1.3.1                 generics_0.1.3             </span></span>
+<span><span class="co">#&gt;  [97] data.table_1.15.4           S4Arrays_1.4.0             </span></span>
+<span><span class="co">#&gt;  [99] httr_1.4.7                  htmlwidgets_1.6.4          </span></span>
+<span><span class="co">#&gt; [101] rngWELL_0.10-10             uwot_0.2.2                 </span></span>
+<span><span class="co">#&gt; [103] pkgconfig_2.0.3             gtable_0.3.5               </span></span>
+<span><span class="co">#&gt; [105] lmtest_0.9-40               SingleCellExperiment_1.26.0</span></span>
+<span><span class="co">#&gt; [107] XVector_0.44.0              htmltools_0.5.8.1          </span></span>
+<span><span class="co">#&gt; [109] dotCall64_1.1-1             bookdown_0.39              </span></span>
+<span><span class="co">#&gt; [111] Biobase_2.64.0              scales_1.3.0               </span></span>
+<span><span class="co">#&gt; [113] png_0.1-8                   knitr_1.51                 </span></span>
+<span><span class="co">#&gt; [115] reshape2_1.4.4              checkmate_2.3.1            </span></span>
+<span><span class="co">#&gt; [117] nlme_3.1-164                cachem_1.0.8               </span></span>
+<span><span class="co">#&gt; [119] zoo_1.8-12                  stringr_1.5.1              </span></span>
+<span><span class="co">#&gt; [121] KernSmooth_2.23-22          parallel_4.4.0             </span></span>
+<span><span class="co">#&gt; [123] miniUI_0.1.1.1              desc_1.4.3                 </span></span>
+<span><span class="co">#&gt; [125] pillar_1.9.0                grid_4.4.0                 </span></span>
+<span><span class="co">#&gt; [127] vctrs_0.6.5                 RANN_2.6.1                 </span></span>
+<span><span class="co">#&gt; [129] promises_1.3.0              xtable_1.8-4               </span></span>
+<span><span class="co">#&gt; [131] cluster_2.1.6               gamlss.dist_6.1-1          </span></span>
+<span><span class="co">#&gt; [133] evaluate_0.23               cli_3.6.2                  </span></span>
+<span><span class="co">#&gt; [135] compiler_4.4.0              crayon_1.5.2               </span></span>
+<span><span class="co">#&gt; [137] rlang_1.1.3                 future.apply_1.11.2        </span></span>
+<span><span class="co">#&gt; [139] labeling_0.4.3              mclust_6.1.1               </span></span>
+<span><span class="co">#&gt; [141] plyr_1.8.9                  fs_1.6.4                   </span></span>
+<span><span class="co">#&gt; [143] stringi_1.8.4               viridisLite_0.4.2          </span></span>
+<span><span class="co">#&gt; [145] deldir_2.0-4                assertthat_0.2.1           </span></span>
+<span><span class="co">#&gt; [147] rvinecopulib_0.7.3.1.0      munsell_0.5.1              </span></span>
 <span><span class="co">#&gt; [149] lazyeval_0.2.2              coop_0.6-3                 </span></span>
-<span><span class="co">#&gt; [151] spatstat.geom_3.6-0         Matrix_1.6-5               </span></span>
-<span><span class="co">#&gt; [153] RcppHNSW_0.6.0              patchwork_1.3.2            </span></span>
-<span><span class="co">#&gt; [155] ggplot2_4.0.0               statmod_1.5.1              </span></span>
-<span><span class="co">#&gt; [157] shiny_1.11.1                SummarizedExperiment_1.32.0</span></span>
-<span><span class="co">#&gt; [159] ROCR_1.0-11                 igraph_2.2.1               </span></span>
-<span><span class="co">#&gt; [161] ClusterDE_0.99.4            bslib_0.9.0                </span></span>
-<span><span class="co">#&gt; [163] ape_5.8-1</span></span></code></pre></div>
+<span><span class="co">#&gt; [151] spatstat.geom_3.2-9         Matrix_1.7-0               </span></span>
+<span><span class="co">#&gt; [153] RcppHNSW_0.6.0              patchwork_1.2.0            </span></span>
+<span><span class="co">#&gt; [155] future_1.33.2               ggplot2_3.5.1              </span></span>
+<span><span class="co">#&gt; [157] statmod_1.5.0               shiny_1.8.1.1              </span></span>
+<span><span class="co">#&gt; [159] SummarizedExperiment_1.34.0 ROCR_1.0-11                </span></span>
+<span><span class="co">#&gt; [161] igraph_2.0.3                memoise_2.0.1              </span></span>
+<span><span class="co">#&gt; [163] ClusterDE_0.99.4            bslib_0.7.0                </span></span>
+<span><span class="co">#&gt; [165] ape_5.8</span></span></code></pre></div>
 </div>
-  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
 </div>
 
@@ -578,15 +609,15 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
     </footer>
 </div>
 
+  
 
-
-
+  
 
   </body>
 </html>
