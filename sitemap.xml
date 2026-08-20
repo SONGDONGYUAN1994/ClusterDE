@@ -10,19 +10,19 @@
     <loc>https://songdongyuan1994.github.io/ClusterDE/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-PBMC.html</loc>
-  </url>
-  <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-cellline.html</loc>
-  </url>
-  <url>
     <loc>https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-microbiome.html</loc>
   </url>
   <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-onedomain.html</loc>
+    <loc>https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-monocyte-scrna.html</loc>
   </url>
   <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-twodomains.html</loc>
+    <loc>https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-pure-cellline.html</loc>
+  </url>
+  <url>
+    <loc>https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-spatial-onedomain.html</loc>
+  </url>
+  <url>
+    <loc>https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-spatial-twodomains.html</loc>
   </url>
   <url>
     <loc>https://songdongyuan1994.github.io/ClusterDE/articles/index.html</loc>
@@ -32,9 +32,6 @@
   </url>
   <url>
     <loc>https://songdongyuan1994.github.io/ClusterDE/index.html</loc>
-  </url>
-  <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/reference/calcNullPval.html</loc>
   </url>
   <url>
     <loc>https://songdongyuan1994.github.io/ClusterDE/reference/callDE.html</loc>
@@ -56,9 +53,6 @@
   </url>
   <url>
     <loc>https://songdongyuan1994.github.io/ClusterDE/reference/exampleCounts.html</loc>
-  </url>
-  <url>
-    <loc>https://songdongyuan1994.github.io/ClusterDE/reference/findMarkers.html</loc>
   </url>
   <url>
     <loc>https://songdongyuan1994.github.io/ClusterDE/reference/index.html</loc>

@@ -41,11 +41,11 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/ClusterDE-cellline.html">Perform ClusterDE on a cell line dataset</a>
     <a class="dropdown-item" href="articles/ClusterDE-microbiome.html">Perform ClusterDE on a microbiome dataset</a>
-    <a class="dropdown-item" href="articles/ClusterDE-onedomain.html">Perform ClusterDE on a single-domain spatial dataset</a>
-    <a class="dropdown-item" href="articles/ClusterDE-PBMC.html">Perform ClusterDE on a PBMC dataset</a>
-    <a class="dropdown-item" href="articles/ClusterDE-twodomains.html">Perform ClusterDE on a two-domain spatial dataset</a>
+    <a class="dropdown-item" href="articles/ClusterDE-monocyte-scrna.html">Perform ClusterDE on a monocyte scRNA dataset</a>
+    <a class="dropdown-item" href="articles/ClusterDE-pure-cellline.html">Perform ClusterDE on a pure cell-line dataset</a>
+    <a class="dropdown-item" href="articles/ClusterDE-spatial-onedomain.html">Perform ClusterDE on a spatial dataset (one domain)</a>
+    <a class="dropdown-item" href="articles/ClusterDE-spatial-twodomains.html">Perform ClusterDE on a spatial dataset (two domains)</a>
   </div>
 </li>
       </ul>
@@ -87,129 +87,46 @@
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"SONGDONGYUAN1994/ClusterDE"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level1">
-<h1 id="quick-start">Quick Start<a name="quick-start"></a>
-<a class="anchor" aria-label="anchor" href="#quick-start"></a>
-</h1>
-<p>A basic way to identify differentially expressed genes (DEGs) between two clusters is to use <code><a href="reference/findMarkers.html">ClusterDE::findMarkers()</a></code> on a Seurat object that already contains the count matrix and clustering results.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># obj is a preprocessed Seurat object with clustering completed</span></span>
-<span><span class="va">markers</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="reference/findMarkers.html">findMarkers</a></span><span class="op">(</span><span class="va">obj</span>, ident.1 <span class="op">=</span> <span class="fl">0</span>, ident.2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p>This generates a list of genes ranked by contrast score (cs), where higher scores indicate stronger differential expression.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">markers</span><span class="op">)</span></span>
-<span><span class="co"># # A tibble: 6 × 3</span></span>
-<span><span class="co">#   gene        cs record</span></span>
-<span><span class="co">#   &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;</span></span>
-<span><span class="co"># 1 CDKN1C    39.9      1</span></span>
-<span><span class="co"># 2 CD79B     38.6      1</span></span>
-<span><span class="co"># 3 FCGR3A    33.8      1</span></span>
-<span><span class="co"># 4 CKB       32.3      1</span></span>
-<span><span class="co"># 5 SIGLEC10  24.4      1</span></span>
-<span><span class="co"># 6 MTSS1     23.8      1</span></span></code></pre></div>
-<ul>
-<li>gene: gene symbol</li>
-<li>cs: contrast score</li>
-<li>record: indicator of reproducibility across null replicates</li>
-</ul>
-</div>
-<div class="section level1">
 <h1 id="tutorials">Tutorials<a name="tutorials"></a>
 <a class="anchor" aria-label="anchor" href="#tutorials"></a>
 </h1>
 <p>For all detailed tutorials, please check the <a href="https://songdongyuan1994.github.io/ClusterDE/index.html">website</a>.</p>
 <ul>
-<li><a href="https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-cellline.html">Perform ClusterDE on a cell line dataset</a></li>
-<li><a href="https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-PBMC.html">Perform ClusterDE on a scRNA PBMC dataset</a></li>
-<li><a href="https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-onedomain.html">Perform ClusterDE on a single-domain spatial transcriptomics dataset</a></li>
-<li><a href="https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-twodomains.html">Perform ClusterDE on a two-domains spatial transcriptomics dataset</a></li>
+<li><a href="https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-monocyte-scrna.html">Perform ClusterDE on a monocyte scRNA dataset</a></li>
+<li><a href="https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-pure-cellline.html">Perform ClusterDE on a pure cell line dataset</a></li>
+<li><a href="https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-spatial-onedomain.html">Perform ClusterDE on a spatial dataset (one domain)</a></li>
+<li><a href="https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-spatial-twodomains.html">Perform ClusterDE on a spatial dataset (two domains)</a></li>
 <li><a href="https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-microbiome.html">Perform ClusterDE on a microbiome dataset</a></li>
 </ul>
 </div>
 <div class="section level1">
-<h1 id="other-usages">Other Usages<a class="anchor" aria-label="anchor" href="#other-usages"></a>
+<h1 id="api-reference">API Reference<a class="anchor" aria-label="anchor" href="#api-reference"></a>
 </h1>
-<div class="section level2">
-<h2 id="pca-approximation">PCA approximation<a class="anchor" aria-label="anchor" href="#pca-approximation"></a>
-</h2>
-<p>For faster and more stable DEG detection when using multiple null-data replicates, we recommend using the <strong>PCA-based approximation</strong> for generating synthetic null data. Enable this by setting the <code>flavour</code> argument in <code><a href="reference/findMarkers.html">findMarkers()</a></code> to <code>"pca"</code> (default is <code>"classic"</code>). Increase the number of threads (<code>nCores</code>) to speed up parallel calculation.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">markers</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="reference/findMarkers.html">findMarkers</a></span><span class="op">(</span><span class="va">obj</span>, ident.1 <span class="op">=</span> <span class="fl">0</span>, ident.2 <span class="op">=</span> <span class="fl">1</span>, flavour <span class="op">=</span> <span class="st">"pca"</span>, nCores <span class="op">=</span> <span class="fl">8</span>, nRep <span class="op">=</span> <span class="fl">40</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="customize-null-data-generation">Customize null data generation<a class="anchor" aria-label="anchor" href="#customize-null-data-generation"></a>
-</h2>
-<p>Beyond the default <code><a href="reference/findMarkers.html">findMarkers()</a></code> parameters, ClusterDE also allows users to customize the analysis pipeline, particularly the generation and inspection of synthetic null data.</p>
-<p>The example below shows how to manually generate null data from a gene-by-cell matrix containing the two clusters of interest. For typical UMI count data, we recommend using the Negative Binomial model (<code>nb</code>). The synthetic null data generation is relatively time-consuming; you may use the fast version (<code>fastVersion = TRUE</code>).</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">exampleCounts</span><span class="op">)</span></span>
-<span><span class="va">nullData</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="reference/constructNull.html">constructNull</a></span><span class="op">(</span></span>
-<span>  mat <span class="op">=</span> <span class="va">exampleCounts</span>,</span>
+<p>The example below shows how to manually generate null data from a gene-by-cell matrix containing the two clusters of interest. For typical UMI count data, we recommend using the Negative Binomial model (<code>nb</code>).</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">exampleCounts</span>, package <span class="op">=</span> <span class="st">"ClusterDE"</span><span class="op">)</span></span>
+<span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">exampleCounts</span><span class="op">)</span></span>
+<span><span class="va">null_data</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="reference/constructNull.html">constructNull</a></span><span class="op">(</span></span>
+<span>  <span class="va">obj</span>,</span>
+<span>  approximation <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  corr_cut <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  data_type <span class="op">=</span> <span class="st">"scRNA"</span>,</span>
 <span>  family <span class="op">=</span> <span class="st">"nb"</span>,</span>
-<span>  formula <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  extraInfo <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  nCores <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  parallelization <span class="op">=</span> <span class="st">"mcmapply"</span>,</span>
-<span>  fastVersion <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  corrCut <span class="op">=</span> <span class="fl">0.2</span>,</span>
-<span>  BPPARAM <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  formula <span class="op">=</span> <span class="st">"1"</span>,</span>
+<span>  if_sparse <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  n_cores <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  n_pcs <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>  n_rep <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  other_covariates <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">123</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>The parameters of <code><a href="reference/constructNull.html">constructNull()</a></code> are:</p>
-<ul>
-<li>
-<code>mat</code>: The input gene by cell matrix. It can be a sparse matrix.</li>
-<li>
-<code>family</code>: A string of the distribution you want to use when fitting the model. Must be one of ‘poisson’, ‘nb’, ’ zip’, ‘zinb’ or ‘gaussian’.</li>
-<li>
-<code>formula</code>: A string of the mu parameter formula. It defines the relationship between gene expression in synthetic null data and the extra covariates. Default is NULL (cell type case). For example, if your input data is a spatial data with X, Y coordinates, the formula can be ‘s(X, Y, bs = ’gp’, k = 4)’.</li>
-<li>
-<code>extraInfo</code>: A data frame of the extra covariates used in . For example, the 2D spatial coordinates. Default is NULL.</li>
-<li>
-<code>nCores</code>: An integer. The number of cores to use. Increasing the cores will greatly speed up the computation.</li>
-<li>
-<code>parallelization</code>: A string indicating the specific parallelization function to use. Must be one of ‘mcmapply’, ’ bpmapply’, or ‘pbmcmapply’, which corresponds to the parallelization function in the package ‘parallel’, ’ BiocParallel’, and ‘pbmcapply’ respectively. The default value is ‘pbmcmapply’.</li>
-<li>
-<code>fastVersion</code>: A logic value. If TRUE, the fast approximation is used.</li>
-<li>
-<code>corrCut</code>: A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation. The reason is that lowly expressed genes are hard to calculate correlation.</li>
-<li>
-<code>BPPARAM</code>: A MulticoreParam object or NULL. When the parameter parallelization = ‘mcmapply’ or ‘pbmcmapply’, this parameter must be NULL. When the parameter parallelization = ‘bpmapply’, this parameter must be one of the MulticoreParam object offered by the package ‘BiocParallel’. The default value is NULL.</li>
-<li>
-<code>approximation</code>: TBA</li>
-<li>
-<code>usePca</code>: TBA</li>
-<li>
-<code>nPcs</code>: TBA</li>
-</ul>
-<p>The output of <code><a href="reference/constructNull.html">constructNull()</a></code> is the new gene by cell matrix in the same format as your input.</p>
+<p>See <a href="https://songdongyuan1994.github.io/ClusterDE/reference/constructNull.html">API Reference</a> for parameter settings of <code><a href="reference/constructNull.html">constructNull()</a></code>.</p>
+<p>The output of <code><a href="reference/constructNull.html">constructNull()</a></code> is the new gene by cell matrix.</p>
 <p>The following figure briefly describes how ClusterDE generates the synthetic null data:</p>
 <p><img src="reference/figures/ClusterDE_supp_null_generation.png" width="800"></p>
-<p>After obtaining the synthetic null data, use <code><a href="reference/calcNullPval.html">calcNullPval()</a></code> to perform standard preprocessing and clustering pipeline to get DE p-values (<code>nullPvalues</code>). Finally, we compare the p-values from the null and p-values from the target data (real data) by <code><a href="reference/callDE.html">callDE()</a></code>. For illustration, here we use the Uniform random numbers as the p-values.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span><span class="va">targetPvalues</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/FindMarkers.html" class="external-link">FindMarkers</a></span><span class="op">(</span><span class="va">obj</span>, ident.1 <span class="op">=</span> <span class="fl">0</span>, ident.2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">nullPvalues</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="reference/calcNullPval.html">calcNullPval</a></span><span class="op">(</span><span class="va">nullData</span><span class="op">)</span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="reference/callDE.html">callDE</a></span><span class="op">(</span></span>
-<span>  targetScores <span class="op">=</span> <span class="va">targetPvalues</span>,</span>
-<span>  nullScores <span class="op">=</span> <span class="va">nullPvalues</span>,</span>
-<span>  nlogTrans <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  FDR <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>  correct <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p>The parameters of <code>callDE</code> are:</p>
-<ul>
-<li>
-<code>targetScores</code>: A named numeric vector of the DE scores from the target data, e.g., the p-values between two clusters from the real data.</li>
-<li>
-<code>nullScores</code>: A named numeric vector of the DE scores from the synthetic null data, e.g., the p-values between two clusters from the null data.</li>
-<li>
-<code>nlogTrans</code>: A logical value. If the input scores are p-values, take the <code>-log10</code> transformation since Clipper require larger scores represent more significant DE. Default is TRUE.</li>
-<li>
-<code>FDR</code>: A numeric value of the target False Discovery Rate (FDR). Default is 0.05.</li>
-<li>
-<code>correct</code>: A logical value. If TRUE, perform the correction to make the distribution of contrast scores approximately symmetric. Default is FALSE.</li>
-</ul>
-<p>The output of <code><a href="reference/callDE.html">callDE()</a></code> is a list of DE genes, same as the output of <code><a href="reference/findMarkers.html">findMarkers()</a></code>.</p>
-</div>
+<p>After obtaining the synthetic null data, perform standard preprocessing and clustering pipeline to get DE p-values.</p>
+<p>Finally, we compare the p-values from the null and p-values from the target data (real data) by <code><a href="reference/callDE.html">callDE()</a></code>. See <a href="https://songdongyuan1994.github.io/ClusterDE/reference/callDE.html">API Reference</a> for parameter settings of <code><a href="reference/callDE.html">callDE()</a></code>.</p>
+<p>The output of <code><a href="reference/callDE.html">callDE()</a></code> is a list of DE genes, ordered by record from most significant to less significant.</p>
 </div>
 <div class="section level1">
 <h1 id="contact">Contact<a name="contact"></a>

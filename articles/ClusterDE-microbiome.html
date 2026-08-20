@@ -41,11 +41,11 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/ClusterDE-cellline.html">Perform ClusterDE on a cell line dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-microbiome.html">Perform ClusterDE on a microbiome dataset</a>
-    <a class="dropdown-item" href="../articles/ClusterDE-onedomain.html">Perform ClusterDE on a single-domain spatial dataset</a>
-    <a class="dropdown-item" href="../articles/ClusterDE-PBMC.html">Perform ClusterDE on a PBMC dataset</a>
-    <a class="dropdown-item" href="../articles/ClusterDE-twodomains.html">Perform ClusterDE on a two-domain spatial dataset</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-monocyte-scrna.html">Perform ClusterDE on a monocyte scRNA dataset</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-pure-cellline.html">Perform ClusterDE on a pure cell-line dataset</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-spatial-onedomain.html">Perform ClusterDE on a spatial dataset (one domain)</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-spatial-twodomains.html">Perform ClusterDE on a spatial dataset (two domains)</a>
   </div>
 </li>
       </ul>
@@ -77,7 +77,7 @@
                   <a class="author_email" href="mailto:#"></a><a href="mailto:yyang5@fredhutch.org" class="email">yyang5@fredhutch.org</a>
       
                   
-            <h4 data-toc-skip class="date">19 August 2026</h4>
+            <h4 data-toc-skip class="date">20 August 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SONGDONGYUAN1994/ClusterDE/blob/HEAD/vignettes/ClusterDE-microbiome.Rmd" class="external-link"><code>vignettes/ClusterDE-microbiome.Rmd</code></a></small>
       <div class="d-none name"><code>ClusterDE-microbiome.Rmd</code></div>
@@ -95,10 +95,18 @@
 <div class="section level2">
 <h2 id="generate-synthetic-null-data">Generate synthetic null data<a class="anchor" aria-label="anchor" href="#generate-synthetic-null-data"></a>
 </h2>
-<p>Generate 20 null replicates using ClusterDE stable, note that for microbiome data pass the meta column name that stores log sequencing depth to parameter <code>logDepth</code>.</p>
+<p>Generate 20 null replicates using ClusterDE stable to eliminate randomness of null generation. Note that for microbiome data pass the meta column name that stores log sequencing depth to both formula and other_covariates.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">123</span></span>
-<span><span class="va">null_data</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/constructNull.html">constructNull</a></span><span class="op">(</span><span class="va">lung</span>, logDepth <span class="op">=</span> <span class="st">"log_depth"</span>, fastVersion <span class="op">=</span> <span class="cn">F</span>, nRep <span class="op">=</span> <span class="fl">20</span>, seed <span class="op">=</span> <span class="va">seed</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">RNGkind</a></span><span class="op">(</span><span class="st">"L'Ecuyer-CMRG"</span><span class="op">)</span></span>
+<span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">123</span></span>
+<span><span class="va">null_data</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/constructNull.html">constructNull</a></span><span class="op">(</span></span>
+<span>  <span class="va">lung</span>,</span>
+<span>  data_type <span class="op">=</span> <span class="st">"microbiome"</span>,</span>
+<span>  formula <span class="op">=</span> <span class="st">"log_depth"</span>,</span>
+<span>  other_covariates <span class="op">=</span> <span class="st">"log_depth"</span>,</span>
+<span>  n_rep <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  seed <span class="op">=</span> <span class="va">seed</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; Registered S3 method overwritten by 'scDesign3':</span></span>
 <span><span class="co">#&gt;   method         from  </span></span>
 <span><span class="co">#&gt;   predict.gamlss gamlss</span></span>
@@ -191,11 +199,11 @@
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span>  <span class="va">null_pval</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">p.adjust</a></span><span class="op">(</span><span class="va">null_pval</span>, method <span class="op">=</span> <span class="st">"BH"</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
-<p>Finally, compare original p-values and null p-values using ClusterDE FDR control, we observed 11 real DA:</p>
+<p>Finally, compare original p-values and null p-values using ClusterDE FDR control, we observed 12 real DA:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">da</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/callDE.html">callDE</a></span><span class="op">(</span><span class="va">original_pval</span>, <span class="va">null_pvals</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"ClusteDE found "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">da</span><span class="op">$</span><span class="va">record</span> <span class="op">&gt;=</span> <span class="fl">0.5</span><span class="op">)</span>, <span class="st">" DA"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "ClusteDE found 11 DA"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "ClusteDE found 12 DA"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
@@ -209,6 +217,11 @@
 <span><span class="co">#&gt; Matrix products: default</span></span>
 <span><span class="co">#&gt; BLAS/LAPACK: FlexiBLAS OPENBLAS;  LAPACK version 3.11.0</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Random number generation:</span></span>
+<span><span class="co">#&gt;  RNG:     L'Ecuyer-CMRG </span></span>
+<span><span class="co">#&gt;  Normal:  Inversion </span></span>
+<span><span class="co">#&gt;  Sample:  Rejection </span></span>
+<span><span class="co">#&gt;  </span></span>
 <span><span class="co">#&gt; locale:</span></span>
 <span><span class="co">#&gt;  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              </span></span>
 <span><span class="co">#&gt;  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    </span></span>

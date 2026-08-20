@@ -24,11 +24,11 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/ClusterDE-cellline.html">Perform ClusterDE on a cell line dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-microbiome.html">Perform ClusterDE on a microbiome dataset</a>
-    <a class="dropdown-item" href="../articles/ClusterDE-onedomain.html">Perform ClusterDE on a single-domain spatial dataset</a>
-    <a class="dropdown-item" href="../articles/ClusterDE-PBMC.html">Perform ClusterDE on a PBMC dataset</a>
-    <a class="dropdown-item" href="../articles/ClusterDE-twodomains.html">Perform ClusterDE on a two-domain spatial dataset</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-monocyte-scrna.html">Perform ClusterDE on a monocyte scRNA dataset</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-pure-cellline.html">Perform ClusterDE on a pure cell-line dataset</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-spatial-onedomain.html">Perform ClusterDE on a spatial dataset (one domain)</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-spatial-twodomains.html">Perform ClusterDE on a spatial dataset (two domains)</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -60,18 +60,16 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">constructNull</span><span class="op">(</span></span>
 <span>  <span class="va">obj</span>,</span>
+<span>  approximation <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>  corr_cut <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  data_type <span class="op">=</span> <span class="st">"scRNA"</span>,</span>
 <span>  family <span class="op">=</span> <span class="st">"nb"</span>,</span>
-<span>  spatial <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  nCores <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  nRep <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  parallelization <span class="op">=</span> <span class="st">"mcmapply"</span>,</span>
-<span>  fastVersion <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  ifSparse <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  corrCut <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span>  BPPARAM <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  approximation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  usePca <span class="op">=</span> <span class="cn">F</span>,</span>
-<span>  nPcs <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>  formula <span class="op">=</span> <span class="st">"1"</span>,</span>
+<span>  if_sparse <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  n_cores <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  n_pcs <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>  n_rep <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  other_covariates <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">123</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -82,6 +80,18 @@
 <dd><p>A Seurat object. The reference data.</p></dd>
 
 
+<dt>approximation</dt>
+<dd><p>A string of either "none", "fast" or "pca". For a high-latitude counting matrix, use "fast" as approximation can increase the speed of data generation while ensuring accuracy. For high-dimensional data (gene number is much larger than cell number), use "pca" as approximation. Default is "none".</p></dd>
+
+
+<dt>corr_cut</dt>
+<dd><p>A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation.</p></dd>
+
+
+<dt>data_type</dt>
+<dd><p>A string of either "scRNA", "spatial", "cellline" or "microbiome". Default is "scRNA".</p></dd>
+
+
 <dt>family</dt>
 <dd><p>A string or a vector of strings of the distribution of your data.
 Must be one of 'nb', 'binomial', 'poisson', 'zip', 'zinb' or 'gaussian', which represent 'poisson distribution',
@@ -89,52 +99,33 @@ Must be one of 'nb', 'binomial', 'poisson', 'zip', 'zinb' or 'gaussian', which r
 and 'gaussian distribution' respectively. For UMI-counts data, we usually use 'nb'. Default is 'nb'.</p></dd>
 
 
-<dt>spatial</dt>
-<dd><p>A vector of 2 strings, the meta data column name representing X and Y coordinates if using spatial data. Default is NULL.</p></dd>
+<dt>formula</dt>
+<dd><p>A string of the mu parameter formula. It defines the relationship between gene expression in synthetic null data and the extra covariates. Default is 1 (cell type case).</p></dd>
 
 
-<dt>nCores</dt>
-<dd><p>An integer. The number of cores to use for Parallel processing.</p></dd>
-
-
-<dt>nRep</dt>
-<dd><p>An integer. The number of sampled synthetic null datasets. Default value is 1.</p></dd>
-
-
-<dt>parallelization</dt>
-<dd><p>A string indicating the specific parallelization function to use.
-Must be one of 'mcmapply', 'bpmapply', or 'pbmcmapply', which corresponds to the parallelization function in the package
-<code>parallel</code>,<code>BiocParallel</code>, and <code>pbmcapply</code> respectively. The default value is 'pbmcmapply'.</p></dd>
-
-
-<dt>fastVersion</dt>
-<dd><p>A logic value. If TRUE, the fast approximation is used. Default is FALSE.</p></dd>
-
-
-<dt>ifSparse</dt>
+<dt>if_sparse</dt>
 <dd><p>A logic value. For high-dimensional data (gene number is much larger than cell number), if a sparse correlation estimation will be used. Default is FALSE.</p></dd>
 
 
-<dt>corrCut</dt>
-<dd><p>A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation.</p></dd>
+<dt>n_cores</dt>
+<dd><p>An integer. The number of cores to use for Parallel processing.</p></dd>
 
 
-<dt>BPPARAM</dt>
-<dd><p>A <code>MulticoreParam</code> object or NULL. When the parameter parallelization = 'mcmapply' or 'pbmcmapply',
-this parameter must be NULL. When the parameter parallelization = 'bpmapply',  this parameter must be one of the</p></dd>
+<dt>n_pcs</dt>
+<dd><p>A numeric value. Number of PCs to use when usePca=T. Default is 200.</p></dd>
 
 
-<dt>usePca</dt>
-<dd><p>A logic value. Whether to use PCA approximation. Default is FALSE.</p></dd>
+<dt>n_rep</dt>
+<dd><p>An integer. The number of sampled synthetic null datasets. Default value is 1.
+For example, if your input data is a spatial data with X, Y coordinates, the formula can be 's(X, Y, bs = 'gp', k = 4)'.</p></dd>
 
 
-<dt>nPcs</dt>
-<dd><p>A numeric value. Number of PCs to use when usePca=T. Default is 200.
-<code>MulticoreParam</code> object offered by the package 'BiocParallel. The default value is NULL.</p></dd>
+<dt>other_covariates</dt>
+<dd><p>A list of the extra covariates used in <code>formula</code>. For example, the 2D spatial coordinates. Default is NULL.</p></dd>
 
 
-<dt>Approximation</dt>
-<dd><p>A logic value. For a high-latitude counting matrix, Approximation can increase the speed of data generation while ensuring accuracy. Note that it only takes effect if "fastVersion=TRUE, Approximation=TRUE". Default is FALSE.</p></dd>
+<dt>seed</dt>
+<dd><p>Random seed. Default is 123</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -148,13 +139,6 @@ this parameter must be NULL. When the parameter parallelization = 'bpmapply',  t
     <p>This function constructs the synthetic null data based on the target data (real data). The input is a expression matrix (gene by cell); the user should specify a distribution, which is usually Negative Binomial for count matrix.</p>
     </div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">exampleCounts</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">nullData</span> <span class="op">&lt;-</span> <span class="fu">constructNull</span><span class="op">(</span>mat <span class="op">=</span> <span class="va">exampleCounts</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in constructNull(mat = exampleCounts):</span> unused argument (mat = exampleCounts)</span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
