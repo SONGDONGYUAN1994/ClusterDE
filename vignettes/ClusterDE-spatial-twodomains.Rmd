@@ -1,6 +1,6 @@
 ---
-title: "Perform ClusterDE on a two-domain spatial dataset"
-author: 
+title: "Perform ClusterDE on a spatial dataset (two domains)"
+author:
   - name: Siqi Chen
     affiliation:
     - Computer Science, Central South University
@@ -10,7 +10,7 @@ author:
     - Department of Genetics & Genome Sciences, UConn Health 
     - Bioinformatics IDP, University of California, Los Angeles
     email: dongyuansong@ucla.edu
-output: 
+output:
   BiocStyle::html_document:
     self_contained: yes
     toc: true
@@ -20,7 +20,7 @@ output:
 date: "`r doc_date()`"
 package: "`r pkg_ver('ClusterDE')`"
 vignette: >
-  %\VignetteIndexEntry{ClusterDE-twodomains_vignette}
+  %\VignetteIndexEntry{ClusterDE-spatial-twodomains_vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}  
 ---
@@ -37,35 +37,6 @@ tools::R_user_dir("ClusterDE", which="cache")
 
 We selected adjacent layer 6 and WM of 151673 slice from the LIBD Human Dorsolateral Prefrontal Cortex (DLPFC) dataset, which is downloaded in the spatialLIBD R package. We removed the genes expressed in fewer than 20% spots to save computational time here.
 ```{r}
-# # Download the spot-level data
-# spe <- spatialLIBD::fetch_data(type = "spe")
-#
-# # Select the Layer6 and WM domains in the slice "151673"
-# sub_151673 <- spe[, spe$sample_id == "151673"]
-# index <- sub_151673$spatialLIBD == "L6" | sub_151673$spatialLIBD == "WM"
-# index[which(is.na(index))] <- "NAN"
-# sub_151673 <- sub_151673[, index == "TRUE"]
-# print(sub_151673)
-#
-# # Delete the genes that express rate less than 20%
-# data <- sub_151673@assays@data$counts
-# zero_expre_rate <- apply(data, 1, function(x) {
-#   zero_true <- x == 0
-#   zero_num <- length(which(zero_true == TRUE)) / dim(data)[2]
-#   return(zero_num)
-# })
-# zero_expre_gene_idx <- which(zero_expre_rate < 0.8)
-# sub_151673 <- sub_151673[zero_expre_gene_idx,]
-# cat(paste0("The size of data: ", dim(sub_151673)[1], "*", dim(sub_151673)[2], sep = ""))
-#
-# # Construct the SingleCellExperiment object
-# dlpfc_twodomain <- SingleCellExperiment::SingleCellExperiment(list(counts = sub_151673@assays@data$counts))
-# # Add colData information of singlecellexperiment
-# dlpfc_twodomain$spatial1 <- sub_151673@int_colData@listData$spatialCoords[, 2]
-# dlpfc_twodomain$spatial2 <- sub_151673@int_colData@listData$spatialCoords[, 1]
-# dlpfc_twodomain$cell_type <- sub_151673@colData$spatialLIBD
-# SingleCellExperiment::logcounts(dlpfc_twodomain) <- log1p(SingleCellExperiment::counts(dlpfc_twodomain))
-# dlpfc_twodomain <- Seurat::as.Seurat(dlpfc_twodomain)
 data(dlpfc_twodomain, package = "ClusterDE")
 ```
 
@@ -94,25 +65,34 @@ ggplot2::ggplot(domains, ggplot2::aes(x = Xaxis, y = Yaxis, col = Domains)) +
 
 # Run the BayesSpace + Seurat pipeline
 
-Firstly, we employed the BayesSpace for spatial clustering. Please note that ClusterDE is designed for 1 vs 1 comparison; therefore, we obtain two spatial clusters for illustration purpose.
+First, we employed the BayesSpace for spatial clustering. Please note that ClusterDE is designed for 1 vs 1 comparison; therefore, we obtain two spatial clusters for illustration purpose.
 ```{r}
 # Construct the input of BayesSpace based on real dataset
 # The input of BayesSpace is sce object
-dlpfc_cluster <- SingleCellExperiment::SingleCellExperiment(
+dlpfc_twodomain_sce <- SingleCellExperiment::SingleCellExperiment(
   list(counts = Seurat::GetAssayData(dlpfc_twodomain, layer = "counts"))
 )
-# Add colData information of singlecellexperiment
-dlpfc_cluster$row <- dlpfc_twodomain$spatial1
-dlpfc_cluster$col <- dlpfc_twodomain$spatial2
+# Add colData information of SingleCellExperiment
+dlpfc_twodomain_sce$row <- dlpfc_twodomain@meta.data$row
+dlpfc_twodomain_sce$col <- dlpfc_twodomain@meta.data$col
+dlpfc_twodomain_sce$spatial1 <- dlpfc_twodomain@meta.data$spatial1
+dlpfc_twodomain_sce$spatial2 <- dlpfc_twodomain@meta.data$spatial2
 
 # Log-normalize the count data
-set.seed(123)
-dlpfc_cluster <- BayesSpace::spatialPreprocess(dlpfc_cluster, platform = "ST", n.PCs = 7, log.normalize = T)
+RNGkind("L'Ecuyer-CMRG")
+seed <- 123
+set.seed(seed)
+dlpfc_twodomain_sce <- BayesSpace::spatialPreprocess(
+  dlpfc_twodomain_sce,
+  platform = "Visium",
+  n.PCs = 7,
+  log.normalize = T
+)
 # Clustering with BayesSpace
-dlpfc_cluster <- BayesSpace::spatialCluster(
-  dlpfc_cluster,
+dlpfc_twodomain_sce <- BayesSpace::spatialCluster(
+  dlpfc_twodomain_sce,
   q = 2,
-  platform = "ST",
+  platform = "Visium",
   d = 7,
   init.method = "mclust",
   model = "t",
@@ -121,12 +101,18 @@ dlpfc_cluster <- BayesSpace::spatialCluster(
   burn.in = 100,
   save.chain = T
 )
+dlpfc_twodomain <- Seurat::as.Seurat(dlpfc_twodomain_sce)
+Seurat::Idents(dlpfc_twodomain) <- "spatial.cluster"
 ```
 
 Visualize the spatial clustering results based on the real data.
 ```{r}
 # Visualize the spatial cluster
-clusters <- data.frame(Xaxis = dlpfc_cluster$row, Yaxis = dlpfc_cluster$col, Clusters = as.character(dlpfc_cluster$spatial.cluster))
+clusters <- data.frame(
+  Xaxis = dlpfc_twodomain$spatial1,
+  Yaxis = dlpfc_twodomain$spatial2,
+  Clusters = as.character(dlpfc_twodomain$spatial.cluster)
+)
 ggplot2::ggplot(clusters, ggplot2::aes(x = Xaxis, y = Yaxis, col = Clusters)) +
   ggplot2::geom_point(size = 1.0) +
   ggplot2::coord_equal() +
@@ -148,10 +134,7 @@ ggplot2::ggplot(clusters, ggplot2::aes(x = Xaxis, y = Yaxis, col = Clusters)) +
 
 Then, we used the common DE method (Wilcoxon Rank Sum Test) to identify domain marker genes between the two spatial clusters.
 ```{r}
-# Identify domain marker genes in the real dataset based on the BayesSpace clustering result, follow Seurat tutorial
-dlpfc_twodomain <- Seurat::as.Seurat(dlpfc_cluster)
-Seurat::Idents(dlpfc_twodomain) <- "spatial.cluster"
-original_markers <- Seurat::FindMarkers(
+original_deg <- Seurat::FindMarkers(
   object = dlpfc_twodomain,
   ident.1 = 2,
   ident.2 = 1,
@@ -161,43 +144,66 @@ original_markers <- Seurat::FindMarkers(
   min.cells.feature = 1,
   min.cells.group = 1
 )
-original_markers <- original_markers[original_markers$avg_log2FC > 0,]
-head(original_markers)
+original_pval <- original_deg$p_val_adj
+names(original_pval) <- rownames(original_deg)
+print(paste0("Seurat found ", sum(original_deg$p_val_adj < 0.05), " DEG"))
 ```
 
 # Find DEGs using ClusterDE
 
-We can use `findMarkers()` from ClusterDE with `spatial` specified as name of X and Y coordinates in the data meta columns. Here in the example, coordinates are stored in `row` and `col`.
+We use spatial coordinates as covariates to generate synthetic null data, then apply the same BayesSpace clustering method as target data.
 ```{r}
-res <- ClusterDE::findMarkers(dlpfc_twodomain, ident.1 = 2, ident.2 = 1, spatial = c("row", "col"))
-head(res)
+set.seed(seed)
+null_data <- ClusterDE::constructNull(
+  dlpfc_twodomain,
+  data_type = "spatial",
+  formula = "s(spatial1, spatial2, bs = 'gp', k = 4)",
+  other_covariates = c("spatial1", "spatial2")
+)
+null_obj_sce <- SingleCellExperiment::SingleCellExperiment(list(counts = null_data))
+null_obj_sce$row <- dlpfc_twodomain@meta.data$row
+null_obj_sce$col <- dlpfc_twodomain@meta.data$col
+null_obj_sce$spatial1 <- dlpfc_twodomain@meta.data$spatial1
+null_obj_sce$spatial2 <- dlpfc_twodomain@meta.data$spatial2
+null_obj_sce <- BayesSpace::spatialPreprocess(
+  null_obj_sce,
+  platform = "Visium",
+  n.PCs = 7,
+  log.normalize = T
+)
+null_obj_sce <- BayesSpace::spatialCluster(
+  null_obj_sce,
+  q = 2,
+  platform = "Visium",
+  d = 7,
+  init.method = "mclust",
+  model = "t",
+  gamma = 2,
+  nrep = 1000,
+  burn.in = 100,
+  save.chain = T
+)
+null_obj <- Seurat::as.Seurat(null_obj_sce)
+Seurat::Idents(null_obj) <- "spatial.cluster"
 ```
 
-# Visualize top marker genes
+Compare gene p-values from target and synthetic data to calculate ClusterDE FDR controlled DEG.
+```{r}
+null_deg <- Seurat::FindMarkers(
+  object = null_obj,
+  ident.1 = 1,
+  ident.2 = 2,
+  test.use = "wilcox",
+  logfc.threshold = 0,
+  min.pct = 0,
+  min.cells.feature = 1,
+  min.cells.group = 1
+)
+null_pval <- null_deg$p_val_adj
+names(null_pval) <- rownames(null_deg)
 
-We visualize the top DE genes from ClusterDE. As expected, the top genes detected by ClusterDE exhibit clear spatial expression patterns.
-```{r, fig.width=15, fig.height=6}
-top_genes_clusterde <- res$gene[1:6]
-expr <- Seurat::GetAssayData(dlpfc_twodomain, layer = "data")[top_genes_clusterde, , drop = F]
-x_coord <- dlpfc_twodomain@meta.data$row
-y_coord <- dlpfc_twodomain@meta.data$col
-
-plots <- lapply(top_genes_clusterde, function(gene) {
-  df <- data.frame(
-    X = x_coord,
-    Y = y_coord,
-    Expr = as.numeric(expr[gene,])
-  )
-  ggplot2::ggplot(df, ggplot2::aes(x = X, y = Y, color = Expr)) +
-    ggplot2::geom_point(size = 1) +
-    ggplot2::scale_colour_gradientn(colors = viridis::viridis_pal(option = "magma")(10)) +
-    ggplot2::coord_fixed() +
-    ggplot2::ggtitle(gene) +
-    ggplot2::theme_void() +
-    ggplot2::theme(legend.position = "bottom")
-})
-
-patchwork::wrap_plots(plots, nrow = 2)
+deg <- ClusterDE::callDE(original_pval, null_pval)
+print(paste0("ClusterDE found ", sum(deg$record >= 0.5), " DEG"))
 ```
 
 # Session information
@@ -205,5 +211,3 @@ patchwork::wrap_plots(plots, nrow = 2)
 ```{r}
 sessionInfo()
 ```
-
-

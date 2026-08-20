@@ -1,6 +1,6 @@
 ---
-title: "Perform ClusterDE on a single-domain spatial dataset"
-author: 
+title: "Perform ClusterDE on a spatial dataset (one domain)"
+author:
   - name: Siqi Chen
     affiliation:
     - Computer Science, Central South University
@@ -10,7 +10,7 @@ author:
     - Department of Genetics & Genome Sciences, UConn Health  
     - Bioinformatics IDP, University of California, Los Angeles
     email: dongyuansong@ucla.edu
-output: 
+output:
   BiocStyle::html_document:
     self_contained: yes
     toc: true
@@ -20,7 +20,7 @@ output:
 date: "`r doc_date()`"
 package: "`r pkg_ver('ClusterDE')`"
 vignette: >
-  %\VignetteIndexEntry{ClusterDE-onedomain_vignette}
+  %\VignetteIndexEntry{ClusterDE-spatial-onedomain_vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}  
 ---
@@ -37,36 +37,6 @@ tools::R_user_dir("ClusterDE", which="cache")
 
 We selected white matter (WM) of 151673 slice from the LIBD Human Dorsolateral Prefrontal Cortex (DLPFC) dataset, which is downloaded in the spatialLIBD R package.
 ```{r}
-# # Download the spot-level data
-# spe <- spatialLIBD::fetch_data(type = "spe")
-#
-# # Select the white matter layer in the slice 151673
-# sub_151673 <- spe[, spe$sample_id == "151673"]
-# index <- sub_151673$spatialLIBD == "WM"
-# index[which(is.na(index))] <- "NAN"
-# sub_151673 <- sub_151673[, index == "TRUE"]
-# print(sub_151673)
-#
-# # Delete the genes that express rate less than 20%
-# data <- sub_151673@assays@data$counts
-# zero_expre_rate <- apply(data, 1, function(x) {
-#   zero_true <- x == 0
-#   zero_num <- length(which(zero_true == TRUE)) / dim(data)[2]
-#   return(zero_num)
-# })
-# zero_expre_gene_idx <- which(zero_expre_rate < 0.8)
-# print(paste0("the number of gene with zero expression rate: ", sum(zero_expre_rate == 1), sep = ""))
-# sub_151673 <- sub_151673[zero_expre_gene_idx,]
-# print(paste0("the size of data: ", dim(sub_151673)[1], "*", dim(sub_151673)[2], sep = ""))
-#
-# # Construct the SingleCellExperiment object
-# real_sce <- SingleCellExperiment::SingleCellExperiment(list(counts = sub_151673@assays@data$counts))
-# # Add colData information of singlecellexperiment
-# real_sce$spatial1 <- sub_151673@int_colData@listData$spatialCoords[, 2]
-# real_sce$spatial2 <- sub_151673@int_colData@listData$spatialCoords[, 1]
-# real_sce$cell_type <- sub_151673@colData$spatialLIBD
-# SingleCellExperiment::logcounts(real_sce) <- log1p(SingleCellExperiment::counts(real_sce))
-# dlpfc_onedomain <- Seurat::as.Seurat(real_sce)
 data(dlpfc_onedomain, package = "ClusterDE")
 ```
 
@@ -95,26 +65,34 @@ ggplot2::ggplot(domains, ggplot2::aes(x = Xaxis, y = Yaxis, col = Domain)) +
 
 # Run the BayesSpace + Seurat pipeline
 
-Firstly, we employed the BayesSpace for spatial clustering. Please note that ClusterDE is designed for 1 vs 1 comparison; therefore, we obtain two spatial clusters for illustration purpose.
-
+First, we employed the BayesSpace for spatial clustering. Please note that ClusterDE is designed for 1 vs 1 comparison; therefore, we obtain two spatial clusters for illustration purpose.
 ```{r}
 # Construct the input of BayesSpace based on real dataset
 # The input of BayesSpace is sce object
-dlpfc_cluster <- SingleCellExperiment::SingleCellExperiment(
+dlpfc_onedomain_sce <- SingleCellExperiment::SingleCellExperiment(
   list(counts = Seurat::GetAssayData(dlpfc_onedomain, layer = "counts"))
 )
 # Add colData information of SingleCellExperiment
-dlpfc_cluster$row <- dlpfc_onedomain@meta.data$spatial1
-dlpfc_cluster$col <- dlpfc_onedomain@meta.data$spatial2
+dlpfc_onedomain_sce$row <- dlpfc_onedomain@meta.data$row
+dlpfc_onedomain_sce$col <- dlpfc_onedomain@meta.data$col
+dlpfc_onedomain_sce$spatial1 <- dlpfc_onedomain@meta.data$spatial1
+dlpfc_onedomain_sce$spatial2 <- dlpfc_onedomain@meta.data$spatial2
 
 # Log-normalize the count data
-set.seed(123)
-dlpfc_cluster <- BayesSpace::spatialPreprocess(dlpfc_cluster, platform = "ST", n.PCs = 7, log.normalize = T)
+RNGkind("L'Ecuyer-CMRG")
+seed <- 123
+set.seed(seed)
+dlpfc_onedomain_sce <- BayesSpace::spatialPreprocess(
+  dlpfc_onedomain_sce,
+  platform = "Visium",
+  n.PCs = 7,
+  log.normalize = T
+)
 # Clustering with BayesSpace
-dlpfc_cluster <- BayesSpace::spatialCluster(
-  dlpfc_cluster,
+dlpfc_onedomain_sce <- BayesSpace::spatialCluster(
+  dlpfc_onedomain_sce,
   q = 2,
-  platform = "ST",
+  platform = "Visium",
   d = 7,
   init.method = "mclust",
   model = "t",
@@ -123,12 +101,18 @@ dlpfc_cluster <- BayesSpace::spatialCluster(
   burn.in = 100,
   save.chain = T
 )
+dlpfc_onedomain <- Seurat::as.Seurat(dlpfc_onedomain_sce)
+Seurat::Idents(dlpfc_onedomain) <- "spatial.cluster"
 ```
 
 Visualize the spatial clustering results based on the real data.
 ```{r}
 # Visualize the spatial cluster
-clusters <- data.frame(Xaxis = dlpfc_cluster$row, Yaxis = dlpfc_cluster$col, Clusters = as.character(dlpfc_cluster$spatial.cluster))
+clusters <- data.frame(
+  Xaxis = dlpfc_onedomain$spatial1,
+  Yaxis = dlpfc_onedomain$spatial2,
+  Clusters = as.character(dlpfc_onedomain$spatial.cluster)
+)
 ggplot2::ggplot(clusters, ggplot2::aes(x = Xaxis, y = Yaxis, col = Clusters)) +
   ggplot2::geom_point(size = 1.0) +
   ggplot2::coord_equal() +
@@ -150,10 +134,7 @@ ggplot2::ggplot(clusters, ggplot2::aes(x = Xaxis, y = Yaxis, col = Clusters)) +
 
 Then, we used the common DE method (Wilcoxon Rank Sum Test) to identify domain marker genes between the two spatial clusters.
 ```{r}
-# Identify domain marker genes in the real dataset based on the BayesSpace clustering result, follow Seurat tutorial
-dlpfc_onedomain <- Seurat::as.Seurat(dlpfc_cluster)
-Seurat::Idents(dlpfc_onedomain) <- "spatial.cluster"
-original_markers <- Seurat::FindMarkers(
+original_deg <- Seurat::FindMarkers(
   object = dlpfc_onedomain,
   ident.1 = 1,
   ident.2 = 2,
@@ -163,20 +144,66 @@ original_markers <- Seurat::FindMarkers(
   min.cells.feature = 1,
   min.cells.group = 1
 )
-original_markers <- original_markers[original_markers$avg_log2FC > 0,]
-message(paste0("Number of DE gene is ", sum(original_markers$p_val_adj < 0.05)))
+original_pval <- original_deg$p_val_adj
+names(original_pval) <- rownames(original_deg)
+print(paste0("Seurat found ", sum(original_deg$p_val_adj < 0.05), " DEG"))
 ```
 
 # Find DEGs using ClusterDE
 
-We can use `findMarkers()` from ClusterDE with `spatial` specified as name of X and Y coordinates in the data meta columns. Here in the example, coordinates are stored in `row` and `col`.
+We use spatial coordinates as covariates to generate synthetic null data, then apply the same BayesSpace clustering method as target data.
 ```{r}
-res <- ClusterDE::findMarkers(dlpfc_onedomain, ident.1 = 1, ident.2 = 2, spatial = c("row", "col"))
+set.seed(seed)
+null_data <- ClusterDE::constructNull(
+  dlpfc_onedomain,
+  data_type = "spatial",
+  formula = "s(spatial1, spatial2, bs = 'gp', k = 4)",
+  other_covariates = c("spatial1", "spatial2")
+)
+null_obj_sce <- SingleCellExperiment::SingleCellExperiment(list(counts = null_data))
+null_obj_sce$row <- dlpfc_onedomain@meta.data$row
+null_obj_sce$col <- dlpfc_onedomain@meta.data$col
+null_obj_sce$spatial1 <- dlpfc_onedomain@meta.data$spatial1
+null_obj_sce$spatial2 <- dlpfc_onedomain@meta.data$spatial2
+null_obj_sce <- BayesSpace::spatialPreprocess(
+  null_obj_sce,
+  platform = "Visium",
+  n.PCs = 7,
+  log.normalize = T
+)
+null_obj_sce <- BayesSpace::spatialCluster(
+  null_obj_sce,
+  q = 2,
+  platform = "Visium",
+  d = 7,
+  init.method = "mclust",
+  model = "t",
+  gamma = 2,
+  nrep = 1000,
+  burn.in = 100,
+  save.chain = T
+)
+null_obj <- Seurat::as.Seurat(null_obj_sce)
+Seurat::Idents(null_obj) <- "spatial.cluster"
 ```
 
-We can observe from the results that the cell compositions are nearly identical, leaving only one gene with detectable differential expression.
+Compare gene p-values from target and synthetic data, we observe that ClusterDE does not detect any DEG.
 ```{r}
-message(paste0("Number of DE gene is ", sum(res$record > 0)))
+null_deg <- Seurat::FindMarkers(
+  object = null_obj,
+  ident.1 = 1,
+  ident.2 = 2,
+  test.use = "wilcox",
+  logfc.threshold = 0,
+  min.pct = 0,
+  min.cells.feature = 1,
+  min.cells.group = 1
+)
+null_pval <- null_deg$p_val_adj
+names(null_pval) <- rownames(null_deg)
+
+deg <- ClusterDE::callDE(original_pval, null_pval)
+print(paste0("ClusterDE found ", sum(deg$record >= 0.5), " DEG"))
 ```
 
 # Session information

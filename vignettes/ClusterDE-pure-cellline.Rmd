@@ -1,12 +1,12 @@
 ---
-title: "Perform ClusterDE on a cell line dataset"
-author: 
+title: "Perform ClusterDE on a pure cell-line dataset"
+author:
   - name: Dongyuan Song
     affiliation:
     - Department of Genetics & Genome Sciences, UConn Health 
     - Bioinformatics IDP, University of California, Los Angeles
     email: dongyuansong@ucla.edu
-output: 
+output:
   BiocStyle::html_document:
     self_contained: yes
     toc: true
@@ -16,7 +16,7 @@ output:
 date: "`r doc_date()`"
 package: "`r pkg_ver('ClusterDE')`"
 vignette: >
-  %\VignetteIndexEntry{ClusterDE-cellline_vignette}
+  %\VignetteIndexEntry{ClusterDE-pure-cellline_vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}  
 ---
@@ -33,8 +33,6 @@ tools::R_user_dir("ClusterDE", which = "cache")
 
 We download the cell line data set H2228. The original data is from [Tian et al., Nature Methods 2019](https://github.com/LuyiTian/sc_mixology) as the gold standard for benchmarking the accuracy of clustering. Since the data is from the pure cell line, it should not have cell types, and, of course, between cell type DE genes. **Note**: it does not mean that there are no variations within one cell line; of course there are, e.g., cell cycle, total UMI, etc. However, these variations do not represent **discrete cell groups**, and essentially it means you should not use your obtained clusters to explain the variation.
 ```{r}
-# sce <- readRDS(url("https://figshare.com/ndownloader/files/41395260"))
-# cellline <- Seurat::as.Seurat(sce)
 data(cellline, package = "ClusterDE")
 ```
 
@@ -43,7 +41,8 @@ data(cellline, package = "ClusterDE")
 We perform the default Seurat clustering. Please note that ClusterDE is designed for 1 vs 1 comparison; therefore, we set the resolution as 0.2 here to obtain two clusters for illustration purpose.
 ```{r}
 RNGkind("L'Ecuyer-CMRG")
-set.seed(123)
+seed <- 123
+set.seed(seed)
 cellline <- Seurat::UpdateSeuratObject(cellline)
 cellline <- Seurat::NormalizeData(cellline)
 cellline <- Seurat::FindVariableFeatures(cellline)
@@ -55,38 +54,51 @@ cellline <- Seurat::RunUMAP(cellline, dims = 1:10)
 Seurat::DimPlot(cellline, reduction = "umap") + ggplot2::ggtitle("Clustering result")
 ```
 
-From the UMAP, the two clusters seem to be dubious. Although we do not expect the existence of cell types, when we perform Seurat DE test between the two clusters, and we get > 1000 genes with FDR < 0.05. It means that the double-dipping introduces a huge number of discoveries.
+From the UMAP, the two clusters seem to be dubious. Although we do not expect the existence of cell types, when we perform Seurat DE test between the two clusters, and we get DE genes with FDR < 0.05. It means that the double-dipping introduces a huge number of false discoveries.
 
 ```{r}
-original_markers <- Seurat::FindMarkers(
+original_deg <- Seurat::FindMarkers(
   cellline,
   ident.1 = 0,
   ident.2 = 1,
   min.pct = 0,
   logfc.threshold = 0
 )
-original_markers <- original_markers[original_markers$avg_log2FC > 0,]
-message(paste0("Number of DE gene is ", sum(original_markers$p_val_adj < 0.05)))
+original_deg <- original_deg[original_deg$avg_log2FC > 0,]
+original_pval <- original_deg$p_val_adj
+names(original_pval) <- rownames(original_deg)
+print(paste0("Seurat found ", sum(original_deg$p_val_adj < 0.05), " DEG"))
 ```
 
 # Find DEGs using ClusterDE
 
-We can use `findMarkers()` to perform null-calibrated post-clustering differential expression. The result table is sorted by contrast scores.
+We generate the synthetic null replicate from the target data using `ClusterDE::constructNULL` and perform the same preprocessing and clustering pipeline as the target cell line data.
 ```{r}
-res <- ClusterDE::findMarkers(cellline, ident.1 = 0, ident.2 = 1)
+set.seed(seed)
+null_data <- ClusterDE::constructNull(cellline, data_type = "cellline", seed = seed)
+null_obj <- Seurat::CreateSeuratObject(null_data)
+null_obj <- Seurat::NormalizeData(null_obj)
+null_obj <- Seurat::FindVariableFeatures(null_obj)
+null_obj <- Seurat::ScaleData(null_obj)
+null_obj <- Seurat::RunPCA(null_obj)
+null_obj <- Seurat::FindNeighbors(null_obj)
+null_obj <- Seurat::FindClusters(null_obj, resolution = 0.3)
 ```
 
-We can observe from the results that all genes have a frequency record of 0, which means that we do not detect any DE genes.
+We then perform Wilcoxon DE test on the null data and compare it with the p-values of target genes. We can observe that after ClusterDE FDR control, no genes pass the test which means we don't detect any DEG in this cell line data.
 ```{r}
-message(paste0("Number of DE gene is ", sum(res$record > 0)))
-```
-
-We can also visualize the distribution of contrast scores (diff between the -log p-values from real and null). It is roughly symmetric around 0.
-```{r}
-ggplot2::ggplot(data = res, ggplot2::aes(x = cs)) +
-  ggplot2::geom_histogram(fill = "white", color = "black") +
-  ggplot2::theme_bw() +
-  ggplot2::ggtitle("Distribution of constrast scores")
+null_deg <- Seurat::FindMarkers(
+  null_obj,
+  ident.1 = 0,
+  ident.2 = 1,
+  min.pct = 0,
+  logfc.threshold = 0
+)
+null_deg <- null_deg[null_deg$avg_log2FC > 0,]
+null_pval <- null_deg$p_val_adj
+names(null_pval) <- rownames(null_deg)
+deg <- ClusterDE::callDE(original_pval, null_pval)
+print(paste0("ClusterDE found ", sum(deg$record >= 0.5), " DEG"))
 ```
 
 # Session information

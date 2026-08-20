@@ -1,0 +1,97 @@
+---
+title: "Perform ClusterDE on a microbiome dataset"
+author: 
+  - name: Yiwen Yang
+    email: yyang5@fredhutch.org
+output: 
+  BiocStyle::html_document:
+    self_contained: yes
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    code_folding: show
+date: "`r doc_date()`"
+package: "`r pkg_ver('ClusterDE')`"
+vignette: >
+  %\VignetteIndexEntry{ClusterDE-microbiome_vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+tools::R_user_dir("ClusterDE", which = "cache")
+```
+
+# Download data
+
+Load lung cancer WGS microbiome profile processed in Seurat object, originally available at <https://github.com/yge15/TCGA_Microbial_Content>.
+```{r}
+data(lung, package = "ClusterDE")
+```
+
+# Generate synthetic null data
+
+Generate 20 null replicates using ClusterDE stable to eliminate randomness of null generation. Note that for microbiome data pass the meta column name that stores log sequencing depth to both formula and other_covariates.
+```{r}
+RNGkind("L'Ecuyer-CMRG")
+seed <- 123
+null_data <- ClusterDE::constructNull(
+  lung,
+  data_type = "microbiome",
+  formula = "log_depth",
+  other_covariates = "log_depth",
+  n_rep = 20,
+  seed = seed
+)
+```
+
+# Cell clustering
+
+Perform Kmeans (K = 2) clustering on both real data and synthetic null data, the clustering method can be any method that is used in the original study.
+```{r}
+set.seed(seed)
+clusters <- kmeans(t(Seurat::GetAssayData(lung, layer = "data")), 2)$cluster
+null_clusters <- lapply(null_data, function(mat) {
+  set.seed(seed)
+  mat <- apply(mat, 2, function(x) x / sum(x))
+  kmeans(t(mat), 2)$cluster
+})
+```
+
+# DE analysis
+
+Use any established DA methods to find differentially abundant taxa in both real and synthetic data. Using Wilcoxon, we can find 70 DA comparing the two clusters:
+```{r}
+original_pval <- apply(Seurat::GetAssayData(lung, layer = "data"), 1, function(x) {
+  stats <- wilcox.test(x ~ clusters)
+  stats$p.value
+})
+original_pval <- p.adjust(original_pval, method = "BH")
+print(paste0("Wilcox found ", sum(original_pval < 0.05), " DA"))
+```
+
+Next, apply the same DA method on all null replicates.
+```{r}
+null_pvals <- lapply(seq_along(null_data), function(i) {
+  null_pval <- apply(null_data[[i]], 1, function(x) {
+    stats <- wilcox.test(x ~ null_clusters[[i]])
+    stats$p.value
+  })
+  null_pval <- p.adjust(null_pval, method = "BH")
+})
+```
+
+Finally, compare original p-values and null p-values using ClusterDE FDR control, we observed 12 real DA:
+```{r}
+da <- ClusterDE::callDE(original_pval, null_pvals)
+print(paste0("ClusteDE found ", sum(da$record >= 0.5), " DA"))
+```
+
+# Session information
+```{r}
+sessionInfo()
+```

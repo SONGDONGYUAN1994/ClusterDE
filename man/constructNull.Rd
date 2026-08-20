@@ -6,54 +6,47 @@
 \usage{
 constructNull(
   obj,
+  approximation = "none",
+  corr_cut = 0.1,
+  data_type = "scRNA",
   family = "nb",
-  spatial = NULL,
-  nCores = 1,
-  nRep = 1,
-  parallelization = "mcmapply",
-  fastVersion = TRUE,
-  ifSparse = FALSE,
-  corrCut = 0.1,
-  BPPARAM = NULL,
-  approximation = FALSE,
-  usePca = F,
-  nPcs = 200,
+  formula = "1",
+  if_sparse = F,
+  n_cores = 1,
+  n_pcs = 200,
+  n_rep = 1,
+  other_covariates = NULL,
   seed = 123
 )
 }
 \arguments{
 \item{obj}{A Seurat object. The reference data.}
 
+\item{approximation}{A string of either "none", "fast" or "pca". For a high-latitude counting matrix, use "fast" as approximation can increase the speed of data generation while ensuring accuracy. For high-dimensional data (gene number is much larger than cell number), use "pca" as approximation. Default is "none".}
+
+\item{corr_cut}{A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation.}
+
+\item{data_type}{A string of either "scRNA", "spatial", "cellline" or "microbiome". Default is "scRNA".}
+
 \item{family}{A string or a vector of strings of the distribution of your data.
 Must be one of 'nb', 'binomial', 'poisson', 'zip', 'zinb' or 'gaussian', which represent 'poisson distribution',
 'negative binomial distribution', 'zero-inflated poisson distribution', 'zero-inflated negative binomail distribution',
 and 'gaussian distribution' respectively. For UMI-counts data, we usually use 'nb'. Default is 'nb'.}
 
-\item{spatial}{A vector of 2 strings, the meta data column name representing X and Y coordinates if using spatial data. Default is NULL.}
+\item{formula}{A string of the mu parameter formula. It defines the relationship between gene expression in synthetic null data and the extra covariates. Default is 1 (cell type case).}
 
-\item{nCores}{An integer. The number of cores to use for Parallel processing.}
+\item{if_sparse}{A logic value. For high-dimensional data (gene number is much larger than cell number), if a sparse correlation estimation will be used. Default is FALSE.}
 
-\item{nRep}{An integer. The number of sampled synthetic null datasets. Default value is 1.}
+\item{n_cores}{An integer. The number of cores to use for Parallel processing.}
 
-\item{parallelization}{A string indicating the specific parallelization function to use.
-Must be one of 'mcmapply', 'bpmapply', or 'pbmcmapply', which corresponds to the parallelization function in the package
-\code{parallel},\code{BiocParallel}, and \code{pbmcapply} respectively. The default value is 'pbmcmapply'.}
+\item{n_pcs}{A numeric value. Number of PCs to use when usePca=T. Default is 200.}
 
-\item{fastVersion}{A logic value. If TRUE, the fast approximation is used. Default is FALSE.}
+\item{n_rep}{An integer. The number of sampled synthetic null datasets. Default value is 1.
+For example, if your input data is a spatial data with X, Y coordinates, the formula can be 's(X, Y, bs = 'gp', k = 4)'.}
 
-\item{ifSparse}{A logic value. For high-dimensional data (gene number is much larger than cell number), if a sparse correlation estimation will be used. Default is FALSE.}
+\item{other_covariates}{A list of the extra covariates used in \code{formula}. For example, the 2D spatial coordinates. Default is NULL.}
 
-\item{corrCut}{A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation.}
-
-\item{BPPARAM}{A \code{MulticoreParam} object or NULL. When the parameter parallelization = 'mcmapply' or 'pbmcmapply',
-this parameter must be NULL. When the parameter parallelization = 'bpmapply',  this parameter must be one of the}
-
-\item{usePca}{A logic value. Whether to use PCA approximation. Default is FALSE.}
-
-\item{nPcs}{A numeric value. Number of PCs to use when usePca=T. Default is 200.
-\code{MulticoreParam} object offered by the package 'BiocParallel. The default value is NULL.}
-
-\item{Approximation}{A logic value. For a high-latitude counting matrix, Approximation can increase the speed of data generation while ensuring accuracy. Note that it only takes effect if "fastVersion=TRUE, Approximation=TRUE". Default is FALSE.}
+\item{seed}{Random seed. Default is 123}
 }
 \value{
 The expression matrix of the synthetic null data.
@@ -63,8 +56,4 @@ The expression matrix of the synthetic null data.
 }
 \details{
 This function constructs the synthetic null data based on the target data (real data). The input is a expression matrix (gene by cell); the user should specify a distribution, which is usually Negative Binomial for count matrix.
-}
-\examples{
-data(exampleCounts)
-nullData <- constructNull(mat = exampleCounts)
 }

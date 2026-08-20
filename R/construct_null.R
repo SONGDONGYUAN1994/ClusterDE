@@ -5,68 +5,61 @@
 #' This function constructs the synthetic null data based on the target data (real data). The input is a expression matrix (gene by cell); the user should specify a distribution, which is usually Negative Binomial for count matrix.
 #'
 #' @param obj A Seurat object. The reference data.
+#' @param approximation A string of either "none", "fast" or "pca". For a high-latitude counting matrix, use "fast" as approximation can increase the speed of data generation while ensuring accuracy. For high-dimensional data (gene number is much larger than cell number), use "pca" as approximation. Default is "none".
+#' @param corr_cut A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation.
 #' @param family A string or a vector of strings of the distribution of your data.
 #' Must be one of 'nb', 'binomial', 'poisson', 'zip', 'zinb' or 'gaussian', which represent 'poisson distribution',
 #' 'negative binomial distribution', 'zero-inflated poisson distribution', 'zero-inflated negative binomail distribution',
 #' and 'gaussian distribution' respectively. For UMI-counts data, we usually use 'nb'. Default is 'nb'.
-#' @param spatial A vector of 2 strings, the meta data column name representing X and Y coordinates if using spatial data. Default is NULL.
-#' @param nCores An integer. The number of cores to use for Parallel processing.
-#' @param nRep An integer. The number of sampled synthetic null datasets. Default value is 1.
-#' @param parallelization A string indicating the specific parallelization function to use.
-#' Must be one of 'mcmapply', 'bpmapply', or 'pbmcmapply', which corresponds to the parallelization function in the package
-#' \code{parallel},\code{BiocParallel}, and \code{pbmcapply} respectively. The default value is 'pbmcmapply'.
-#' @param fastVersion A logic value. If TRUE, the fast approximation is used. Default is FALSE.
-#' @param corrCut A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation.
-#' @param ifSparse A logic value. For high-dimensional data (gene number is much larger than cell number), if a sparse correlation estimation will be used. Default is FALSE.
-#' @param BPPARAM A \code{MulticoreParam} object or NULL. When the parameter parallelization = 'mcmapply' or 'pbmcmapply',
-#' this parameter must be NULL. When the parameter parallelization = 'bpmapply',  this parameter must be one of the
-#' @param Approximation A logic value. For a high-latitude counting matrix, Approximation can increase the speed of data generation while ensuring accuracy. Note that it only takes effect if "fastVersion=TRUE, Approximation=TRUE". Default is FALSE.
-#' @param usePca A logic value. Whether to use PCA approximation. Default is FALSE.
-#' @param nPcs A numeric value. Number of PCs to use when usePca=T. Default is 200.
-#' \code{MulticoreParam} object offered by the package 'BiocParallel. The default value is NULL.
+#' @param data_type A string of either "scRNA", "spatial", "cellline" or "microbiome". Default is "scRNA".
+#' @param formula A string of the mu parameter formula. It defines the relationship between gene expression in synthetic null data and the extra covariates. Default is 1 (cell type case).
+#' @param if_sparse A logic value. For high-dimensional data (gene number is much larger than cell number), if a sparse correlation estimation will be used. Default is FALSE.
+#' @param n_cores An integer. The number of cores to use for Parallel processing.
+#' @param n_pcs A numeric value. Number of PCs to use when usePca=T. Default is 200.
+#' @param n_rep An integer. The number of sampled synthetic null datasets. Default value is 1.
+#' For example, if your input data is a spatial data with X, Y coordinates, the formula can be 's(X, Y, bs = 'gp', k = 4)'.
+#' @param other_covariates A list of the extra covariates used in \code{formula}. For example, the 2D spatial coordinates. Default is NULL.
+#' @param seed Random seed. Default is 123
 #'
 #' @return The expression matrix of the synthetic null data.
 #'
-#' @examples
-#' data(exampleCounts)
-#' nullData <- constructNull(mat = exampleCounts)
 #' @importFrom gamlss.dist dZIP pZIP qZIP rZIP ZIP
 #' @export constructNull
 constructNull <- function(
   obj,
+  approximation = "none",
+  corr_cut = 0.1,
+  data_type = "scRNA",
   family = "nb",
-  spatial = NULL,
-  nCores = 1,
-  nRep = 1,
-  parallelization = "mcmapply",
-  fastVersion = TRUE,
-  ifSparse = FALSE,
-  corrCut = 0.1,
-  BPPARAM = NULL,
-  approximation = FALSE,
-  usePca = F,
-  nPcs = 200,
+  formula = "1",
+  if_sparse = F,
+  n_cores = 1,
+  n_pcs = 200,
+  n_rep = 1,
+  other_covariates = NULL,
   seed = 123
 ) {
   mat <- Seurat::GetAssayData(obj, layer = "counts")
   ## Check if we should use sparse matrix.
   isSparse <- methods::is(mat, "sparseMatrix")
 
-  if (nRep < nCores) {
-    nCores <- nRep
+  if (n_rep < n_cores) {
+    n_cores <- n_rep
   }
 
-  # Set mu formula for spatial data/single cell data
-  mu_formula <- if ((!is.null(spatial)) && (length(spatial) == 2)) {
-    paste0("s(", spatial[[1]], ", ", spatial[[2]], ", bs = 'gp', k = 4)")
-  } else {
-    "1"
+  supported_data_types <- c("scRNA", "spatial", "cellline", "microbiome")
+  if (!data_type %in% supported_data_types) {
+    stop(sprintf(
+      "Invalid data_type: '%s'. Supported types are: %s",
+      data_type,
+      paste(supported_data_types, collapse = ", ")
+    ))
   }
 
   # Add fake variable for cell type constraint
   obj@meta.data$fake_variable <- 1
 
-  synthetic_null_list <- if (usePca) {
+  synthetic_null_list <- if (approximation == "pca") {
     # Construct PCA
     message("Contruct PCA")
     non_zero_genes <- apply(mat, 1, var) != 0
@@ -86,12 +79,12 @@ constructNull <- function(
     pca_score <- pca_res$x
     rownames(pca_score) <- colnames(mat)
     ## get the bootstrapped residuals
-    reconstructed_mat <- pca_score[, 1:nPcs] %*% t(pca_loading[, 1:nPcs])
+    reconstructed_mat <- pca_score[, 1:n_pcs] %*% t(pca_loading[, 1:n_pcs])
     pca_intput <- sweep(normalized_mat, 2, pca_res$center, "-")
     pca_intput <- sweep(pca_intput, 2, pca_res$scale, "/")
     residuals <- pca_intput - reconstructed_mat
 
-    pca_sce <- SingleCellExperiment::SingleCellExperiment(list(counts = t(pca_score[, 1:nPcs])), colData = obj@meta.data)
+    pca_sce <- SingleCellExperiment::SingleCellExperiment(list(counts = t(pca_score[, 1:n_pcs])), colData = obj@meta.data)
 
     set.seed(seed)
     message("Construct scDesign3 data")
@@ -100,7 +93,7 @@ constructNull <- function(
       assay_use = "counts",
       celltype = "fake_variable",
       pseudotime = NULL,
-      spatial = spatial,
+      spatial = other_covariates,
       other_covariates = NULL,
       corr_by = "ind"
     )
@@ -109,10 +102,10 @@ constructNull <- function(
     marginal <- scDesign3::fit_marginal(
       data = data,
       predictor = "gene",
-      mu_formula = mu_formula,
+      mu_formula = formula,
       sigma_formula = "1",
       family_use = "gaussian",
-      n_cores = nCores,
+      n_cores = n_cores,
       parallelization = "mapply"
     )
 
@@ -123,7 +116,7 @@ constructNull <- function(
       input_data = data$dat,
       marginal_list = marginal,
       family_use = "gaussian",
-      n_cores = nCores,
+      n_cores = n_cores,
       parallelization = "mapply"
     )
 
@@ -134,12 +127,12 @@ constructNull <- function(
       family_use = "gaussian",
       new_covariate = data$newCovariate,
       data = data$dat,
-      n_cores = nCores,
+      n_cores = n_cores,
       parallelization = "mapply"
     )
 
-    message(paste0("Generate null data of ", nRep, " replicates"))
-    new_count_list <- suppressMessages(bettermc::mclapply(1:nRep, function(b) {
+    message(paste0("Generate null data of ", n_rep, " replicates"))
+    new_count_list <- suppressMessages(bettermc::mclapply(1:n_rep, function(b) {
       set.seed(seed + b)
       new_count <- scDesign3::simu_new(
         sce = pca_sce,
@@ -159,42 +152,17 @@ constructNull <- function(
         filtered_gene = data$filtered_gene
       )
 
-      new_mat <- t(new_count) %*% t(pca_loading[, 1:nPcs])
+      new_mat <- t(new_count) %*% t(pca_loading[, 1:n_pcs])
       residuals_bootstrap <- apply(residuals, 2, function(x) sample(x, length(x), replace = TRUE))
       rownames(residuals_bootstrap) <- rownames(residuals)
       new_mat <- new_mat + residuals_bootstrap
       new_mat <- sweep(new_mat, 2, pca_res$scale, `*`)
       new_mat <- sweep(new_mat, 2, pca_res$center, `+`)
-      # new_mat[new_mat < 0] <- 0
       t(new_mat)
-    }, mc.cores = nCores, mc.retry = 5))
+    }, mc.cores = n_cores, mc.retry = 5))
     new_count_list
-  } else if (!fastVersion) {
-    sce <- SingleCellExperiment::SingleCellExperiment(list(counts = mat))
-    SummarizedExperiment::colData(sce)$fake_variable <- "1"
-    newData <- scDesign3::scdesign3(
-      sce,
-      celltype = "fake_variable",
-      pseudotime = NULL,
-      spatial = spatial,
-      other_covariates = NULL,
-      empirical_quantile = FALSE,
-      mu_formula = mu_formula,
-      sigma_formula = "1",
-      corr_formula = "1",
-      family_use = family,
-      nonzerovar = FALSE,
-      n_cores = nCores,
-      parallelization = parallelization,
-      important_feature = corrCut,
-      nonnegative = FALSE,
-      copula = "gaussian",
-      if_sparse = ifSparse,
-      fastmvn = FALSE,
-      n_rep = nRep
-    )
-    newData$new_count
-  } else {
+  } else if ((data_type == "scRNA") || (data_type == "cellline")) {
+    set.seed(seed)
     tol <- 1e-5
     mat <- as.matrix(mat)
     n_gene <- dim(mat)[1]
@@ -239,7 +207,7 @@ constructNull <- function(
             res
           })
         },
-        mc.cores = nCores
+        mc.cores = n_cores
       )
       para <- t(simplify2array(para))
       rownames(para) <- para_feature
@@ -262,13 +230,10 @@ constructNull <- function(
               x,
               "is problematic with Poisson MLE; using Poisson MME instead."
             ))
-            fit_para <- fitdistrplus::fitdist(mat_filtered[x,], "pois", method = "mme")$estimate
-            #res <- c(NA, mu = fit_para)
-            #names(res) <- c("size", "mu")
             res
           })
         },
-        mc.cores = nCores
+        mc.cores = n_cores
       )
       para <- simplify2array(para)
       names(para) <- para_feature
@@ -276,7 +241,6 @@ constructNull <- function(
         warning("NA produces in mean estimate; using 0 instead.")
         para[is.na(para)] <- 0
       }
-
     } else if (family == "zip") {
       para <- parallel::mclapply(
         X = seq_len(dim(mat_filtered)[1]),
@@ -302,7 +266,7 @@ constructNull <- function(
             res
           })
         },
-        mc.cores = nCores
+        mc.cores = n_cores
       )
       para <- t(simplify2array(para))
       rownames(para) <- para_feature
@@ -318,7 +282,7 @@ constructNull <- function(
     ## Now we get the para matrix. You can modify it here. First column is the dispersion and second column is the mean.
 
     ## Copula fitting
-    important_feature <- names(which(rowMeans(mat_filtered != 0) > corrCut))
+    important_feature <- names(which(rowMeans(mat_filtered != 0) > corr_cut))
 
     if (length(important_feature) > 1) {
       unimportant_feature <- setdiff(gene_names, union(important_feature, filtered_gene))
@@ -333,7 +297,7 @@ constructNull <- function(
         "% of genes are used in correlation modelling."
       ))
 
-      if (ifSparse) {
+      if (if_sparse) {
         corr_mat <- scDesign3::sparse_cov(
           normal_obs,
           method = 'qiu',
@@ -347,7 +311,7 @@ constructNull <- function(
       diag(corr_mat) <- diag(corr_mat) + tol
 
       ####
-      if (!approximation) {
+      if (approximation == "none") {
         #get parameters for Cholesky decomposition factor
         cdf <- chol(corr_mat)
       } else {
@@ -441,14 +405,14 @@ constructNull <- function(
 
       }
       ## Start sampling
-      if (nRep == 1) {
-        if (!approximation) {
+      if (n_rep == 1) {
+        if (approximation == "none") {
           new_mvn <- mvnfast::rmvn(
             n_cell,
             mu = rep(0, dim(corr_mat)[1]),
             sigma = cdf,
             isChol = TRUE,
-            ncores = nCores
+            ncores = n_cores
           )
         } else {
           new_mvn <- block_mvn_sample(
@@ -459,7 +423,7 @@ constructNull <- function(
             V_t = V_t,
             k = k,
             d = d,
-            ncores = nCores
+            ncores = n_cores
           )
 
         }
@@ -494,7 +458,7 @@ constructNull <- function(
             } else {
               stop("Family must be in nb, poisson, or zip.")
             }
-          }, mc.cores = nCores)
+          }, mc.cores = n_cores)
 
           unimportant_mat <- t(simplify2array(unimportant_mat))
           rownames(unimportant_mat) <- unimportant_feature
@@ -526,7 +490,7 @@ constructNull <- function(
           } else {
             stop("Family must be in nb, poisson, or zip.")
           }
-        }, mc.cores = nCores)
+        }, mc.cores = n_cores)
 
         important_mat <- t(simplify2array(important_mat))
         rownames(important_mat) <- important_feature
@@ -539,8 +503,8 @@ constructNull <- function(
         newMat
 
       } else {
-        parallel::mclapply(seq_len(nRep), function(x) {
-          if (!approximation) {
+        parallel::mclapply(seq_len(n_rep), function(x) {
+          if (approximation == "none") {
             new_mvn <- mvnfast::rmvn(
               n_cell,
               mu = rep(0, dim(corr_mat)[1]),
@@ -635,12 +599,12 @@ constructNull <- function(
             newMat <- Matrix::Matrix(newMat, sparse = TRUE)
           }
           newMat
-        }, mc.cores = nCores)
+        }, mc.cores = n_cores)
       }
 
     } else {
       message("No correlation structure. All features are independent.")
-      lapply(seq_len(nRep), function(x) {
+      lapply(seq_len(n_rep), function(x) {
         newMat <- matrix(0, nrow = n_gene, ncol = n_cell)
         rownames(newMat) <- gene_names
         colnames(newMat) <- paste0("Cell", seq_len(n_cell))
@@ -664,13 +628,13 @@ constructNull <- function(
               stats::rpois(n = n_cell, lambda = para[x, 1])
             } else {
               gamlss.dist::rZIP(n = n_cell,
-                   sigma = para[x, 2],
-                   mu = para[x, 1])
+                                sigma = para[x, 2],
+                                mu = para[x, 1])
             }
           } else {
             stop("Family must be in nb, poisson, or zip.")
           }
-        }, mc.cores = nCores)
+        }, mc.cores = n_cores)
 
         para_mat <- t(simplify2array(para_mat))
         newMat[para_feature,] <- para_mat
@@ -681,7 +645,34 @@ constructNull <- function(
         newMat
       })
     }
-  } ## End for fastVersion
+  } else {
+    sce <- SingleCellExperiment::SingleCellExperiment(list(counts = mat))
+    SummarizedExperiment::colData(sce) <- S4Vectors::DataFrame(obj@meta.data)
+
+    set.seed(seed)
+    newData <- scDesign3::scdesign3(
+      sce,
+      celltype = "fake_variable",
+      pseudotime = NULL,
+      spatial = if (data_type == "spatial") other_covariates else NULL,
+      other_covariates = if (data_type != "spatial") other_covariates else NULL,
+      empirical_quantile = FALSE,
+      mu_formula = formula,
+      sigma_formula = "1",
+      corr_formula = "1",
+      family_use = family,
+      nonzerovar = FALSE,
+      n_cores = n_cores,
+      parallelization = "mcmapply",
+      important_feature = corr_cut,
+      nonnegative = FALSE,
+      copula = "gaussian",
+      if_sparse = if_sparse,
+      fastmvn = FALSE,
+      n_rep = n_rep
+    )
+    newData$new_count
+  }
 
   if (length(synthetic_null_list) == 1) {
     synthetic_null_list[[1]]
