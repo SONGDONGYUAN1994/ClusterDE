@@ -41,9 +41,11 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/ClusterDE-bulk-microarray.html">Perform ClusterDE on a bulk microarray dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-microbiome.html">Perform ClusterDE on a microbiome dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-monocyte-scrna.html">Perform ClusterDE on a monocyte scRNA dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-pure-cellline.html">Perform ClusterDE on a pure cell-line dataset</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-scmultiome.html">Perform ClusterDE on a single-cell multiome dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-spatial-onedomain.html">Perform ClusterDE on a spatial dataset (one domain)</a>
     <a class="dropdown-item" href="../articles/ClusterDE-spatial-twodomains.html">Perform ClusterDE on a spatial dataset (two domains)</a>
   </div>
@@ -73,12 +75,15 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Perform ClusterDE on a monocyte scRNA dataset</h1>
-                        <h4 data-toc-skip class="author">Dongyuan Song</h4>
+                        <h4 data-toc-skip class="author">Dongyuan
+Song</h4>
             <address class="author_afil">
-      Department of Genetics &amp; Genome Sciences, UConn HealthBioinformatics IDP, University of California, Los Angeles<br><a class="author_email" href="mailto:#"></a><a href="mailto:dongyuansong@ucla.edu" class="email">dongyuansong@ucla.edu</a>
+      Department of Genetics &amp; Genome Sciences, UConn
+HealthBioinformatics IDP, University of California, Los
+Angeles<br><a class="author_email" href="mailto:#"></a><a href="mailto:dongyuansong@ucla.edu" class="email">dongyuansong@ucla.edu</a>
       </address>
                   
-            <h4 data-toc-skip class="date">20 August 2026</h4>
+            <h4 data-toc-skip class="date">27 August 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SONGDONGYUAN1994/ClusterDE/blob/HEAD/vignettes/ClusterDE-monocyte-scrna.Rmd" class="external-link"><code>vignettes/ClusterDE-monocyte-scrna.Rmd</code></a></small>
       <div class="d-none name"><code>ClusterDE-monocyte-scrna.Rmd</code></div>
@@ -89,14 +94,17 @@
 <div class="section level2">
 <h2 id="download-data">Download data<a class="anchor" aria-label="anchor" href="#download-data"></a>
 </h2>
-<p>The PBMC datasets are originally from <code>SeuratData</code>. We use one of them (10x Chromium (v3) from PBMC1 replicate). We filtered out some lowly epxressed genes to save computational time here.</p>
+<p>The PBMC datasets are originally from <code>SeuratData</code>. We use
+one of them (10x Chromium (v3) from PBMC1 replicate). We filtered out
+some lowly epxressed genes to save computational time here.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pbmc</span>, package <span class="op">=</span> <span class="st">"ClusterDE"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="run-the-regular-seurat-pipeline">Run the regular Seurat pipeline<a class="anchor" aria-label="anchor" href="#run-the-regular-seurat-pipeline"></a>
 </h2>
-<p>We perform the default Seurat clustering. Note that in real data analysis, the cell type label is usually unknown.</p>
+<p>We perform the default Seurat clustering. Note that in real data
+analysis, the cell type label is usually unknown.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">RNGkind</a></span><span class="op">(</span><span class="st">"L'Ecuyer-CMRG"</span><span class="op">)</span></span>
 <span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">123</span></span>
@@ -112,6 +120,20 @@
 <span><span class="co">#&gt; Validating object structure for Assay 'RNA'</span></span>
 <span><span class="co">#&gt; Object representation is consistent with the most current Seurat version</span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/NormalizeData.html" class="external-link">NormalizeData</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: The `slot` argument of `SetAssayData()` is deprecated as of SeuratObject 5.0.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `layer` argument instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">Seurat</span> package.</span></span>
+<span><span class="co">#&gt;   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/satijalab/seurat/issues&gt;</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
+<span><span class="co">#&gt; Warning: The `slot` argument of `GetAssayData()` is deprecated as of SeuratObject 5.0.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `layer` argument instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">Seurat</span> package.</span></span>
+<span><span class="co">#&gt;   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/satijalab/seurat/issues&gt;</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/FindVariableFeatures.html" class="external-link">FindVariableFeatures</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/ScaleData.html" class="external-link">ScaleData</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Centering and scaling data matrix</span></span>
@@ -168,41 +190,58 @@
 <span><span class="co">#&gt; Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric</span></span>
 <span><span class="co">#&gt; To use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to 'correlation'</span></span>
 <span><span class="co">#&gt; This message will be shown once per session</span></span>
-<span><span class="co">#&gt; 03:29:54 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
-<span><span class="co">#&gt; 03:29:54 Read 3222 rows and found 10 numeric columns</span></span>
-<span><span class="co">#&gt; 03:29:54 Using Annoy for neighbor search, n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 03:29:54 Building Annoy index with metric = cosine, n_trees = 50</span></span>
+<span><span class="co">#&gt; 15:27:52 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
+<span><span class="co">#&gt; 15:27:52 Read 3222 rows and found 10 numeric columns</span></span>
+<span><span class="co">#&gt; 15:27:52 Using Annoy for neighbor search, n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 15:27:52 Building Annoy index with metric = cosine, n_trees = 50</span></span>
 <span><span class="co">#&gt; 0%   10   20   30   40   50   60   70   80   90   100%</span></span>
 <span><span class="co">#&gt; [----|----|----|----|----|----|----|----|----|----|</span></span>
 <span><span class="co">#&gt; **************************************************|</span></span>
-<span><span class="co">#&gt; 03:29:55 Writing NN index file to temp file /loc/scratch/65626926/RtmpZAUYHM/file4b0128734d21</span></span>
-<span><span class="co">#&gt; 03:29:55 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">#&gt; 03:29:56 Annoy recall = 100%</span></span>
-<span><span class="co">#&gt; 03:29:56 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 03:29:56 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
-<span><span class="co">#&gt; 03:29:57 Commencing optimization for 500 epochs, with 126438 positive edges</span></span>
-<span><span class="co">#&gt; 03:30:00 Optimization finished</span></span>
+<span><span class="co">#&gt; 15:27:52 Writing NN index file to temp file /loc/scratch/2560765/RtmpYGLA1U/filedb6f53dab9eb3</span></span>
+<span><span class="co">#&gt; 15:27:52 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">#&gt; 15:27:53 Annoy recall = 100%</span></span>
+<span><span class="co">#&gt; 15:27:53 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 15:27:54 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
+<span><span class="co">#&gt; 15:27:54 Commencing optimization for 500 epochs, with 126438 positive edges</span></span>
+<span><span class="co">#&gt; 15:27:54 Using rng type: pcg</span></span>
+<span><span class="co">#&gt; 15:27:57 Optimization finished</span></span>
 <span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, label <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Clustering result"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span> <span class="st">"CellType"</span>, label <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span></span></code></pre></div>
-<p><img src="ClusterDE-monocyte-scrna_files/figure-html/unnamed-chunk-3-1.png" alt="" width="1152"></p>
-<p>In this vignette, we are interested in cluster 3 vs 8, which approximately represent CD14+/CD16+ monocytes. Please note that ClusterDE is designed for 1 vs 1 comparison. Therefore, users may (1) choose the two interested clusters manually based on their knowledge or (2) use the two locally closest clusters from computation (e.g., <code>BuildClusterTree</code> in <code>Seurat</code>).</p>
+<p><img src="ClusterDE-monocyte-scrna_files/figure-html/unnamed-chunk-3-1.png" width="1152"></p>
+<p>In this vignette, we are interested in cluster 3 vs 8, which
+approximately represent CD14+/CD16+ monocytes. Please note that
+ClusterDE is designed for 1 vs 1 comparison. Therefore, users may (1)
+choose the two interested clusters manually based on their knowledge or
+(2) use the two locally closest clusters from computation (e.g.,
+<code>BuildClusterTree</code> in <code>Seurat</code>).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: SeuratObject</span></span>
 <span><span class="co">#&gt; Loading required package: sp</span></span>
+<span><span class="co">#&gt; 'SeuratObject' was built with package 'Matrix' 1.7.3 but the current</span></span>
+<span><span class="co">#&gt; version is 1.7.5; it is recomended that you reinstall 'SeuratObject' as</span></span>
+<span><span class="co">#&gt; the ABI for 'Matrix' may have changed</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'SeuratObject'</span></span>
 <span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     intersect, t</span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/BuildClusterTree.html" class="external-link">BuildClusterTree</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://satijalab.org/seurat/reference/PlotClusterTree.html" class="external-link">PlotClusterTree</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ClusterDE-monocyte-scrna_files/figure-html/unnamed-chunk-4-1.png" alt="" width="700"></p>
-<p>We subset the cluster 3 and 8 (<code>pbmc_sub</code>) for further analysis.</p>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/PlotClusterTree.html" class="external-link">PlotClusterTree</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: `PackageCheck()` was deprecated in SeuratObject 5.0.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `rlang::check_installed()` instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">Seurat</span> package.</span></span>
+<span><span class="co">#&gt;   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/satijalab/seurat/issues&gt;</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre></div>
+<p><img src="ClusterDE-monocyte-scrna_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<p>We subset the cluster 3 and 8 (<code>pbmc_sub</code>) for further
+analysis.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pbmc_sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pbmc</span>, idents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># Remove genes with zero variance</span></span>
@@ -212,12 +251,16 @@
 <div class="section level2">
 <h2 id="find-degs-using-clusterde">Find DEGs using ClusterDE<a class="anchor" aria-label="anchor" href="#find-degs-using-clusterde"></a>
 </h2>
-<p>First, we generate a synthetic null data from the target pbmc subset data.</p>
+<p>First, we generate a synthetic null data from the target pbmc subset
+data.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">null_data</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/constructNull.html">constructNull</a></span><span class="op">(</span><span class="va">pbmc_sub</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 107 genes have no more than 2 non-zero values; ignore fitting and return all 0s.</span></span>
 <span><span class="co">#&gt; 64.7% of genes are used in correlation modelling.</span></span></code></pre></div>
-<p>Next we perform the same preprocess pipeline for the null data as the target data, which apply the standard Seurat pipeline to log normalize counts and find cell clusters. We set the resolution to be 0.3 to find 2 clusters for the null data.</p>
+<p>Next we perform the same preprocess pipeline for the null data as the
+target data, which apply the standard Seurat pipeline to log normalize
+counts and find cell clusters. We set the resolution to be 0.3 to find 2
+clusters for the null data.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span></span>
 <span><span class="va">null_obj</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span><span class="va">null_data</span><span class="op">)</span></span>
@@ -236,12 +279,12 @@
 <span><span class="co">#&gt;     RPL10, RPL8, RPL41, RPL19, HLA-B, B2M, RNASET2, NACA, FCER1G, FTH1 </span></span>
 <span><span class="co">#&gt;     CORO1A, TMSB10, RPS2, S100A11, CFL1, GNAI2, TYROBP, FCGR3A, LYN, EEF1A1 </span></span>
 <span><span class="co">#&gt; PC_ 2 </span></span>
-<span><span class="co">#&gt; Positive:  TPT1, GAPDH, RPS6, S100A10, RPS3A, RPS8, VIM, RPL3, FCN1, GPX1 </span></span>
-<span><span class="co">#&gt;     LYZ, RPS4X, RPL18A, S100A9, RPS18, LGALS3, RPS12, RPL5, RPL15, RPL11 </span></span>
-<span><span class="co">#&gt;     RPS2, HLA-DRA, RPS14, RPL30, RPL37A, RPL23A, RPL7A, RPL21, RPL26, RPL10A </span></span>
-<span><span class="co">#&gt; Negative:  CDKN1C, KLF2, HES4, FCGR3A, RHOC, SAT1, POU2F2, IFITM2, PAG1, SNX9 </span></span>
+<span><span class="co">#&gt; Positive:  CDKN1C, KLF2, HES4, FCGR3A, RHOC, SAT1, POU2F2, IFITM2, PAG1, SNX9 </span></span>
 <span><span class="co">#&gt;     CD79B, FAM110A, CTSL, LYST, MTSS1, CDH23, TCF7L2, PIK3CG, PTP4A3, IARS </span></span>
 <span><span class="co">#&gt;     LINC01272, CKB, CD19, OAS1, GADD45A, TSPAN14, ITGAL, MS4A7, HVCN1, PECAM1 </span></span>
+<span><span class="co">#&gt; Negative:  TPT1, GAPDH, RPS6, S100A10, RPS3A, RPS8, VIM, RPL3, FCN1, GPX1 </span></span>
+<span><span class="co">#&gt;     LYZ, RPS4X, RPL18A, S100A9, RPS18, LGALS3, RPS12, RPL5, RPL15, RPL11 </span></span>
+<span><span class="co">#&gt;     RPS2, HLA-DRA, RPS14, RPL30, RPL37A, RPL23A, RPL7A, RPL21, RPL26, RPL10A </span></span>
 <span><span class="co">#&gt; PC_ 3 </span></span>
 <span><span class="co">#&gt; Positive:  HLA-DRA, HLA-DPA1, HLA-DPB1, MARCKSL1, INSIG1, MAP3K8, HLA-DQB1, HLA-DRB1, ACTG1, EMP3 </span></span>
 <span><span class="co">#&gt;     CDKN1A, EZR, APOBEC3A, RGCC, DUSP6, TLE3, NOTCH1, RUNX3, MARCKS, CD74 </span></span>
@@ -257,12 +300,12 @@
 <span><span class="co">#&gt;     GAPDH, S100A12, FOS, RAB8A, CD14, VIM, NEK3, ACTB, UBXN1, RNF144B </span></span>
 <span><span class="co">#&gt;     H2AFZ, CXCL8, IL7R, S100A8, AC093673.5, BID, CD79B, LINC01272, BASP1, GHITM </span></span>
 <span><span class="co">#&gt; PC_ 5 </span></span>
-<span><span class="co">#&gt; Positive:  METAP2, MLXIP, HMGA1, F13A1, SNX13, CSRNP1, RNF126, SURF2, CASP8, RGCC </span></span>
-<span><span class="co">#&gt;     TRPV2, PSMD11, MIR4435-2HG, PPM1G, RPL3, TRAPPC13, NR4A1, HMOX1, PPIF, NPM1 </span></span>
-<span><span class="co">#&gt;     DDT, GK5, LCP2, CHORDC1, RPS4X, RPL23A, MRPS15, ELMSAN1, CSF1R, ZNF791 </span></span>
-<span><span class="co">#&gt; Negative:  WARS, MARCKS, MAFB, APOBEC3A, LY6E, IFI44, ISG15, C5AR1, MNDA, CMPK2 </span></span>
+<span><span class="co">#&gt; Positive:  WARS, MARCKS, MAFB, APOBEC3A, LY6E, IFI44, ISG15, C5AR1, MNDA, CMPK2 </span></span>
 <span><span class="co">#&gt;     SERPINA1, MX1, PARP14, IFI6, ALDH2, IFI44L, PLEK, AP1S2, FCN1, PLSCR1 </span></span>
-<span><span class="co">#&gt;     TMSB4X, PMF1, CD36, B2M, ALDH1A1, IFI16, HCST, XAF1, CST3, TXNIP</span></span>
+<span><span class="co">#&gt;     TMSB4X, PMF1, CD36, B2M, ALDH1A1, IFI16, HCST, XAF1, CST3, TXNIP </span></span>
+<span><span class="co">#&gt; Negative:  METAP2, MLXIP, HMGA1, F13A1, SNX13, CSRNP1, RNF126, SURF2, CASP8, RGCC </span></span>
+<span><span class="co">#&gt;     TRPV2, PSMD11, MIR4435-2HG, PPM1G, RPL3, TRAPPC13, NR4A1, HMOX1, PPIF, NPM1 </span></span>
+<span><span class="co">#&gt;     DDT, GK5, LCP2, CHORDC1, RPS4X, RPL23A, MRPS15, ELMSAN1, CSF1R, ZNF791</span></span>
 <span><span class="va">null_obj</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span><span class="va">null_obj</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing nearest neighbor graph</span></span>
 <span><span class="co">#&gt; Computing SNN</span></span>
@@ -276,7 +319,8 @@
 <span><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7532</span></span>
 <span><span class="co">#&gt; Number of communities: 2</span></span>
 <span><span class="co">#&gt; Elapsed time: 0 seconds</span></span></code></pre></div>
-<p>Then we perform DE analysis on both target data and synthetic null data using Seurat methods.</p>
+<p>Then we perform DE analysis on both target data and synthetic null
+data using Seurat methods.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">original_deg</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/FindMarkers.html" class="external-link">FindMarkers</a></span><span class="op">(</span></span>
 <span>  <span class="va">pbmc_sub</span>,</span>
@@ -296,33 +340,52 @@
 <span><span class="op">)</span></span>
 <span><span class="va">null_pval</span> <span class="op">&lt;-</span> <span class="va">null_deg</span><span class="op">$</span><span class="va">p_val_adj</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">null_pval</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">null_deg</span><span class="op">)</span></span></code></pre></div>
-<p>Finally, compare original p-values and null p-values using ClusterDE FDR control to find DE.</p>
+<p>Finally, compare original p-values and null p-values using ClusterDE
+FDR control to find DE.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">deg</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/callDE.html">callDE</a></span><span class="op">(</span><span class="va">original_pval</span>, <span class="va">null_pval</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Seurat pipeline found "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">original_deg</span><span class="op">$</span><span class="va">p_val_adj</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span>, <span class="st">" DEG"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Seurat pipeline found 863 DEG"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"ClusterDE found "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">deg</span><span class="op">$</span><span class="va">record</span> <span class="op">&gt;=</span> <span class="fl">0.5</span><span class="op">)</span>, <span class="st">" DEG"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "ClusterDE found 28 DEG"</span></span></code></pre></div>
-<p>To compare the result from the naive Seurat pipeline and ClusterDE, we visualize the top 6 DE genes from Seurat. Genes <em>LST1</em> and <em>RPS19</em> are both highly expressed in two clusters. In addition, <em>RPS19</em> is reported as a stable housekeeping genes in several studies. Note that it does not mean the expression levels of <em>LST1</em> and <em>RPS19</em> are the same between the two cell types. It means that they are not good cell type markers. Philosophically speaking, it means that <strong>conditional on the two clusters are obtained by clustering algorithm, LST1 and RPS19 are less likely to be the cell type markers between the two cell types</strong>.</p>
+<p>To compare the result from the naive Seurat pipeline and ClusterDE,
+we visualize the top 6 DE genes from Seurat. Genes <em>LST1</em> and
+<em>RPS19</em> are both highly expressed in two clusters. In addition,
+<em>RPS19</em> is reported as a stable housekeeping genes in several
+studies. Note that it does not mean the expression levels of
+<em>LST1</em> and <em>RPS19</em> are the same between the two cell
+types. It means that they are not good cell type markers.
+Philosophically speaking, it means that <strong>conditional on the two
+clusters are obtained by clustering algorithm, LST1 and RPS19 are less
+likely to be the cell type markers between the two cell
+types</strong>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot</a></span><span class="op">(</span><span class="va">pbmc_sub</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">original_deg</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ClusterDE-monocyte-scrna_files/figure-html/unnamed-chunk-10-1.png" alt="" width="960"></p>
-<p>In contrast, the genes from ClusterDE do not have <em>LST1</em> and <em>RPS19</em> anymore.</p>
+<code class="sourceCode R"><span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot</a></span><span class="op">(</span><span class="va">pbmc_sub</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">original_deg</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: The `slot` argument of `FetchData()` is deprecated as of SeuratObject 5.0.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `layer` argument instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">Seurat</span> package.</span></span>
+<span><span class="co">#&gt;   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/satijalab/seurat/issues&gt;</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre></div>
+<p><img src="ClusterDE-monocyte-scrna_files/figure-html/unnamed-chunk-10-1.png" width="960"></p>
+<p>In contrast, the genes from ClusterDE do not have <em>LST1</em> and
+<em>RPS19</em> anymore.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot</a></span><span class="op">(</span><span class="va">pbmc_sub</span>, features <span class="op">=</span> <span class="va">deg</span><span class="op">$</span><span class="va">gene</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ClusterDE-monocyte-scrna_files/figure-html/unnamed-chunk-11-1.png" alt="" width="960"></p>
+<p><img src="ClusterDE-monocyte-scrna_files/figure-html/unnamed-chunk-11-1.png" width="960"></p>
 </div>
 <div class="section level2">
 <h2 id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
 </h2>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R version 4.4.0 (2024-04-24)</span></span>
+<span><span class="co">#&gt; R version 4.5.1 (2025-06-13)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
-<span><span class="co">#&gt; Running under: Ubuntu 18.04.6 LTS</span></span>
+<span><span class="co">#&gt; Running under: Ubuntu 24.04.4 LTS</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
-<span><span class="co">#&gt; BLAS/LAPACK: FlexiBLAS OPENBLAS;  LAPACK version 3.11.0</span></span>
+<span><span class="co">#&gt; BLAS/LAPACK: FlexiBLAS OPENBLAS;  LAPACK version 3.12.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Random number generation:</span></span>
 <span><span class="co">#&gt;  RNG:     L'Ecuyer-CMRG </span></span>
@@ -330,12 +393,10 @@
 <span><span class="co">#&gt;  Sample:  Rejection </span></span>
 <span><span class="co">#&gt;  </span></span>
 <span><span class="co">#&gt; locale:</span></span>
-<span><span class="co">#&gt;  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              </span></span>
-<span><span class="co">#&gt;  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    </span></span>
-<span><span class="co">#&gt;  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   </span></span>
-<span><span class="co">#&gt;  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 </span></span>
-<span><span class="co">#&gt;  [9] LC_ADDRESS=C               LC_TELEPHONE=C            </span></span>
-<span><span class="co">#&gt; [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       </span></span>
+<span><span class="co">#&gt;  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       </span></span>
+<span><span class="co">#&gt;  [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   </span></span>
+<span><span class="co">#&gt;  [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          </span></span>
+<span><span class="co">#&gt; [10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; time zone: America/Los_Angeles</span></span>
 <span><span class="co">#&gt; tzcode source: system (glibc)</span></span>
@@ -344,56 +405,56 @@
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] Seurat_5.1.0       SeuratObject_5.0.2 sp_2.1-4           BiocStyle_2.32.0  </span></span>
+<span><span class="co">#&gt; [1] Seurat_5.3.0       SeuratObject_5.1.0 sp_2.2-0           future_1.58.0     </span></span>
+<span><span class="co">#&gt; [5] BiocStyle_2.36.0  </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;   [1] RColorBrewer_1.1-3     jsonlite_1.8.8         magrittr_2.0.3        </span></span>
-<span><span class="co">#&gt;   [4] spatstat.utils_3.0-4   farver_2.1.2           rmarkdown_2.30        </span></span>
-<span><span class="co">#&gt;   [7] fs_1.6.4               ragg_1.3.1             vctrs_0.6.5           </span></span>
-<span><span class="co">#&gt;  [10] ROCR_1.0-11            memoise_2.0.1          spatstat.explore_3.2-7</span></span>
-<span><span class="co">#&gt;  [13] htmltools_0.5.8.1      sass_0.4.9             sctransform_0.4.1     </span></span>
-<span><span class="co">#&gt;  [16] parallelly_1.37.1      KernSmooth_2.23-22     bslib_0.7.0           </span></span>
+<span><span class="co">#&gt;   [1] RColorBrewer_1.1-3     jsonlite_2.0.0         magrittr_2.0.3        </span></span>
+<span><span class="co">#&gt;   [4] spatstat.utils_3.1-4   farver_2.1.2           rmarkdown_2.29        </span></span>
+<span><span class="co">#&gt;   [7] fs_1.6.6               ragg_1.4.0             vctrs_0.6.5           </span></span>
+<span><span class="co">#&gt;  [10] ROCR_1.0-11            memoise_2.0.1          spatstat.explore_3.4-3</span></span>
+<span><span class="co">#&gt;  [13] htmltools_0.5.8.1      sass_0.4.10            sctransform_0.4.2     </span></span>
+<span><span class="co">#&gt;  [16] parallelly_1.45.0      KernSmooth_2.23-26     bslib_0.9.0           </span></span>
 <span><span class="co">#&gt;  [19] htmlwidgets_1.6.4      desc_1.4.3             ica_1.0-3             </span></span>
-<span><span class="co">#&gt;  [22] plyr_1.8.9             plotly_4.10.4          zoo_1.8-12            </span></span>
-<span><span class="co">#&gt;  [25] cachem_1.0.8           igraph_2.0.3           mime_0.12             </span></span>
-<span><span class="co">#&gt;  [28] lifecycle_1.0.4        pkgconfig_2.0.3        Matrix_1.7-0          </span></span>
-<span><span class="co">#&gt;  [31] R6_2.5.1               fastmap_1.2.0          fitdistrplus_1.2-1    </span></span>
-<span><span class="co">#&gt;  [34] future_1.33.2          shiny_1.8.1.1          digest_0.6.35         </span></span>
-<span><span class="co">#&gt;  [37] colorspace_2.1-0       patchwork_1.2.0        tensor_1.5            </span></span>
-<span><span class="co">#&gt;  [40] RSpectra_0.16-1        irlba_2.3.5.1          kde1d_1.1.1           </span></span>
-<span><span class="co">#&gt;  [43] textshaping_0.3.7      labeling_0.4.3         progressr_0.14.0      </span></span>
-<span><span class="co">#&gt;  [46] fansi_1.0.6            spatstat.sparse_3.0-3  coop_0.6-3            </span></span>
-<span><span class="co">#&gt;  [49] httr_1.4.7             polyclip_1.10-6        abind_1.4-5           </span></span>
-<span><span class="co">#&gt;  [52] compiler_4.4.0         withr_3.0.0            backports_1.4.1       </span></span>
-<span><span class="co">#&gt;  [55] fastDummies_1.7.3      MASS_7.3-60.2          tools_4.4.0           </span></span>
-<span><span class="co">#&gt;  [58] lmtest_0.9-40          ape_5.8                httpuv_1.6.15         </span></span>
-<span><span class="co">#&gt;  [61] future.apply_1.11.2    goftest_1.2-3          glue_1.7.0            </span></span>
-<span><span class="co">#&gt;  [64] nlme_3.1-164           promises_1.3.0         grid_4.4.0            </span></span>
-<span><span class="co">#&gt;  [67] checkmate_2.3.1        Rtsne_0.17             cluster_2.1.6         </span></span>
-<span><span class="co">#&gt;  [70] reshape2_1.4.4         generics_0.1.3         gtable_0.3.5          </span></span>
-<span><span class="co">#&gt;  [73] spatstat.data_3.0-4    tidyr_1.3.1            data.table_1.15.4     </span></span>
-<span><span class="co">#&gt;  [76] utf8_1.2.4             spatstat.geom_3.2-9    RcppAnnoy_0.0.22      </span></span>
-<span><span class="co">#&gt;  [79] ggrepel_0.9.5          RANN_2.6.1             pillar_1.9.0          </span></span>
-<span><span class="co">#&gt;  [82] stringr_1.5.1          limma_3.60.6           spam_2.10-0           </span></span>
-<span><span class="co">#&gt;  [85] RcppHNSW_0.6.0         later_1.3.2            splines_4.4.0         </span></span>
-<span><span class="co">#&gt;  [88] dplyr_1.1.4            lattice_0.22-6         survival_3.6-4        </span></span>
-<span><span class="co">#&gt;  [91] deldir_2.0-4           tidyselect_1.2.1       miniUI_0.1.1.1        </span></span>
-<span><span class="co">#&gt;  [94] pbapply_1.7-2          knitr_1.51             gridExtra_2.3         </span></span>
-<span><span class="co">#&gt;  [97] bookdown_0.39          scattermore_1.2        xfun_0.56             </span></span>
-<span><span class="co">#&gt; [100] statmod_1.5.0          matrixStats_1.3.0      ClusterDE_0.99.4      </span></span>
-<span><span class="co">#&gt; [103] stringi_1.8.4          lazyeval_0.2.2         yaml_2.3.12           </span></span>
-<span><span class="co">#&gt; [106] evaluate_0.23          codetools_0.2-20       tibble_3.2.1          </span></span>
-<span><span class="co">#&gt; [109] BiocManager_1.30.27    cli_3.6.2              uwot_0.2.2            </span></span>
-<span><span class="co">#&gt; [112] xtable_1.8-4           reticulate_1.46.0      systemfonts_1.1.0     </span></span>
-<span><span class="co">#&gt; [115] munsell_0.5.1          jquerylib_0.1.4        Rcpp_1.0.12           </span></span>
-<span><span class="co">#&gt; [118] globals_0.16.3         spatstat.random_3.2-3  png_0.1-8             </span></span>
-<span><span class="co">#&gt; [121] rngWELL_0.10-10        parallel_4.4.0         randtoolbox_2.0.5     </span></span>
-<span><span class="co">#&gt; [124] assertthat_0.2.1       pkgdown_2.0.9          ggplot2_3.5.1         </span></span>
-<span><span class="co">#&gt; [127] presto_1.0.0           mvnfast_0.2.8          dotCall64_1.1-1       </span></span>
-<span><span class="co">#&gt; [130] bettermc_1.2.2.9000    gamlss.dist_6.1-1      listenv_0.9.1         </span></span>
-<span><span class="co">#&gt; [133] viridisLite_0.4.2      scales_1.3.0           ggridges_0.5.6        </span></span>
-<span><span class="co">#&gt; [136] leiden_0.4.3.1         purrr_1.0.2            rlang_1.1.3           </span></span>
-<span><span class="co">#&gt; [139] rvinecopulib_0.7.3.1.0 cowplot_1.1.3</span></span></code></pre></div>
+<span><span class="co">#&gt;  [22] plyr_1.8.9             plotly_4.10.4          zoo_1.8-14            </span></span>
+<span><span class="co">#&gt;  [25] cachem_1.1.0           igraph_2.1.4           mime_0.13             </span></span>
+<span><span class="co">#&gt;  [28] lifecycle_1.0.4        pkgconfig_2.0.3        Matrix_1.7-5          </span></span>
+<span><span class="co">#&gt;  [31] R6_2.6.1               fastmap_1.2.0          fitdistrplus_1.2-2    </span></span>
+<span><span class="co">#&gt;  [34] shiny_1.10.0           digest_0.6.37          patchwork_1.3.0       </span></span>
+<span><span class="co">#&gt;  [37] tensor_1.5             RSpectra_0.16-2        irlba_2.3.5.1         </span></span>
+<span><span class="co">#&gt;  [40] kde1d_1.1.1            textshaping_1.0.1      labeling_0.4.3        </span></span>
+<span><span class="co">#&gt;  [43] progressr_0.15.1       spatstat.sparse_3.1-0  coop_0.6-3            </span></span>
+<span><span class="co">#&gt;  [46] httr_1.4.7             polyclip_1.10-7        abind_1.4-8           </span></span>
+<span><span class="co">#&gt;  [49] compiler_4.5.1         withr_3.0.2            backports_1.5.0       </span></span>
+<span><span class="co">#&gt;  [52] fastDummies_1.7.5      MASS_7.3-65            tools_4.5.1           </span></span>
+<span><span class="co">#&gt;  [55] lmtest_0.9-40          ape_5.8-1              httpuv_1.6.16         </span></span>
+<span><span class="co">#&gt;  [58] future.apply_1.20.0    goftest_1.2-3          glue_1.8.0            </span></span>
+<span><span class="co">#&gt;  [61] nlme_3.1-168           promises_1.3.3         grid_4.5.1            </span></span>
+<span><span class="co">#&gt;  [64] checkmate_2.3.2        Rtsne_0.17             cluster_2.1.8.1       </span></span>
+<span><span class="co">#&gt;  [67] reshape2_1.4.4         generics_0.1.4         gtable_0.3.6          </span></span>
+<span><span class="co">#&gt;  [70] spatstat.data_3.1-6    tidyr_1.3.1            data.table_1.17.4     </span></span>
+<span><span class="co">#&gt;  [73] spatstat.geom_3.4-1    RcppAnnoy_0.0.22       ggrepel_0.9.6         </span></span>
+<span><span class="co">#&gt;  [76] RANN_2.6.2             pillar_1.10.2          stringr_1.5.1         </span></span>
+<span><span class="co">#&gt;  [79] limma_3.64.1           spam_2.11-1            RcppHNSW_0.6.0        </span></span>
+<span><span class="co">#&gt;  [82] later_1.4.2            splines_4.5.1          dplyr_1.1.4           </span></span>
+<span><span class="co">#&gt;  [85] lattice_0.22-9         survival_3.8-3         deldir_2.0-4          </span></span>
+<span><span class="co">#&gt;  [88] tidyselect_1.2.1       miniUI_0.1.2           pbapply_1.7-2         </span></span>
+<span><span class="co">#&gt;  [91] knitr_1.50             gridExtra_2.3          bookdown_0.43         </span></span>
+<span><span class="co">#&gt;  [94] scattermore_1.2        xfun_0.52              statmod_1.5.0         </span></span>
+<span><span class="co">#&gt;  [97] matrixStats_1.5.0      stringi_1.8.7          ClusterDE_0.99.4      </span></span>
+<span><span class="co">#&gt; [100] lazyeval_0.2.2         yaml_2.3.10            evaluate_1.0.3        </span></span>
+<span><span class="co">#&gt; [103] codetools_0.2-20       tibble_3.3.0           BiocManager_1.30.27   </span></span>
+<span><span class="co">#&gt; [106] cli_3.6.5              uwot_0.2.3             xtable_1.8-4          </span></span>
+<span><span class="co">#&gt; [109] reticulate_1.42.0      systemfonts_1.2.3      jquerylib_0.1.4       </span></span>
+<span><span class="co">#&gt; [112] dichromat_2.0-0.1      Rcpp_1.0.14            globals_0.18.0        </span></span>
+<span><span class="co">#&gt; [115] spatstat.random_3.4-1  png_0.1-8              rngWELL_0.10-10       </span></span>
+<span><span class="co">#&gt; [118] spatstat.univar_3.1-3  parallel_4.5.1         randtoolbox_2.0.5     </span></span>
+<span><span class="co">#&gt; [121] assertthat_0.2.1       pkgdown_2.0.9          ggplot2_3.5.2         </span></span>
+<span><span class="co">#&gt; [124] presto_1.0.0           mvnfast_0.2.8          dotCall64_1.2         </span></span>
+<span><span class="co">#&gt; [127] bettermc_1.2.2.9000    listenv_0.9.1          gamlss.dist_6.1-1     </span></span>
+<span><span class="co">#&gt; [130] viridisLite_0.4.2      scales_1.4.0           ggridges_0.5.6        </span></span>
+<span><span class="co">#&gt; [133] purrr_1.0.4            crayon_1.5.3           rlang_1.1.6           </span></span>
+<span><span class="co">#&gt; [136] rvinecopulib_0.7.3.1.0 cowplot_1.1.3</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

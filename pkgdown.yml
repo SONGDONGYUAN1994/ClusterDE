@@ -1,13 +1,15 @@
-pandoc: '2.13'
+pandoc: 3.1.2
 pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
+  ClusterDE-bulk-microarray: ClusterDE-bulk-microarray.html
   ClusterDE-microbiome: ClusterDE-microbiome.html
   ClusterDE-monocyte-scrna: ClusterDE-monocyte-scrna.html
   ClusterDE-pure-cellline: ClusterDE-pure-cellline.html
+  ClusterDE-scmultiome: ClusterDE-scmultiome.html
   ClusterDE-spatial-onedomain: ClusterDE-spatial-onedomain.html
   ClusterDE-spatial-twodomains: ClusterDE-spatial-twodomains.html
-last_built: 2026-08-20T10:28Z
+last_built: 2026-08-27T22:25Z
 urls:
   reference: https://songdongyuan1994.github.io/ClusterDE/reference
   article: https://songdongyuan1994.github.io/ClusterDE/articles

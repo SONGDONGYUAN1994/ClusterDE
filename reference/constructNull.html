@@ -24,9 +24,11 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/ClusterDE-bulk-microarray.html">Perform ClusterDE on a bulk microarray dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-microbiome.html">Perform ClusterDE on a microbiome dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-monocyte-scrna.html">Perform ClusterDE on a monocyte scRNA dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-pure-cellline.html">Perform ClusterDE on a pure cell-line dataset</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-scmultiome.html">Perform ClusterDE on a single-cell multiome dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-spatial-onedomain.html">Perform ClusterDE on a spatial dataset (one domain)</a>
     <a class="dropdown-item" href="../articles/ClusterDE-spatial-twodomains.html">Perform ClusterDE on a spatial dataset (two domains)</a>
   </div>
@@ -81,26 +83,27 @@
 
 
 <dt>approximation</dt>
-<dd><p>A string of either "none", "fast" or "pca". For a high-latitude counting matrix, use "fast" as approximation can increase the speed of data generation while ensuring accuracy. For high-dimensional data (gene number is much larger than cell number), use "pca" as approximation. Default is "none".</p></dd>
+<dd><p>A string of either "none", "fast" or "pca". For a high-latitude scRNA counting matrix, use "fast" as approximation can increase the speed of data generation while ensuring accuracy. For high-dimensional scRNA data (gene number is much larger than cell number), use "pca" as approximation. Default is "none".</p></dd>
 
 
 <dt>corr_cut</dt>
-<dd><p>A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation.</p></dd>
+<dd><p>A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation. Default is 0.1. All features will be used if approximation is set to "pca", or when data_type is "bulk_microarray".</p></dd>
 
 
 <dt>data_type</dt>
-<dd><p>A string of either "scRNA", "spatial", "cellline" or "microbiome". Default is "scRNA".</p></dd>
+<dd><p>A string of either "scRNA", "scATAC", "spatial", "cellline", "microbiome" or "bulk_microarray". Default is "scRNA".</p></dd>
 
 
 <dt>family</dt>
-<dd><p>A string or a vector of strings of the distribution of your data.
+<dd><p>A string of the distribution of your data.
 Must be one of 'nb', 'binomial', 'poisson', 'zip', 'zinb' or 'gaussian', which represent 'poisson distribution',
 'negative binomial distribution', 'zero-inflated poisson distribution', 'zero-inflated negative binomail distribution',
-and 'gaussian distribution' respectively. For UMI-counts data, we usually use 'nb'. Default is 'nb'.</p></dd>
+and 'gaussian distribution' respectively. For UMI-counts data, we usually use 'nb'. For bulk microarray data, use 'gaussian'. Default is 'nb'.</p></dd>
 
 
 <dt>formula</dt>
-<dd><p>A string of the mu parameter formula. It defines the relationship between gene expression in synthetic null data and the extra covariates. Default is 1 (cell type case).</p></dd>
+<dd><p>A string of the mu parameter formula. It defines the relationship between gene expression in synthetic null data and the extra covariates. Default is 1 (cell type case).
+For example, if your input data is a spatial data with X, Y coordinates, the formula can be 's(X, Y, bs = 'gp', k = 4)'.</p></dd>
 
 
 <dt>if_sparse</dt>
@@ -116,8 +119,7 @@ and 'gaussian distribution' respectively. For UMI-counts data, we usually use 'n
 
 
 <dt>n_rep</dt>
-<dd><p>An integer. The number of sampled synthetic null datasets. Default value is 1.
-For example, if your input data is a spatial data with X, Y coordinates, the formula can be 's(X, Y, bs = 'gp', k = 4)'.</p></dd>
+<dd><p>An integer. The number of sampled synthetic null datasets. Default value is 1.</p></dd>
 
 
 <dt>other_covariates</dt>

@@ -41,9 +41,11 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/ClusterDE-bulk-microarray.html">Perform ClusterDE on a bulk microarray dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-microbiome.html">Perform ClusterDE on a microbiome dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-monocyte-scrna.html">Perform ClusterDE on a monocyte scRNA dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-pure-cellline.html">Perform ClusterDE on a pure cell-line dataset</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-scmultiome.html">Perform ClusterDE on a single-cell multiome dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-spatial-onedomain.html">Perform ClusterDE on a spatial dataset (one domain)</a>
     <a class="dropdown-item" href="../articles/ClusterDE-spatial-twodomains.html">Perform ClusterDE on a spatial dataset (two domains)</a>
   </div>
@@ -75,14 +77,18 @@
       <img src="" class="logo" alt=""><h1>Perform ClusterDE on a spatial dataset (one domain)</h1>
                         <h4 data-toc-skip class="author">Siqi Chen</h4>
             <address class="author_afil">
-      Computer Science, Central South University<br><a class="author_email" href="mailto:#"></a><a href="mailto:siqichen4477@gmail.com" class="email">siqichen4477@gmail.com</a>
+      Computer Science, Central South
+University<br><a class="author_email" href="mailto:#"></a><a href="mailto:siqichen4477@gmail.com" class="email">siqichen4477@gmail.com</a>
       </address>
-                              <h4 data-toc-skip class="author">Dongyuan Song</h4>
+                              <h4 data-toc-skip class="author">Dongyuan
+Song</h4>
             <address class="author_afil">
-      Department of Genetics &amp; Genome Sciences, UConn HealthBioinformatics IDP, University of California, Los Angeles<br><a class="author_email" href="mailto:#"></a><a href="mailto:dongyuansong@ucla.edu" class="email">dongyuansong@ucla.edu</a>
+      Department of Genetics &amp; Genome Sciences, UConn
+HealthBioinformatics IDP, University of California, Los
+Angeles<br><a class="author_email" href="mailto:#"></a><a href="mailto:dongyuansong@ucla.edu" class="email">dongyuansong@ucla.edu</a>
       </address>
                   
-            <h4 data-toc-skip class="date">20 August 2026</h4>
+            <h4 data-toc-skip class="date">27 August 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SONGDONGYUAN1994/ClusterDE/blob/HEAD/vignettes/ClusterDE-spatial-onedomain.Rmd" class="external-link"><code>vignettes/ClusterDE-spatial-onedomain.Rmd</code></a></small>
       <div class="d-none name"><code>ClusterDE-spatial-onedomain.Rmd</code></div>
@@ -93,20 +99,16 @@
 <div class="section level2">
 <h2 id="download-data">Download data<a class="anchor" aria-label="anchor" href="#download-data"></a>
 </h2>
-<p>We selected white matter (WM) of 151673 slice from the LIBD Human Dorsolateral Prefrontal Cortex (DLPFC) dataset, which is downloaded in the spatialLIBD R package.</p>
+<p>We selected white matter (WM) of 151673 slice from the LIBD Human
+Dorsolateral Prefrontal Cortex (DLPFC) dataset, which is downloaded in
+the spatialLIBD R package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">dlpfc_onedomain</span>, package <span class="op">=</span> <span class="st">"ClusterDE"</span><span class="op">)</span></span></code></pre></div>
 <p>Visualize the real data on spatial mapping.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Visualize the real spatial domains</span></span>
 <span><span class="va">domains</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Xaxis <span class="op">=</span> <span class="va">dlpfc_onedomain</span><span class="op">$</span><span class="va">spatial1</span>, Yaxis <span class="op">=</span> <span class="va">dlpfc_onedomain</span><span class="op">$</span><span class="va">spatial2</span>, Domain <span class="op">=</span> <span class="va">dlpfc_onedomain</span><span class="op">$</span><span class="va">cell_type</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required package: SeuratObject</span></span>
-<span><span class="co">#&gt; Loading required package: sp</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'SeuratObject'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, t</span></span>
+<span><span class="co">#&gt; Loading required namespace: SeuratObject</span></span>
 <span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">domains</span>, <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Xaxis</span>, y <span class="op">=</span> <span class="va">Yaxis</span>, col <span class="op">=</span> <span class="va">Domain</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Manual annotation \n (WM in the slice 151673)"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -129,12 +131,14 @@
 <span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre></div>
-<p><img src="ClusterDE-spatial-onedomain_files/figure-html/unnamed-chunk-3-1.png" alt="" width="700"></p>
+<p><img src="ClusterDE-spatial-onedomain_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="run-the-bayesspace-seurat-pipeline">Run the BayesSpace + Seurat pipeline<a class="anchor" aria-label="anchor" href="#run-the-bayesspace-seurat-pipeline"></a>
 </h2>
-<p>First, we employed the BayesSpace for spatial clustering. Please note that ClusterDE is designed for 1 vs 1 comparison; therefore, we obtain two spatial clusters for illustration purpose.</p>
+<p>First, we employed the BayesSpace for spatial clustering. Please note
+that ClusterDE is designed for 1 vs 1 comparison; therefore, we obtain
+two spatial clusters for illustration purpose.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Construct the input of BayesSpace based on real dataset</span></span>
 <span><span class="co"># The input of BayesSpace is sce object</span></span>
@@ -144,6 +148,8 @@
 <span><span class="co"># Add colData information of SingleCellExperiment</span></span>
 <span><span class="va">dlpfc_onedomain_sce</span><span class="op">$</span><span class="va">row</span> <span class="op">&lt;-</span> <span class="va">dlpfc_onedomain</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">row</span></span>
 <span><span class="va">dlpfc_onedomain_sce</span><span class="op">$</span><span class="va">col</span> <span class="op">&lt;-</span> <span class="va">dlpfc_onedomain</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">col</span></span>
+<span><span class="va">dlpfc_onedomain_sce</span><span class="op">$</span><span class="va">array_row</span> <span class="op">&lt;-</span> <span class="va">dlpfc_onedomain</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">row</span></span>
+<span><span class="va">dlpfc_onedomain_sce</span><span class="op">$</span><span class="va">array_col</span> <span class="op">&lt;-</span> <span class="va">dlpfc_onedomain</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">col</span></span>
 <span><span class="va">dlpfc_onedomain_sce</span><span class="op">$</span><span class="va">spatial1</span> <span class="op">&lt;-</span> <span class="va">dlpfc_onedomain</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">spatial1</span></span>
 <span><span class="va">dlpfc_onedomain_sce</span><span class="op">$</span><span class="va">spatial2</span> <span class="op">&lt;-</span> <span class="va">dlpfc_onedomain</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">spatial2</span></span>
 <span></span>
@@ -172,8 +178,22 @@
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Neighbors were identified for 513 out of 513 spots.</span></span>
 <span><span class="co">#&gt; Fitting model...</span></span>
-<span><span class="co">#&gt; Calculating labels using iterations 100 through 1000.</span></span>
+<span><span class="co">#&gt; Calculating labels using iterations 101 through 1000.</span></span>
 <span><span class="va">dlpfc_onedomain</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/as.Seurat.html" class="external-link">as.Seurat</a></span><span class="op">(</span><span class="va">dlpfc_onedomain_sce</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: `PackageCheck()` was deprecated in SeuratObject 5.0.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `rlang::check_installed()` instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">Seurat</span> package.</span></span>
+<span><span class="co">#&gt;   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/satijalab/seurat/issues&gt;</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
+<span><span class="co">#&gt; Warning: The `slot` argument of `SetAssayData()` is deprecated as of SeuratObject 5.0.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `layer` argument instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">Seurat</span> package.</span></span>
+<span><span class="co">#&gt;   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/satijalab/seurat/issues&gt;</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
 <span><span class="co">#&gt; Warning: Keys should be one or more alphanumeric characters followed by an</span></span>
 <span><span class="co">#&gt; underscore, setting key from PC to PC_</span></span>
 <span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">dlpfc_onedomain</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"spatial.cluster"</span></span></code></pre></div>
@@ -202,8 +222,9 @@
 <span>    axis.text.y <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#e87d72"</span>, <span class="st">"#54bcc2"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ClusterDE-spatial-onedomain_files/figure-html/unnamed-chunk-5-1.png" alt="" width="700"></p>
-<p>Then, we used the common DE method (Wilcoxon Rank Sum Test) to identify domain marker genes between the two spatial clusters.</p>
+<p><img src="ClusterDE-spatial-onedomain_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p>Then, we used the common DE method (Wilcoxon Rank Sum Test) to
+identify domain marker genes between the two spatial clusters.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">original_deg</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/FindMarkers.html" class="external-link">FindMarkers</a></span><span class="op">(</span></span>
 <span>  object <span class="op">=</span> <span class="va">dlpfc_onedomain</span>,</span>
@@ -215,15 +236,24 @@
 <span>  min.cells.feature <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  min.cells.group <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: The `slot` argument of `GetAssayData()` is deprecated as of SeuratObject 5.0.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `layer` argument instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">Seurat</span> package.</span></span>
+<span><span class="co">#&gt;   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/satijalab/seurat/issues&gt;</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
 <span><span class="va">original_pval</span> <span class="op">&lt;-</span> <span class="va">original_deg</span><span class="op">$</span><span class="va">p_val_adj</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">original_pval</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">original_deg</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Seurat found "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">original_deg</span><span class="op">$</span><span class="va">p_val_adj</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span>, <span class="st">" DEG"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Seurat found 69 DEG"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "Seurat found 68 DEG"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="find-degs-using-clusterde">Find DEGs using ClusterDE<a class="anchor" aria-label="anchor" href="#find-degs-using-clusterde"></a>
 </h2>
-<p>We use spatial coordinates as covariates to generate synthetic null data, then apply the same BayesSpace clustering method as target data.</p>
+<p>We use spatial coordinates as covariates to generate synthetic null
+data, then apply the same BayesSpace clustering method as target
+data.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span></span>
 <span><span class="va">null_data</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/constructNull.html">constructNull</a></span><span class="op">(</span></span>
@@ -257,6 +287,8 @@
 <span><span class="va">null_obj_sce</span> <span class="op">&lt;-</span> <span class="fu">SingleCellExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html" class="external-link">SingleCellExperiment</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">null_data</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">null_obj_sce</span><span class="op">$</span><span class="va">row</span> <span class="op">&lt;-</span> <span class="va">dlpfc_onedomain</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">row</span></span>
 <span><span class="va">null_obj_sce</span><span class="op">$</span><span class="va">col</span> <span class="op">&lt;-</span> <span class="va">dlpfc_onedomain</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">col</span></span>
+<span><span class="va">null_obj_sce</span><span class="op">$</span><span class="va">array_row</span> <span class="op">&lt;-</span> <span class="va">dlpfc_onedomain</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">row</span></span>
+<span><span class="va">null_obj_sce</span><span class="op">$</span><span class="va">array_col</span> <span class="op">&lt;-</span> <span class="va">dlpfc_onedomain</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">col</span></span>
 <span><span class="va">null_obj_sce</span><span class="op">$</span><span class="va">spatial1</span> <span class="op">&lt;-</span> <span class="va">dlpfc_onedomain</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">spatial1</span></span>
 <span><span class="va">null_obj_sce</span><span class="op">$</span><span class="va">spatial2</span> <span class="op">&lt;-</span> <span class="va">dlpfc_onedomain</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">spatial2</span></span>
 <span><span class="va">null_obj_sce</span> <span class="op">&lt;-</span> <span class="fu">BayesSpace</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BayesSpace/man/spatialPreprocess.html" class="external-link">spatialPreprocess</a></span><span class="op">(</span></span>
@@ -279,12 +311,13 @@
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Neighbors were identified for 513 out of 513 spots.</span></span>
 <span><span class="co">#&gt; Fitting model...</span></span>
-<span><span class="co">#&gt; Calculating labels using iterations 100 through 1000.</span></span>
+<span><span class="co">#&gt; Calculating labels using iterations 101 through 1000.</span></span>
 <span><span class="va">null_obj</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/as.Seurat.html" class="external-link">as.Seurat</a></span><span class="op">(</span><span class="va">null_obj_sce</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Keys should be one or more alphanumeric characters followed by an</span></span>
 <span><span class="co">#&gt; underscore, setting key from PC to PC_</span></span>
 <span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">null_obj</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"spatial.cluster"</span></span></code></pre></div>
-<p>Compare gene p-values from target and synthetic data, we observe that ClusterDE does not detect any DEG.</p>
+<p>Compare gene p-values from target and synthetic data, we observe that
+ClusterDE does not detect any DEG.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">null_deg</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/FindMarkers.html" class="external-link">FindMarkers</a></span><span class="op">(</span></span>
 <span>  object <span class="op">=</span> <span class="va">null_obj</span>,</span>
@@ -308,12 +341,12 @@
 </h2>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R version 4.4.0 (2024-04-24)</span></span>
+<span><span class="co">#&gt; R version 4.5.1 (2025-06-13)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
-<span><span class="co">#&gt; Running under: Ubuntu 18.04.6 LTS</span></span>
+<span><span class="co">#&gt; Running under: Ubuntu 24.04.4 LTS</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
-<span><span class="co">#&gt; BLAS/LAPACK: FlexiBLAS OPENBLAS;  LAPACK version 3.11.0</span></span>
+<span><span class="co">#&gt; BLAS/LAPACK: FlexiBLAS OPENBLAS;  LAPACK version 3.12.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Random number generation:</span></span>
 <span><span class="co">#&gt;  RNG:     L'Ecuyer-CMRG </span></span>
@@ -321,12 +354,10 @@
 <span><span class="co">#&gt;  Sample:  Rejection </span></span>
 <span><span class="co">#&gt;  </span></span>
 <span><span class="co">#&gt; locale:</span></span>
-<span><span class="co">#&gt;  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              </span></span>
-<span><span class="co">#&gt;  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    </span></span>
-<span><span class="co">#&gt;  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   </span></span>
-<span><span class="co">#&gt;  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 </span></span>
-<span><span class="co">#&gt;  [9] LC_ADDRESS=C               LC_TELEPHONE=C            </span></span>
-<span><span class="co">#&gt; [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       </span></span>
+<span><span class="co">#&gt;  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       </span></span>
+<span><span class="co">#&gt;  [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   </span></span>
+<span><span class="co">#&gt;  [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          </span></span>
+<span><span class="co">#&gt; [10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; time zone: America/Los_Angeles</span></span>
 <span><span class="co">#&gt; tzcode source: system (glibc)</span></span>
@@ -335,109 +366,109 @@
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] SeuratObject_5.0.2 sp_2.1-4           BiocStyle_2.32.0  </span></span>
+<span><span class="co">#&gt; [1] BiocStyle_2.36.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;   [1] fs_1.6.4                    matrixStats_1.3.0          </span></span>
-<span><span class="co">#&gt;   [3] spatstat.sparse_3.0-3       bitops_1.0-7               </span></span>
+<span><span class="co">#&gt;   [1] fs_1.6.6                    matrixStats_1.5.0          </span></span>
+<span><span class="co">#&gt;   [3] spatstat.sparse_3.1-0       bitops_1.0-9               </span></span>
 <span><span class="co">#&gt;   [5] httr_1.4.7                  RColorBrewer_1.1-3         </span></span>
-<span><span class="co">#&gt;   [7] backports_1.4.1             tools_4.4.0                </span></span>
-<span><span class="co">#&gt;   [9] sctransform_0.4.1           utf8_1.2.4                 </span></span>
-<span><span class="co">#&gt;  [11] R6_2.5.1                    DirichletReg_0.7-2         </span></span>
-<span><span class="co">#&gt;  [13] mgcv_1.9-1                  lazyeval_0.2.2             </span></span>
-<span><span class="co">#&gt;  [15] uwot_0.2.2                  rhdf5filters_1.16.0        </span></span>
-<span><span class="co">#&gt;  [17] withr_3.0.0                 ClusterDE_0.99.4           </span></span>
-<span><span class="co">#&gt;  [19] gridExtra_2.3               progressr_0.14.0           </span></span>
-<span><span class="co">#&gt;  [21] cli_3.6.2                   Biobase_2.64.0             </span></span>
-<span><span class="co">#&gt;  [23] textshaping_0.3.7           spatstat.explore_3.2-7     </span></span>
-<span><span class="co">#&gt;  [25] fastDummies_1.7.3           sandwich_3.1-0             </span></span>
-<span><span class="co">#&gt;  [27] labeling_0.4.3              sass_0.4.9                 </span></span>
-<span><span class="co">#&gt;  [29] Seurat_5.1.0                mvtnorm_1.2-4              </span></span>
-<span><span class="co">#&gt;  [31] spatstat.data_3.0-4         gamlss_5.5-0               </span></span>
-<span><span class="co">#&gt;  [33] ggridges_0.5.6              pbapply_1.7-2              </span></span>
-<span><span class="co">#&gt;  [35] pkgdown_2.0.9               systemfonts_1.1.0          </span></span>
-<span><span class="co">#&gt;  [37] scater_1.32.0               parallelly_1.37.1          </span></span>
-<span><span class="co">#&gt;  [39] limma_3.60.6                RSQLite_2.3.6              </span></span>
-<span><span class="co">#&gt;  [41] gamlss.data_6.0-7           generics_0.1.3             </span></span>
-<span><span class="co">#&gt;  [43] ica_1.0-3                   spatstat.random_3.2-3      </span></span>
-<span><span class="co">#&gt;  [45] dplyr_1.1.4                 Matrix_1.7-0               </span></span>
-<span><span class="co">#&gt;  [47] ggbeeswarm_0.7.2            fansi_1.0.6                </span></span>
-<span><span class="co">#&gt;  [49] S4Vectors_0.42.0            abind_1.4-5                </span></span>
-<span><span class="co">#&gt;  [51] lifecycle_1.0.4             yaml_2.3.12                </span></span>
-<span><span class="co">#&gt;  [53] edgeR_4.2.0                 SummarizedExperiment_1.34.0</span></span>
-<span><span class="co">#&gt;  [55] rhdf5_2.48.0                SparseArray_1.4.3          </span></span>
-<span><span class="co">#&gt;  [57] BiocFileCache_2.12.0        Rtsne_0.17                 </span></span>
-<span><span class="co">#&gt;  [59] grid_4.4.0                  blob_1.2.4                 </span></span>
-<span><span class="co">#&gt;  [61] promises_1.3.0              dqrng_0.4.0                </span></span>
-<span><span class="co">#&gt;  [63] crayon_1.5.2                miniUI_0.1.1.1             </span></span>
-<span><span class="co">#&gt;  [65] lattice_0.22-6              beachmat_2.20.0            </span></span>
-<span><span class="co">#&gt;  [67] cowplot_1.1.3               metapod_1.12.0             </span></span>
-<span><span class="co">#&gt;  [69] pillar_1.9.0                knitr_1.51                 </span></span>
-<span><span class="co">#&gt;  [71] GenomicRanges_1.56.0        xgboost_3.2.1.1            </span></span>
-<span><span class="co">#&gt;  [73] future.apply_1.11.2         codetools_0.2-20           </span></span>
-<span><span class="co">#&gt;  [75] leiden_0.4.3.1              glue_1.7.0                 </span></span>
-<span><span class="co">#&gt;  [77] data.table_1.15.4           vctrs_0.6.5                </span></span>
-<span><span class="co">#&gt;  [79] png_0.1-8                   spam_2.10-0                </span></span>
-<span><span class="co">#&gt;  [81] gtable_0.3.5                assertthat_0.2.1           </span></span>
-<span><span class="co">#&gt;  [83] cachem_1.0.8                xfun_0.56                  </span></span>
-<span><span class="co">#&gt;  [85] S4Arrays_1.4.0              mime_0.12                  </span></span>
-<span><span class="co">#&gt;  [87] coda_0.19-4.1               survival_3.6-4             </span></span>
-<span><span class="co">#&gt;  [89] SingleCellExperiment_1.26.0 maxLik_1.5-2.2             </span></span>
-<span><span class="co">#&gt;  [91] statmod_1.5.0               bluster_1.14.0             </span></span>
-<span><span class="co">#&gt;  [93] BayesSpace_1.14.0           fitdistrplus_1.2-1         </span></span>
-<span><span class="co">#&gt;  [95] ROCR_1.0-11                 bettermc_1.2.2.9000        </span></span>
-<span><span class="co">#&gt;  [97] nlme_3.1-164                bit64_4.0.5                </span></span>
-<span><span class="co">#&gt;  [99] filelock_1.0.3              RcppAnnoy_0.0.22           </span></span>
-<span><span class="co">#&gt; [101] GenomeInfoDb_1.40.0         bslib_0.7.0                </span></span>
-<span><span class="co">#&gt; [103] irlba_2.3.5.1               vipor_0.4.7                </span></span>
-<span><span class="co">#&gt; [105] KernSmooth_2.23-22          colorspace_2.1-0           </span></span>
-<span><span class="co">#&gt; [107] BiocGenerics_0.50.0         DBI_1.2.2                  </span></span>
-<span><span class="co">#&gt; [109] tidyselect_1.2.1            bit_4.0.5                  </span></span>
-<span><span class="co">#&gt; [111] compiler_4.4.0              curl_5.2.1                 </span></span>
-<span><span class="co">#&gt; [113] BiocNeighbors_1.22.0        desc_1.4.3                 </span></span>
-<span><span class="co">#&gt; [115] DelayedArray_0.30.1         plotly_4.10.4              </span></span>
-<span><span class="co">#&gt; [117] bookdown_0.39               checkmate_2.3.1            </span></span>
-<span><span class="co">#&gt; [119] scales_1.3.0                lmtest_0.9-40              </span></span>
-<span><span class="co">#&gt; [121] stringr_1.5.1               digest_0.6.35              </span></span>
-<span><span class="co">#&gt; [123] goftest_1.2-3               presto_1.0.0               </span></span>
-<span><span class="co">#&gt; [125] spatstat.utils_3.0-4        rmarkdown_2.30             </span></span>
-<span><span class="co">#&gt; [127] scDesign3_1.7.6             XVector_0.44.0             </span></span>
-<span><span class="co">#&gt; [129] htmltools_0.5.8.1           pkgconfig_2.0.3            </span></span>
-<span><span class="co">#&gt; [131] sparseMatrixStats_1.16.0    MatrixGenerics_1.16.0      </span></span>
-<span><span class="co">#&gt; [133] dbplyr_2.5.0                fastmap_1.2.0              </span></span>
-<span><span class="co">#&gt; [135] rlang_1.1.3                 htmlwidgets_1.6.4          </span></span>
-<span><span class="co">#&gt; [137] UCSC.utils_1.0.0            shiny_1.8.1.1              </span></span>
-<span><span class="co">#&gt; [139] DelayedMatrixStats_1.26.0   farver_2.1.2               </span></span>
-<span><span class="co">#&gt; [141] jquerylib_0.1.4             zoo_1.8-12                 </span></span>
-<span><span class="co">#&gt; [143] jsonlite_1.8.8              BiocParallel_1.38.0        </span></span>
-<span><span class="co">#&gt; [145] mclust_6.1.1                BiocSingular_1.20.0        </span></span>
-<span><span class="co">#&gt; [147] RCurl_1.98-1.14             magrittr_2.0.3             </span></span>
-<span><span class="co">#&gt; [149] Formula_1.2-5               scuttle_1.14.0             </span></span>
-<span><span class="co">#&gt; [151] GenomeInfoDbData_1.2.12     dotCall64_1.1-1            </span></span>
-<span><span class="co">#&gt; [153] patchwork_1.2.0             Rhdf5lib_1.26.0            </span></span>
-<span><span class="co">#&gt; [155] munsell_0.5.1               Rcpp_1.0.12                </span></span>
-<span><span class="co">#&gt; [157] viridis_0.6.5               reticulate_1.46.0          </span></span>
-<span><span class="co">#&gt; [159] stringi_1.8.4               zlibbioc_1.50.0            </span></span>
-<span><span class="co">#&gt; [161] MASS_7.3-60.2               gamlss.dist_6.1-1          </span></span>
-<span><span class="co">#&gt; [163] plyr_1.8.9                  parallel_4.4.0             </span></span>
-<span><span class="co">#&gt; [165] listenv_0.9.1               ggrepel_0.9.5              </span></span>
-<span><span class="co">#&gt; [167] deldir_2.0-4                splines_4.4.0              </span></span>
-<span><span class="co">#&gt; [169] tensor_1.5                  locfit_1.5-9.9             </span></span>
-<span><span class="co">#&gt; [171] igraph_2.0.3                spatstat.geom_3.2-9        </span></span>
-<span><span class="co">#&gt; [173] RcppHNSW_0.6.0              reshape2_1.4.4             </span></span>
-<span><span class="co">#&gt; [175] stats4_4.4.0                ScaledMatrix_1.12.0        </span></span>
-<span><span class="co">#&gt; [177] evaluate_0.23               scran_1.32.0               </span></span>
-<span><span class="co">#&gt; [179] BiocManager_1.30.27         httpuv_1.6.15              </span></span>
-<span><span class="co">#&gt; [181] miscTools_0.6-30            RANN_2.6.1                 </span></span>
-<span><span class="co">#&gt; [183] tidyr_1.3.1                 purrr_1.0.2                </span></span>
-<span><span class="co">#&gt; [185] polyclip_1.10-6             future_1.33.2              </span></span>
-<span><span class="co">#&gt; [187] scattermore_1.2             ggplot2_3.5.1              </span></span>
-<span><span class="co">#&gt; [189] rsvd_1.0.5                  xtable_1.8-4               </span></span>
-<span><span class="co">#&gt; [191] RSpectra_0.16-1             later_1.3.2                </span></span>
-<span><span class="co">#&gt; [193] viridisLite_0.4.2           ragg_1.3.1                 </span></span>
-<span><span class="co">#&gt; [195] tibble_3.2.1                memoise_2.0.1              </span></span>
-<span><span class="co">#&gt; [197] beeswarm_0.4.0              IRanges_2.38.0             </span></span>
-<span><span class="co">#&gt; [199] cluster_2.1.6               globals_0.16.3</span></span></code></pre></div>
+<span><span class="co">#&gt;   [7] backports_1.5.0             tools_4.5.1                </span></span>
+<span><span class="co">#&gt;   [9] sctransform_0.4.2           R6_2.6.1                   </span></span>
+<span><span class="co">#&gt;  [11] DirichletReg_0.7-2          mgcv_1.9-3                 </span></span>
+<span><span class="co">#&gt;  [13] lazyeval_0.2.2              uwot_0.2.3                 </span></span>
+<span><span class="co">#&gt;  [15] rhdf5filters_1.20.0         withr_3.0.2                </span></span>
+<span><span class="co">#&gt;  [17] sp_2.2-0                    ClusterDE_0.99.4           </span></span>
+<span><span class="co">#&gt;  [19] gridExtra_2.3               progressr_0.15.1           </span></span>
+<span><span class="co">#&gt;  [21] cli_3.6.5                   Biobase_2.68.0             </span></span>
+<span><span class="co">#&gt;  [23] textshaping_1.0.1           spatstat.explore_3.4-3     </span></span>
+<span><span class="co">#&gt;  [25] fastDummies_1.7.5           microbenchmark_1.5.0       </span></span>
+<span><span class="co">#&gt;  [27] sandwich_3.1-1              labeling_0.4.3             </span></span>
+<span><span class="co">#&gt;  [29] sass_0.4.10                 Seurat_5.3.0               </span></span>
+<span><span class="co">#&gt;  [31] mvtnorm_1.3-3               arrow_20.0.0.2             </span></span>
+<span><span class="co">#&gt;  [33] spatstat.data_3.1-6         gamlss_5.4-22              </span></span>
+<span><span class="co">#&gt;  [35] ggridges_0.5.6              pbapply_1.7-2              </span></span>
+<span><span class="co">#&gt;  [37] pkgdown_2.0.9               systemfonts_1.2.3          </span></span>
+<span><span class="co">#&gt;  [39] dichromat_2.0-0.1           scater_1.36.0              </span></span>
+<span><span class="co">#&gt;  [41] parallelly_1.45.0           limma_3.64.1               </span></span>
+<span><span class="co">#&gt;  [43] RSQLite_2.4.1               gamlss.data_6.0-6          </span></span>
+<span><span class="co">#&gt;  [45] generics_0.1.4              ica_1.0-3                  </span></span>
+<span><span class="co">#&gt;  [47] spatstat.random_3.4-1       dplyr_1.1.4                </span></span>
+<span><span class="co">#&gt;  [49] Matrix_1.7-5                ggbeeswarm_0.7.2           </span></span>
+<span><span class="co">#&gt;  [51] S4Vectors_0.46.0            abind_1.4-8                </span></span>
+<span><span class="co">#&gt;  [53] lifecycle_1.0.4             yaml_2.3.10                </span></span>
+<span><span class="co">#&gt;  [55] edgeR_4.6.2                 SummarizedExperiment_1.38.1</span></span>
+<span><span class="co">#&gt;  [57] rhdf5_2.52.1                SparseArray_1.8.0          </span></span>
+<span><span class="co">#&gt;  [59] BiocFileCache_2.16.0        Rtsne_0.17                 </span></span>
+<span><span class="co">#&gt;  [61] grid_4.5.1                  blob_1.2.4                 </span></span>
+<span><span class="co">#&gt;  [63] promises_1.3.3              dqrng_0.4.1                </span></span>
+<span><span class="co">#&gt;  [65] crayon_1.5.3                miniUI_0.1.2               </span></span>
+<span><span class="co">#&gt;  [67] lattice_0.22-9              beachmat_2.24.0            </span></span>
+<span><span class="co">#&gt;  [69] cowplot_1.1.3               pillar_1.10.2              </span></span>
+<span><span class="co">#&gt;  [71] knitr_1.50                  metapod_1.16.0             </span></span>
+<span><span class="co">#&gt;  [73] GenomicRanges_1.60.0        rjson_0.2.23               </span></span>
+<span><span class="co">#&gt;  [75] xgboost_3.2.1.1             future.apply_1.20.0        </span></span>
+<span><span class="co">#&gt;  [77] codetools_0.2-20            glue_1.8.0                 </span></span>
+<span><span class="co">#&gt;  [79] spatstat.univar_3.1-3       data.table_1.17.4          </span></span>
+<span><span class="co">#&gt;  [81] vctrs_0.6.5                 png_0.1-8                  </span></span>
+<span><span class="co">#&gt;  [83] spam_2.11-1                 gtable_0.3.6               </span></span>
+<span><span class="co">#&gt;  [85] assertthat_0.2.1            cachem_1.1.0               </span></span>
+<span><span class="co">#&gt;  [87] xfun_0.52                   S4Arrays_1.8.1             </span></span>
+<span><span class="co">#&gt;  [89] mime_0.13                   coda_0.19-4.1              </span></span>
+<span><span class="co">#&gt;  [91] survival_3.8-3              SingleCellExperiment_1.30.1</span></span>
+<span><span class="co">#&gt;  [93] maxLik_1.5-2.1              statmod_1.5.0              </span></span>
+<span><span class="co">#&gt;  [95] bluster_1.18.0              BayesSpace_1.21.2          </span></span>
+<span><span class="co">#&gt;  [97] fitdistrplus_1.2-2          ROCR_1.0-11                </span></span>
+<span><span class="co">#&gt;  [99] bettermc_1.2.2.9000         nlme_3.1-168               </span></span>
+<span><span class="co">#&gt; [101] bit64_4.6.0-1               filelock_1.0.3             </span></span>
+<span><span class="co">#&gt; [103] RcppAnnoy_0.0.22            GenomeInfoDb_1.44.0        </span></span>
+<span><span class="co">#&gt; [105] bslib_0.9.0                 irlba_2.3.5.1              </span></span>
+<span><span class="co">#&gt; [107] vipor_0.4.7                 KernSmooth_2.23-26         </span></span>
+<span><span class="co">#&gt; [109] BiocGenerics_0.54.0         DBI_1.2.3                  </span></span>
+<span><span class="co">#&gt; [111] tidyselect_1.2.1            bit_4.6.0                  </span></span>
+<span><span class="co">#&gt; [113] compiler_4.5.1              curl_6.3.0                 </span></span>
+<span><span class="co">#&gt; [115] BiocNeighbors_2.2.0         desc_1.4.3                 </span></span>
+<span><span class="co">#&gt; [117] DelayedArray_0.34.1         plotly_4.10.4              </span></span>
+<span><span class="co">#&gt; [119] bookdown_0.43               checkmate_2.3.2            </span></span>
+<span><span class="co">#&gt; [121] scales_1.4.0                lmtest_0.9-40              </span></span>
+<span><span class="co">#&gt; [123] stringr_1.5.1               digest_0.6.37              </span></span>
+<span><span class="co">#&gt; [125] goftest_1.2-3               presto_1.0.0               </span></span>
+<span><span class="co">#&gt; [127] spatstat.utils_3.1-4        rmarkdown_2.29             </span></span>
+<span><span class="co">#&gt; [129] scDesign3_1.7.6             XVector_0.48.0             </span></span>
+<span><span class="co">#&gt; [131] htmltools_0.5.8.1           pkgconfig_2.0.3            </span></span>
+<span><span class="co">#&gt; [133] MatrixGenerics_1.20.0       dbplyr_2.5.0               </span></span>
+<span><span class="co">#&gt; [135] fastmap_1.2.0               rlang_1.1.6                </span></span>
+<span><span class="co">#&gt; [137] htmlwidgets_1.6.4           UCSC.utils_1.4.0           </span></span>
+<span><span class="co">#&gt; [139] shiny_1.10.0                farver_2.1.2               </span></span>
+<span><span class="co">#&gt; [141] jquerylib_0.1.4             zoo_1.8-14                 </span></span>
+<span><span class="co">#&gt; [143] jsonlite_2.0.0              BiocParallel_1.42.1        </span></span>
+<span><span class="co">#&gt; [145] mclust_6.1.1                BiocSingular_1.24.0        </span></span>
+<span><span class="co">#&gt; [147] RCurl_1.98-1.17             magrittr_2.0.3             </span></span>
+<span><span class="co">#&gt; [149] Formula_1.2-5               scuttle_1.18.0             </span></span>
+<span><span class="co">#&gt; [151] GenomeInfoDbData_1.2.14     dotCall64_1.2              </span></span>
+<span><span class="co">#&gt; [153] patchwork_1.3.0             Rhdf5lib_1.30.0            </span></span>
+<span><span class="co">#&gt; [155] Rcpp_1.0.14                 viridis_0.6.5              </span></span>
+<span><span class="co">#&gt; [157] reticulate_1.42.0           stringi_1.8.7              </span></span>
+<span><span class="co">#&gt; [159] MASS_7.3-65                 gamlss.dist_6.1-1          </span></span>
+<span><span class="co">#&gt; [161] plyr_1.8.9                  parallel_4.5.1             </span></span>
+<span><span class="co">#&gt; [163] listenv_0.9.1               ggrepel_0.9.6              </span></span>
+<span><span class="co">#&gt; [165] deldir_2.0-4                splines_4.5.1              </span></span>
+<span><span class="co">#&gt; [167] tensor_1.5                  locfit_1.5-9.12            </span></span>
+<span><span class="co">#&gt; [169] igraph_2.1.4                spatstat.geom_3.4-1        </span></span>
+<span><span class="co">#&gt; [171] RcppHNSW_0.6.0              reshape2_1.4.4             </span></span>
+<span><span class="co">#&gt; [173] stats4_4.5.1                ScaledMatrix_1.16.0        </span></span>
+<span><span class="co">#&gt; [175] evaluate_1.0.3              SeuratObject_5.1.0         </span></span>
+<span><span class="co">#&gt; [177] scran_1.36.0                BiocManager_1.30.27        </span></span>
+<span><span class="co">#&gt; [179] httpuv_1.6.16               miscTools_0.6-28           </span></span>
+<span><span class="co">#&gt; [181] RANN_2.6.2                  tidyr_1.3.1                </span></span>
+<span><span class="co">#&gt; [183] purrr_1.0.4                 polyclip_1.10-7            </span></span>
+<span><span class="co">#&gt; [185] future_1.58.0               scattermore_1.2            </span></span>
+<span><span class="co">#&gt; [187] ggplot2_3.5.2               rsvd_1.0.5                 </span></span>
+<span><span class="co">#&gt; [189] xtable_1.8-4                RSpectra_0.16-2            </span></span>
+<span><span class="co">#&gt; [191] later_1.4.2                 viridisLite_0.4.2          </span></span>
+<span><span class="co">#&gt; [193] ragg_1.4.0                  tibble_3.3.0               </span></span>
+<span><span class="co">#&gt; [195] memoise_2.0.1               beeswarm_0.4.0             </span></span>
+<span><span class="co">#&gt; [197] IRanges_2.42.0              cluster_2.1.8.1            </span></span>
+<span><span class="co">#&gt; [199] globals_0.18.0</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

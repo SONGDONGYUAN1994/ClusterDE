@@ -41,9 +41,11 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/ClusterDE-bulk-microarray.html">Perform ClusterDE on a bulk microarray dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-microbiome.html">Perform ClusterDE on a microbiome dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-monocyte-scrna.html">Perform ClusterDE on a monocyte scRNA dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-pure-cellline.html">Perform ClusterDE on a pure cell-line dataset</a>
+    <a class="dropdown-item" href="../articles/ClusterDE-scmultiome.html">Perform ClusterDE on a single-cell multiome dataset</a>
     <a class="dropdown-item" href="../articles/ClusterDE-spatial-onedomain.html">Perform ClusterDE on a spatial dataset (one domain)</a>
     <a class="dropdown-item" href="../articles/ClusterDE-spatial-twodomains.html">Perform ClusterDE on a spatial dataset (two domains)</a>
   </div>
@@ -73,12 +75,15 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Perform ClusterDE on a pure cell-line dataset</h1>
-                        <h4 data-toc-skip class="author">Dongyuan Song</h4>
+                        <h4 data-toc-skip class="author">Dongyuan
+Song</h4>
             <address class="author_afil">
-      Department of Genetics &amp; Genome Sciences, UConn HealthBioinformatics IDP, University of California, Los Angeles<br><a class="author_email" href="mailto:#"></a><a href="mailto:dongyuansong@ucla.edu" class="email">dongyuansong@ucla.edu</a>
+      Department of Genetics &amp; Genome Sciences, UConn
+HealthBioinformatics IDP, University of California, Los
+Angeles<br><a class="author_email" href="mailto:#"></a><a href="mailto:dongyuansong@ucla.edu" class="email">dongyuansong@ucla.edu</a>
       </address>
                   
-            <h4 data-toc-skip class="date">20 August 2026</h4>
+            <h4 data-toc-skip class="date">27 August 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SONGDONGYUAN1994/ClusterDE/blob/HEAD/vignettes/ClusterDE-pure-cellline.Rmd" class="external-link"><code>vignettes/ClusterDE-pure-cellline.Rmd</code></a></small>
       <div class="d-none name"><code>ClusterDE-pure-cellline.Rmd</code></div>
@@ -89,14 +94,25 @@
 <div class="section level2">
 <h2 id="download-data">Download data<a class="anchor" aria-label="anchor" href="#download-data"></a>
 </h2>
-<p>We download the cell line data set H2228. The original data is from <a href="https://github.com/LuyiTian/sc_mixology" class="external-link">Tian et al., Nature Methods 2019</a> as the gold standard for benchmarking the accuracy of clustering. Since the data is from the pure cell line, it should not have cell types, and, of course, between cell type DE genes. <strong>Note</strong>: it does not mean that there are no variations within one cell line; of course there are, e.g., cell cycle, total UMI, etc. However, these variations do not represent <strong>discrete cell groups</strong>, and essentially it means you should not use your obtained clusters to explain the variation.</p>
+<p>We download the cell line data set H2228. The original data is from
+<a href="https://github.com/LuyiTian/sc_mixology" class="external-link">Tian et al., Nature
+Methods 2019</a> as the gold standard for benchmarking the accuracy of
+clustering. Since the data is from the pure cell line, it should not
+have cell types, and, of course, between cell type DE genes.
+<strong>Note</strong>: it does not mean that there are no variations
+within one cell line; of course there are, e.g., cell cycle, total UMI,
+etc. However, these variations do not represent <strong>discrete cell
+groups</strong>, and essentially it means you should not use your
+obtained clusters to explain the variation.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">cellline</span>, package <span class="op">=</span> <span class="st">"ClusterDE"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="run-the-regular-seurat-pipeline">Run the regular Seurat pipeline<a class="anchor" aria-label="anchor" href="#run-the-regular-seurat-pipeline"></a>
 </h2>
-<p>We perform the default Seurat clustering. Please note that ClusterDE is designed for 1 vs 1 comparison; therefore, we set the resolution as 0.2 here to obtain two clusters for illustration purpose.</p>
+<p>We perform the default Seurat clustering. Please note that ClusterDE
+is designed for 1 vs 1 comparison; therefore, we set the resolution as
+0.2 here to obtain two clusters for illustration purpose.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">RNGkind</a></span><span class="op">(</span><span class="st">"L'Ecuyer-CMRG"</span><span class="op">)</span></span>
 <span><span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">123</span></span>
@@ -111,6 +127,20 @@
 <span><span class="co">#&gt; Validating object structure for Assay 'originalexp'</span></span>
 <span><span class="co">#&gt; Object representation is consistent with the most current Seurat version</span></span>
 <span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/NormalizeData.html" class="external-link">NormalizeData</a></span><span class="op">(</span><span class="va">cellline</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: The `slot` argument of `SetAssayData()` is deprecated as of SeuratObject 5.0.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `layer` argument instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">Seurat</span> package.</span></span>
+<span><span class="co">#&gt;   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/satijalab/seurat/issues&gt;</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
+<span><span class="co">#&gt; Warning: The `slot` argument of `GetAssayData()` is deprecated as of SeuratObject 5.0.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `layer` argument instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">Seurat</span> package.</span></span>
+<span><span class="co">#&gt;   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/satijalab/seurat/issues&gt;</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
 <span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/FindVariableFeatures.html" class="external-link">FindVariableFeatures</a></span><span class="op">(</span><span class="va">cellline</span><span class="op">)</span></span>
 <span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/ScaleData.html" class="external-link">ScaleData</a></span><span class="op">(</span><span class="va">cellline</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Centering and scaling data matrix</span></span>
@@ -144,12 +174,12 @@
 <span><span class="co">#&gt;     CDH1, TOMM40, ATP5MD, HSPE1, NAA10, GPX1P1, RPS16, MRPL12, MCRIP2, PDCD5 </span></span>
 <span><span class="co">#&gt;     RPL18, PLEC, S100A13, RPL36AL, LAD1, MGLL, BOLA2B, MISP, MRPL36, SEC61G </span></span>
 <span><span class="co">#&gt; PC_ 5 </span></span>
-<span><span class="co">#&gt; Positive:  HINT1, COX5B, TXN, SOD1, NDUFA4, NDUFS6, ATP5PO, ATP5MC3, S100A10, ATP6V0E1 </span></span>
-<span><span class="co">#&gt;     CYB5A, SLIRP, NDUFB4, ATP5MC1, HSPE1, TXNP6, POMP, POLR2L, RPS14, HSPE1P4 </span></span>
-<span><span class="co">#&gt;     RPS15, CBR1, NDUFB3, HSPE1P3, ATP5PD, COX7B, ADGRF1, PSMB9, AC079250.1, NDUFAB1 </span></span>
-<span><span class="co">#&gt; Negative:  BTG1, PPP1R15A, EIF1, JUN, CEBPG, H3F3B, TMEM132A, C6orf48, HIST2H4B, SGK1 </span></span>
+<span><span class="co">#&gt; Positive:  BTG1, PPP1R15A, EIF1, JUN, CEBPG, H3F3B, TMEM132A, C6orf48, HIST2H4B, SGK1 </span></span>
 <span><span class="co">#&gt;     KPNA4, PMEPA1, KLF6, CDKN1A, WARS, PEA15, GARS, MAP1LC3B, SNHG12, SERTAD1 </span></span>
-<span><span class="co">#&gt;     LAMC2, EPB41L4A-AS1, NAP1L1, SNHG5, KLF10, SLC7A5, KIF5B, ATP2B1, EIF5, ABL2</span></span>
+<span><span class="co">#&gt;     LAMC2, EPB41L4A-AS1, NAP1L1, SNHG5, KLF10, SLC7A5, KIF5B, ATP2B1, EIF5, ABL2 </span></span>
+<span><span class="co">#&gt; Negative:  HINT1, COX5B, TXN, SOD1, NDUFA4, NDUFS6, ATP5PO, ATP5MC3, S100A10, ATP6V0E1 </span></span>
+<span><span class="co">#&gt;     CYB5A, SLIRP, NDUFB4, ATP5MC1, HSPE1, TXNP6, POMP, POLR2L, RPS14, HSPE1P4 </span></span>
+<span><span class="co">#&gt;     RPS15, CBR1, NDUFB3, HSPE1P3, ATP5PD, COX7B, ADGRF1, PSMB9, AC079250.1, NDUFAB1</span></span>
 <span><span class="va">cellline</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span><span class="va">cellline</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing nearest neighbor graph</span></span>
 <span><span class="co">#&gt; Computing SNN</span></span>
@@ -167,23 +197,28 @@
 <span><span class="co">#&gt; Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric</span></span>
 <span><span class="co">#&gt; To use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to 'correlation'</span></span>
 <span><span class="co">#&gt; This message will be shown once per session</span></span>
-<span><span class="co">#&gt; 03:31:41 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
-<span><span class="co">#&gt; 03:31:41 Read 758 rows and found 10 numeric columns</span></span>
-<span><span class="co">#&gt; 03:31:41 Using Annoy for neighbor search, n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 03:31:41 Building Annoy index with metric = cosine, n_trees = 50</span></span>
+<span><span class="co">#&gt; 15:29:02 UMAP embedding parameters a = 0.9922 b = 1.112</span></span>
+<span><span class="co">#&gt; 15:29:02 Read 758 rows and found 10 numeric columns</span></span>
+<span><span class="co">#&gt; 15:29:02 Using Annoy for neighbor search, n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 15:29:02 Building Annoy index with metric = cosine, n_trees = 50</span></span>
 <span><span class="co">#&gt; 0%   10   20   30   40   50   60   70   80   90   100%</span></span>
 <span><span class="co">#&gt; [----|----|----|----|----|----|----|----|----|----|</span></span>
 <span><span class="co">#&gt; **************************************************|</span></span>
-<span><span class="co">#&gt; 03:31:41 Writing NN index file to temp file /loc/scratch/65626926/RtmpqAt146/file82082cf5539f</span></span>
-<span><span class="co">#&gt; 03:31:41 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">#&gt; 03:31:42 Annoy recall = 100%</span></span>
-<span><span class="co">#&gt; 03:31:42 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">#&gt; 03:31:43 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
-<span><span class="co">#&gt; 03:31:43 Commencing optimization for 500 epochs, with 27914 positive edges</span></span>
-<span><span class="co">#&gt; 03:31:43 Optimization finished</span></span>
+<span><span class="co">#&gt; 15:29:02 Writing NN index file to temp file /loc/scratch/2560765/RtmpgdLPJH/filedb7725b3f3997</span></span>
+<span><span class="co">#&gt; 15:29:02 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">#&gt; 15:29:02 Annoy recall = 100%</span></span>
+<span><span class="co">#&gt; 15:29:03 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">#&gt; 15:29:03 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
+<span><span class="co">#&gt; 15:29:03 Commencing optimization for 500 epochs, with 27914 positive edges</span></span>
+<span><span class="co">#&gt; 15:29:03 Using rng type: pcg</span></span>
+<span><span class="co">#&gt; 15:29:04 Optimization finished</span></span>
 <span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">cellline</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Clustering result"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ClusterDE-pure-cellline_files/figure-html/unnamed-chunk-3-1.png" alt="" width="700"></p>
-<p>From the UMAP, the two clusters seem to be dubious. Although we do not expect the existence of cell types, when we perform Seurat DE test between the two clusters, and we get DE genes with FDR &lt; 0.05. It means that the double-dipping introduces a huge number of false discoveries.</p>
+<p><img src="ClusterDE-pure-cellline_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<p>From the UMAP, the two clusters seem to be dubious. Although we do
+not expect the existence of cell types, when we perform Seurat DE test
+between the two clusters, and we get DE genes with FDR &lt; 0.05. It
+means that the double-dipping introduces a huge number of false
+discoveries.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">original_deg</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/FindMarkers.html" class="external-link">FindMarkers</a></span><span class="op">(</span></span>
 <span>  <span class="va">cellline</span>,</span>
@@ -192,6 +227,13 @@
 <span>  min.pct <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  logfc.threshold <span class="op">=</span> <span class="fl">0</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: `PackageCheck()` was deprecated in SeuratObject 5.0.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `rlang::check_installed()` instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">Seurat</span> package.</span></span>
+<span><span class="co">#&gt;   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/satijalab/seurat/issues&gt;</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
 <span><span class="va">original_deg</span> <span class="op">&lt;-</span> <span class="va">original_deg</span><span class="op">[</span><span class="va">original_deg</span><span class="op">$</span><span class="va">avg_log2FC</span> <span class="op">&gt;</span> <span class="fl">0</span>,<span class="op">]</span></span>
 <span><span class="va">original_pval</span> <span class="op">&lt;-</span> <span class="va">original_deg</span><span class="op">$</span><span class="va">p_val_adj</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">original_pval</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">original_deg</span><span class="op">)</span></span>
@@ -201,7 +243,9 @@
 <div class="section level2">
 <h2 id="find-degs-using-clusterde">Find DEGs using ClusterDE<a class="anchor" aria-label="anchor" href="#find-degs-using-clusterde"></a>
 </h2>
-<p>We generate the synthetic null replicate from the target data using <code>ClusterDE::constructNULL</code> and perform the same preprocessing and clustering pipeline as the target cell line data.</p>
+<p>We generate the synthetic null replicate from the target data using
+<code>ClusterDE::constructNULL</code> and perform the same preprocessing
+and clustering pipeline as the target cell line data.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span></span>
 <span><span class="va">null_data</span> <span class="op">&lt;-</span> <span class="fu">ClusterDE</span><span class="fu">::</span><span class="fu"><a href="../reference/constructNull.html">constructNull</a></span><span class="op">(</span><span class="va">cellline</span>, data_type <span class="op">=</span> <span class="st">"cellline"</span>, seed <span class="op">=</span> <span class="va">seed</span><span class="op">)</span></span>
@@ -263,7 +307,10 @@
 <span><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7174</span></span>
 <span><span class="co">#&gt; Number of communities: 2</span></span>
 <span><span class="co">#&gt; Elapsed time: 0 seconds</span></span></code></pre></div>
-<p>We then perform Wilcoxon DE test on the null data and compare it with the p-values of target genes. We can observe that after ClusterDE FDR control, no genes pass the test which means we don’t detect any DEG in this cell line data.</p>
+<p>We then perform Wilcoxon DE test on the null data and compare it with
+the p-values of target genes. We can observe that after ClusterDE FDR
+control, no genes pass the test which means we don’t detect any DEG in
+this cell line data.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">null_deg</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/FindMarkers.html" class="external-link">FindMarkers</a></span><span class="op">(</span></span>
 <span>  <span class="va">null_obj</span>,</span>
@@ -284,12 +331,12 @@
 </h2>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R version 4.4.0 (2024-04-24)</span></span>
+<span><span class="co">#&gt; R version 4.5.1 (2025-06-13)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
-<span><span class="co">#&gt; Running under: Ubuntu 18.04.6 LTS</span></span>
+<span><span class="co">#&gt; Running under: Ubuntu 24.04.4 LTS</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
-<span><span class="co">#&gt; BLAS/LAPACK: FlexiBLAS OPENBLAS;  LAPACK version 3.11.0</span></span>
+<span><span class="co">#&gt; BLAS/LAPACK: FlexiBLAS OPENBLAS;  LAPACK version 3.12.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Random number generation:</span></span>
 <span><span class="co">#&gt;  RNG:     L'Ecuyer-CMRG </span></span>
@@ -297,12 +344,10 @@
 <span><span class="co">#&gt;  Sample:  Rejection </span></span>
 <span><span class="co">#&gt;  </span></span>
 <span><span class="co">#&gt; locale:</span></span>
-<span><span class="co">#&gt;  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              </span></span>
-<span><span class="co">#&gt;  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    </span></span>
-<span><span class="co">#&gt;  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   </span></span>
-<span><span class="co">#&gt;  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 </span></span>
-<span><span class="co">#&gt;  [9] LC_ADDRESS=C               LC_TELEPHONE=C            </span></span>
-<span><span class="co">#&gt; [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       </span></span>
+<span><span class="co">#&gt;  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       </span></span>
+<span><span class="co">#&gt;  [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   </span></span>
+<span><span class="co">#&gt;  [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          </span></span>
+<span><span class="co">#&gt; [10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; time zone: America/Los_Angeles</span></span>
 <span><span class="co">#&gt; tzcode source: system (glibc)</span></span>
@@ -311,57 +356,56 @@
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] BiocStyle_2.32.0</span></span>
+<span><span class="co">#&gt; [1] future_1.58.0    BiocStyle_2.36.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;   [1] RColorBrewer_1.1-3     jsonlite_1.8.8         magrittr_2.0.3        </span></span>
-<span><span class="co">#&gt;   [4] spatstat.utils_3.0-4   farver_2.1.2           rmarkdown_2.30        </span></span>
-<span><span class="co">#&gt;   [7] fs_1.6.4               ragg_1.3.1             vctrs_0.6.5           </span></span>
-<span><span class="co">#&gt;  [10] ROCR_1.0-11            memoise_2.0.1          spatstat.explore_3.2-7</span></span>
-<span><span class="co">#&gt;  [13] htmltools_0.5.8.1      sass_0.4.9             sctransform_0.4.1     </span></span>
-<span><span class="co">#&gt;  [16] parallelly_1.37.1      KernSmooth_2.23-22     bslib_0.7.0           </span></span>
+<span><span class="co">#&gt;   [1] RColorBrewer_1.1-3     jsonlite_2.0.0         magrittr_2.0.3        </span></span>
+<span><span class="co">#&gt;   [4] spatstat.utils_3.1-4   farver_2.1.2           rmarkdown_2.29        </span></span>
+<span><span class="co">#&gt;   [7] fs_1.6.6               ragg_1.4.0             vctrs_0.6.5           </span></span>
+<span><span class="co">#&gt;  [10] ROCR_1.0-11            memoise_2.0.1          spatstat.explore_3.4-3</span></span>
+<span><span class="co">#&gt;  [13] htmltools_0.5.8.1      sass_0.4.10            sctransform_0.4.2     </span></span>
+<span><span class="co">#&gt;  [16] parallelly_1.45.0      KernSmooth_2.23-26     bslib_0.9.0           </span></span>
 <span><span class="co">#&gt;  [19] htmlwidgets_1.6.4      desc_1.4.3             ica_1.0-3             </span></span>
-<span><span class="co">#&gt;  [22] plyr_1.8.9             plotly_4.10.4          zoo_1.8-12            </span></span>
-<span><span class="co">#&gt;  [25] cachem_1.0.8           igraph_2.0.3           mime_0.12             </span></span>
-<span><span class="co">#&gt;  [28] lifecycle_1.0.4        pkgconfig_2.0.3        Matrix_1.7-0          </span></span>
-<span><span class="co">#&gt;  [31] R6_2.5.1               fastmap_1.2.0          fitdistrplus_1.2-1    </span></span>
-<span><span class="co">#&gt;  [34] future_1.33.2          shiny_1.8.1.1          digest_0.6.35         </span></span>
-<span><span class="co">#&gt;  [37] colorspace_2.1-0       patchwork_1.2.0        Seurat_5.1.0          </span></span>
-<span><span class="co">#&gt;  [40] tensor_1.5             RSpectra_0.16-1        irlba_2.3.5.1         </span></span>
-<span><span class="co">#&gt;  [43] kde1d_1.1.1            textshaping_0.3.7      labeling_0.4.3        </span></span>
-<span><span class="co">#&gt;  [46] progressr_0.14.0       fansi_1.0.6            spatstat.sparse_3.0-3 </span></span>
-<span><span class="co">#&gt;  [49] coop_0.6-3             httr_1.4.7             polyclip_1.10-6       </span></span>
-<span><span class="co">#&gt;  [52] abind_1.4-5            compiler_4.4.0         withr_3.0.0           </span></span>
-<span><span class="co">#&gt;  [55] backports_1.4.1        fastDummies_1.7.3      MASS_7.3-60.2         </span></span>
-<span><span class="co">#&gt;  [58] tools_4.4.0            lmtest_0.9-40          httpuv_1.6.15         </span></span>
-<span><span class="co">#&gt;  [61] future.apply_1.11.2    goftest_1.2-3          glue_1.7.0            </span></span>
-<span><span class="co">#&gt;  [64] nlme_3.1-164           promises_1.3.0         grid_4.4.0            </span></span>
-<span><span class="co">#&gt;  [67] checkmate_2.3.1        Rtsne_0.17             cluster_2.1.6         </span></span>
-<span><span class="co">#&gt;  [70] reshape2_1.4.4         generics_0.1.3         gtable_0.3.5          </span></span>
-<span><span class="co">#&gt;  [73] spatstat.data_3.0-4    tidyr_1.3.1            data.table_1.15.4     </span></span>
-<span><span class="co">#&gt;  [76] sp_2.1-4               utf8_1.2.4             spatstat.geom_3.2-9   </span></span>
-<span><span class="co">#&gt;  [79] RcppAnnoy_0.0.22       ggrepel_0.9.5          RANN_2.6.1            </span></span>
-<span><span class="co">#&gt;  [82] pillar_1.9.0           stringr_1.5.1          limma_3.60.6          </span></span>
-<span><span class="co">#&gt;  [85] spam_2.10-0            RcppHNSW_0.6.0         later_1.3.2           </span></span>
-<span><span class="co">#&gt;  [88] splines_4.4.0          dplyr_1.1.4            lattice_0.22-6        </span></span>
-<span><span class="co">#&gt;  [91] survival_3.6-4         deldir_2.0-4           tidyselect_1.2.1      </span></span>
-<span><span class="co">#&gt;  [94] miniUI_0.1.1.1         pbapply_1.7-2          knitr_1.51            </span></span>
-<span><span class="co">#&gt;  [97] gridExtra_2.3          bookdown_0.39          scattermore_1.2       </span></span>
-<span><span class="co">#&gt; [100] xfun_0.56              statmod_1.5.0          matrixStats_1.3.0     </span></span>
-<span><span class="co">#&gt; [103] ClusterDE_0.99.4       stringi_1.8.4          lazyeval_0.2.2        </span></span>
-<span><span class="co">#&gt; [106] yaml_2.3.12            evaluate_0.23          codetools_0.2-20      </span></span>
-<span><span class="co">#&gt; [109] tibble_3.2.1           BiocManager_1.30.27    cli_3.6.2             </span></span>
-<span><span class="co">#&gt; [112] uwot_0.2.2             xtable_1.8-4           reticulate_1.46.0     </span></span>
-<span><span class="co">#&gt; [115] systemfonts_1.1.0      munsell_0.5.1          jquerylib_0.1.4       </span></span>
-<span><span class="co">#&gt; [118] Rcpp_1.0.12            globals_0.16.3         spatstat.random_3.2-3 </span></span>
-<span><span class="co">#&gt; [121] png_0.1-8              rngWELL_0.10-10        parallel_4.4.0        </span></span>
-<span><span class="co">#&gt; [124] randtoolbox_2.0.5      assertthat_0.2.1       pkgdown_2.0.9         </span></span>
-<span><span class="co">#&gt; [127] ggplot2_3.5.1          presto_1.0.0           mvnfast_0.2.8         </span></span>
-<span><span class="co">#&gt; [130] dotCall64_1.1-1        bettermc_1.2.2.9000    gamlss.dist_6.1-1     </span></span>
-<span><span class="co">#&gt; [133] listenv_0.9.1          viridisLite_0.4.2      scales_1.3.0          </span></span>
-<span><span class="co">#&gt; [136] ggridges_0.5.6         SeuratObject_5.0.2     leiden_0.4.3.1        </span></span>
-<span><span class="co">#&gt; [139] purrr_1.0.2            rlang_1.1.3            rvinecopulib_0.7.3.1.0</span></span>
-<span><span class="co">#&gt; [142] cowplot_1.1.3</span></span></code></pre></div>
+<span><span class="co">#&gt;  [22] plyr_1.8.9             plotly_4.10.4          zoo_1.8-14            </span></span>
+<span><span class="co">#&gt;  [25] cachem_1.1.0           igraph_2.1.4           mime_0.13             </span></span>
+<span><span class="co">#&gt;  [28] lifecycle_1.0.4        pkgconfig_2.0.3        Matrix_1.7-5          </span></span>
+<span><span class="co">#&gt;  [31] R6_2.6.1               fastmap_1.2.0          fitdistrplus_1.2-2    </span></span>
+<span><span class="co">#&gt;  [34] shiny_1.10.0           digest_0.6.37          patchwork_1.3.0       </span></span>
+<span><span class="co">#&gt;  [37] Seurat_5.3.0           tensor_1.5             RSpectra_0.16-2       </span></span>
+<span><span class="co">#&gt;  [40] irlba_2.3.5.1          kde1d_1.1.1            textshaping_1.0.1     </span></span>
+<span><span class="co">#&gt;  [43] labeling_0.4.3         progressr_0.15.1       spatstat.sparse_3.1-0 </span></span>
+<span><span class="co">#&gt;  [46] coop_0.6-3             httr_1.4.7             polyclip_1.10-7       </span></span>
+<span><span class="co">#&gt;  [49] abind_1.4-8            compiler_4.5.1         withr_3.0.2           </span></span>
+<span><span class="co">#&gt;  [52] backports_1.5.0        fastDummies_1.7.5      MASS_7.3-65           </span></span>
+<span><span class="co">#&gt;  [55] tools_4.5.1            lmtest_0.9-40          httpuv_1.6.16         </span></span>
+<span><span class="co">#&gt;  [58] future.apply_1.20.0    goftest_1.2-3          glue_1.8.0            </span></span>
+<span><span class="co">#&gt;  [61] nlme_3.1-168           promises_1.3.3         grid_4.5.1            </span></span>
+<span><span class="co">#&gt;  [64] checkmate_2.3.2        Rtsne_0.17             cluster_2.1.8.1       </span></span>
+<span><span class="co">#&gt;  [67] reshape2_1.4.4         generics_0.1.4         gtable_0.3.6          </span></span>
+<span><span class="co">#&gt;  [70] spatstat.data_3.1-6    tidyr_1.3.1            data.table_1.17.4     </span></span>
+<span><span class="co">#&gt;  [73] sp_2.2-0               spatstat.geom_3.4-1    RcppAnnoy_0.0.22      </span></span>
+<span><span class="co">#&gt;  [76] ggrepel_0.9.6          RANN_2.6.2             pillar_1.10.2         </span></span>
+<span><span class="co">#&gt;  [79] stringr_1.5.1          spam_2.11-1            RcppHNSW_0.6.0        </span></span>
+<span><span class="co">#&gt;  [82] limma_3.64.1           later_1.4.2            splines_4.5.1         </span></span>
+<span><span class="co">#&gt;  [85] dplyr_1.1.4            lattice_0.22-9         survival_3.8-3        </span></span>
+<span><span class="co">#&gt;  [88] deldir_2.0-4           tidyselect_1.2.1       miniUI_0.1.2          </span></span>
+<span><span class="co">#&gt;  [91] pbapply_1.7-2          knitr_1.50             gridExtra_2.3         </span></span>
+<span><span class="co">#&gt;  [94] bookdown_0.43          scattermore_1.2        xfun_0.52             </span></span>
+<span><span class="co">#&gt;  [97] statmod_1.5.0          matrixStats_1.5.0      ClusterDE_0.99.4      </span></span>
+<span><span class="co">#&gt; [100] stringi_1.8.7          lazyeval_0.2.2         yaml_2.3.10           </span></span>
+<span><span class="co">#&gt; [103] evaluate_1.0.3         codetools_0.2-20       tibble_3.3.0          </span></span>
+<span><span class="co">#&gt; [106] BiocManager_1.30.27    cli_3.6.5              uwot_0.2.3            </span></span>
+<span><span class="co">#&gt; [109] xtable_1.8-4           reticulate_1.42.0      systemfonts_1.2.3     </span></span>
+<span><span class="co">#&gt; [112] jquerylib_0.1.4        dichromat_2.0-0.1      Rcpp_1.0.14           </span></span>
+<span><span class="co">#&gt; [115] globals_0.18.0         spatstat.random_3.4-1  png_0.1-8             </span></span>
+<span><span class="co">#&gt; [118] rngWELL_0.10-10        spatstat.univar_3.1-3  parallel_4.5.1        </span></span>
+<span><span class="co">#&gt; [121] randtoolbox_2.0.5      assertthat_0.2.1       pkgdown_2.0.9         </span></span>
+<span><span class="co">#&gt; [124] ggplot2_3.5.2          presto_1.0.0           mvnfast_0.2.8         </span></span>
+<span><span class="co">#&gt; [127] dotCall64_1.2          bettermc_1.2.2.9000    gamlss.dist_6.1-1     </span></span>
+<span><span class="co">#&gt; [130] listenv_0.9.1          viridisLite_0.4.2      scales_1.4.0          </span></span>
+<span><span class="co">#&gt; [133] ggridges_0.5.6         SeuratObject_5.1.0     purrr_1.0.4           </span></span>
+<span><span class="co">#&gt; [136] crayon_1.5.3           rlang_1.1.6            rvinecopulib_0.7.3.1.0</span></span>
+<span><span class="co">#&gt; [139] cowplot_1.1.3</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
