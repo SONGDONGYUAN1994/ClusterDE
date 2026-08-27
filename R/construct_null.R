@@ -5,19 +5,19 @@
 #' This function constructs the synthetic null data based on the target data (real data). The input is a expression matrix (gene by cell); the user should specify a distribution, which is usually Negative Binomial for count matrix.
 #'
 #' @param obj A Seurat object. The reference data.
-#' @param approximation A string of either "none", "fast" or "pca". For a high-latitude counting matrix, use "fast" as approximation can increase the speed of data generation while ensuring accuracy. For high-dimensional data (gene number is much larger than cell number), use "pca" as approximation. Default is "none".
-#' @param corr_cut A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation.
-#' @param family A string or a vector of strings of the distribution of your data.
+#' @param approximation A string of either "none", "fast" or "pca". For a high-latitude scRNA counting matrix, use "fast" as approximation can increase the speed of data generation while ensuring accuracy. For high-dimensional scRNA data (gene number is much larger than cell number), use "pca" as approximation. Default is "none".
+#' @param corr_cut A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation. Default is 0.1. All features will be used if approximation is set to "pca", or when data_type is "bulk_microarray".
+#' @param family A string of the distribution of your data.
 #' Must be one of 'nb', 'binomial', 'poisson', 'zip', 'zinb' or 'gaussian', which represent 'poisson distribution',
 #' 'negative binomial distribution', 'zero-inflated poisson distribution', 'zero-inflated negative binomail distribution',
-#' and 'gaussian distribution' respectively. For UMI-counts data, we usually use 'nb'. Default is 'nb'.
-#' @param data_type A string of either "scRNA", "spatial", "cellline" or "microbiome". Default is "scRNA".
+#' and 'gaussian distribution' respectively. For UMI-counts data, we usually use 'nb'. For bulk microarray data, use 'gaussian'. Default is 'nb'.
+#' @param data_type A string of either "scRNA", "scATAC", "spatial", "cellline", "microbiome" or "bulk_microarray". Default is "scRNA".
 #' @param formula A string of the mu parameter formula. It defines the relationship between gene expression in synthetic null data and the extra covariates. Default is 1 (cell type case).
+#' For example, if your input data is a spatial data with X, Y coordinates, the formula can be 's(X, Y, bs = 'gp', k = 4)'.
 #' @param if_sparse A logic value. For high-dimensional data (gene number is much larger than cell number), if a sparse correlation estimation will be used. Default is FALSE.
 #' @param n_cores An integer. The number of cores to use for Parallel processing.
 #' @param n_pcs A numeric value. Number of PCs to use when usePca=T. Default is 200.
 #' @param n_rep An integer. The number of sampled synthetic null datasets. Default value is 1.
-#' For example, if your input data is a spatial data with X, Y coordinates, the formula can be 's(X, Y, bs = 'gp', k = 4)'.
 #' @param other_covariates A list of the extra covariates used in \code{formula}. For example, the 2D spatial coordinates. Default is NULL.
 #' @param seed Random seed. Default is 123
 #'
@@ -47,7 +47,7 @@ constructNull <- function(
     n_cores <- n_rep
   }
 
-  supported_data_types <- c("scRNA", "spatial", "cellline", "microbiome")
+  supported_data_types <- c("scRNA", "scATAC", "spatial", "cellline", "microbiome", "bulk_microarray")
   if (!data_type %in% supported_data_types) {
     stop(sprintf(
       "Invalid data_type: '%s'. Supported types are: %s",
@@ -161,7 +161,11 @@ constructNull <- function(
       t(new_mat)
     }, mc.cores = n_cores, mc.retry = 5))
     new_count_list
-  } else if ((data_type == "scRNA") || (data_type == "cellline")) {
+  } else if (
+    (data_type == "scRNA") ||
+      (data_type == "scATAC") ||
+      (data_type == "cellline")
+  ) {
     set.seed(seed)
     tol <- 1e-5
     mat <- as.matrix(mat)
@@ -276,7 +280,7 @@ constructNull <- function(
         para[, 1][is.na(para[, 1])] <- 0
       }
     } else {
-      stop("FastVersion only supports NB, Poisson or zip.")
+      stop("scRNA data distribution family should be one of 'nb', 'poisson' or 'zip'.")
     }
 
     ## Now we get the para matrix. You can modify it here. First column is the dispersion and second column is the mean.
@@ -664,7 +668,7 @@ constructNull <- function(
       nonzerovar = FALSE,
       n_cores = n_cores,
       parallelization = "mcmapply",
-      important_feature = corr_cut,
+      important_feature = if (data_type != "bulk_microarray") corr_cut else "all",
       nonnegative = FALSE,
       copula = "gaussian",
       if_sparse = if_sparse,

@@ -1,0 +1,111 @@
+---
+title: "Perform ClusterDE on a bulk microarray dataset"
+author:
+  - name: Pan Liu
+    email: pliu3@fredhutch.org
+  - name: Yiwen Yang
+    email: yyang5@fredhutch.org
+output:
+  BiocStyle::html_document:
+    self_contained: yes
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    code_folding: show
+date: "`r doc_date()`"
+package: "`r pkg_ver('ClusterDE')`"
+vignette: >
+  %\VignetteIndexEntry{ClusterDE-bulk-microarray_vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+tools::R_user_dir("ClusterDE", which = "cache")
+```
+
+# Download data
+
+Load glioblastoma (GBM) dataset processed in Seurat object, originally from [Verhaak et al.](http://www.cell.com/cancer-cell/abstract/S1535-6108%2809%2900432-2) and can be downloaded at <https://gdc.cancer.gov/about-data/publications/gbm_exp>. Here we subset the Classical and Mesenchymal subtypes as an example.
+```{r}
+data(gbm_sub, package = "ClusterDE")
+table(gbm_sub$subtype)
+```
+
+# Generate synthetic null data
+
+Generate 20 null replicates using ClusterDE stable to eliminate randomness of null generation. Note that for normalized bulk microarray data, the distribution family should be "gaussian".
+```{r, results = "hide", message = F}
+RNGkind("L'Ecuyer-CMRG")
+seed <- 123
+null_data <- ClusterDE::constructNull(
+  gbm_sub,
+  data_type = "bulk_microarray",
+  family = "gaussian",
+  n_rep = 20,
+  seed = seed
+)
+```
+
+# Sample clustering
+
+Use Consensus Clustering to divide the null samples into two clusters (following the same clustering procedure as the real data).
+```{r, results = "hide", message = F, fig.keep = "none"}
+set.seed(seed)
+null_clusters <- lapply(null_data, function(mat) {
+  mat <- as.matrix(mat)
+  mat_centered <- mat - rowMeans(mat, na.rm = T)
+  clusters <- ConsensusClusterPlus::ConsensusClusterPlus(
+    mat_centered,
+    maxK = 3,
+    reps = 100,
+    pItem = 0.8,
+    pFeature = 1,
+    clusterAlg = "hc",
+    distance = "pearson",
+    seed = seed,
+    plot = F,
+    title = tempdir()
+  )[[2]]$consensusClass
+})
+```
+
+# DE analysis
+
+Use any established bulk methods to find DE genes in both real and null data. We use Wilcoxon as an example here.
+```{r}
+original_pval <- apply(Seurat::GetAssayData(gbm_sub, layer = "counts"), 1, function(x) {
+  stats <- wilcox.test(x ~ gbm_sub$subtype)
+  stats$p.value
+})
+original_pval <- p.adjust(original_pval, method = "BH")
+print(paste0("Wilcox found ", sum(original_pval < 0.05), " DEG"))
+```
+
+```{r}
+null_pvals <- lapply(seq_along(null_data), function(i) {
+  null_pval <- apply(null_data[[i]], 1, function(x) {
+    stats <- wilcox.test(x ~ null_clusters[[i]])
+    stats$p.value
+  })
+  p.adjust(null_pval, method = "BH")
+})
+```
+
+# FDR control
+
+Finally, compare original p-values and null p-values using ClusterDE FDR control, we observed much fewer DEGs comparing to Wilcoxon:
+```{r}
+da <- ClusterDE::callDE(original_pval, null_pvals)
+print(paste0("ClusteDE found ", sum(da$record >= 0.5), " DEG"))
+```
+
+# Session information
+
+```{r}
+sessionInfo()
+```

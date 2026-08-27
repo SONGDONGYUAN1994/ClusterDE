@@ -22,18 +22,19 @@ constructNull(
 \arguments{
 \item{obj}{A Seurat object. The reference data.}
 
-\item{approximation}{A string of either "none", "fast" or "pca". For a high-latitude counting matrix, use "fast" as approximation can increase the speed of data generation while ensuring accuracy. For high-dimensional data (gene number is much larger than cell number), use "pca" as approximation. Default is "none".}
+\item{approximation}{A string of either "none", "fast" or "pca". For a high-latitude scRNA counting matrix, use "fast" as approximation can increase the speed of data generation while ensuring accuracy. For high-dimensional scRNA data (gene number is much larger than cell number), use "pca" as approximation. Default is "none".}
 
-\item{corr_cut}{A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation.}
+\item{corr_cut}{A numeric value. The cutoff for non-zero proportions in genes used in modelling correlation. Default is 0.1. All features will be used if approximation is set to "pca", or when data_type is "bulk_microarray".}
 
-\item{data_type}{A string of either "scRNA", "spatial", "cellline" or "microbiome". Default is "scRNA".}
+\item{data_type}{A string of either "scRNA", "scATAC", "spatial", "cellline", "microbiome" or "bulk_microarray". Default is "scRNA".}
 
-\item{family}{A string or a vector of strings of the distribution of your data.
+\item{family}{A string of the distribution of your data.
 Must be one of 'nb', 'binomial', 'poisson', 'zip', 'zinb' or 'gaussian', which represent 'poisson distribution',
 'negative binomial distribution', 'zero-inflated poisson distribution', 'zero-inflated negative binomail distribution',
-and 'gaussian distribution' respectively. For UMI-counts data, we usually use 'nb'. Default is 'nb'.}
+and 'gaussian distribution' respectively. For UMI-counts data, we usually use 'nb'. For bulk microarray data, use 'gaussian'. Default is 'nb'.}
 
-\item{formula}{A string of the mu parameter formula. It defines the relationship between gene expression in synthetic null data and the extra covariates. Default is 1 (cell type case).}
+\item{formula}{A string of the mu parameter formula. It defines the relationship between gene expression in synthetic null data and the extra covariates. Default is 1 (cell type case).
+For example, if your input data is a spatial data with X, Y coordinates, the formula can be 's(X, Y, bs = 'gp', k = 4)'.}
 
 \item{if_sparse}{A logic value. For high-dimensional data (gene number is much larger than cell number), if a sparse correlation estimation will be used. Default is FALSE.}
 
@@ -41,8 +42,7 @@ and 'gaussian distribution' respectively. For UMI-counts data, we usually use 'n
 
 \item{n_pcs}{A numeric value. Number of PCs to use when usePca=T. Default is 200.}
 
-\item{n_rep}{An integer. The number of sampled synthetic null datasets. Default value is 1.
-For example, if your input data is a spatial data with X, Y coordinates, the formula can be 's(X, Y, bs = 'gp', k = 4)'.}
+\item{n_rep}{An integer. The number of sampled synthetic null datasets. Default value is 1.}
 
 \item{other_covariates}{A list of the extra covariates used in \code{formula}. For example, the 2D spatial coordinates. Default is NULL.}
 

@@ -75,6 +75,8 @@ dlpfc_twodomain_sce <- SingleCellExperiment::SingleCellExperiment(
 # Add colData information of SingleCellExperiment
 dlpfc_twodomain_sce$row <- dlpfc_twodomain@meta.data$row
 dlpfc_twodomain_sce$col <- dlpfc_twodomain@meta.data$col
+dlpfc_twodomain_sce$array_row <- dlpfc_twodomain@meta.data$row
+dlpfc_twodomain_sce$array_col <- dlpfc_twodomain@meta.data$col
 dlpfc_twodomain_sce$spatial1 <- dlpfc_twodomain@meta.data$spatial1
 dlpfc_twodomain_sce$spatial2 <- dlpfc_twodomain@meta.data$spatial2
 
@@ -151,7 +153,7 @@ print(paste0("Seurat found ", sum(original_deg$p_val_adj < 0.05), " DEG"))
 
 # Find DEGs using ClusterDE
 
-We use spatial coordinates as covariates to generate synthetic null data, then apply the same BayesSpace clustering method as target data.
+We use spatial coordinates as covariates to generate synthetic null data, then apply the same BayesSpace clustering method as target data. This may take a few minutes to run.
 ```{r}
 set.seed(seed)
 null_data <- ClusterDE::constructNull(
@@ -163,6 +165,8 @@ null_data <- ClusterDE::constructNull(
 null_obj_sce <- SingleCellExperiment::SingleCellExperiment(list(counts = null_data))
 null_obj_sce$row <- dlpfc_twodomain@meta.data$row
 null_obj_sce$col <- dlpfc_twodomain@meta.data$col
+null_obj_sce$array_row <- dlpfc_twodomain@meta.data$row
+null_obj_sce$array_col <- dlpfc_twodomain@meta.data$col
 null_obj_sce$spatial1 <- dlpfc_twodomain@meta.data$spatial1
 null_obj_sce$spatial2 <- dlpfc_twodomain@meta.data$spatial2
 null_obj_sce <- BayesSpace::spatialPreprocess(

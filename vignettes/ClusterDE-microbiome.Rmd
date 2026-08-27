@@ -1,6 +1,8 @@
 ---
 title: "Perform ClusterDE on a microbiome dataset"
 author: 
+  - name: Christy Lee
+    email: lee700@g.ucla.edu
   - name: Yiwen Yang
     email: yyang5@fredhutch.org
 output: 
@@ -49,7 +51,7 @@ null_data <- ClusterDE::constructNull(
 )
 ```
 
-# Cell clustering
+# Sample clustering
 
 Perform Kmeans (K = 2) clustering on both real data and synthetic null data, the clustering method can be any method that is used in the original study.
 ```{r}
@@ -62,7 +64,7 @@ null_clusters <- lapply(null_data, function(mat) {
 })
 ```
 
-# DE analysis
+# DA analysis
 
 Use any established DA methods to find differentially abundant taxa in both real and synthetic data. Using Wilcoxon, we can find 70 DA comparing the two clusters:
 ```{r}
@@ -81,9 +83,11 @@ null_pvals <- lapply(seq_along(null_data), function(i) {
     stats <- wilcox.test(x ~ null_clusters[[i]])
     stats$p.value
   })
-  null_pval <- p.adjust(null_pval, method = "BH")
+  p.adjust(null_pval, method = "BH")
 })
 ```
+
+# FDR control
 
 Finally, compare original p-values and null p-values using ClusterDE FDR control, we observed 12 real DA:
 ```{r}

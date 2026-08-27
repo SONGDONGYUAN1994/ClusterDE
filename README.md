@@ -43,6 +43,8 @@ For all detailed tutorials, please check the [website](https://songdongyuan1994.
 - [Perform ClusterDE on a pure cell line dataset](https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-pure-cellline.html)
 - [Perform ClusterDE on a spatial dataset (one domain)](https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-spatial-onedomain.html)
 - [Perform ClusterDE on a spatial dataset (two domains)](https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-spatial-twodomains.html)
+- [Perform ClusterDE on a single-cell multiome dataset](https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-scmultiome.html)
+- [Perform ClusterDE on a bulk microarray dataset](https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-bulk-microarray.html)
 - [Perform ClusterDE on a microbiome dataset](https://songdongyuan1994.github.io/ClusterDE/articles/ClusterDE-microbiome.html)
 
 # API Reference

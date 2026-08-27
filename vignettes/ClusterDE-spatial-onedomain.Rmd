@@ -75,6 +75,8 @@ dlpfc_onedomain_sce <- SingleCellExperiment::SingleCellExperiment(
 # Add colData information of SingleCellExperiment
 dlpfc_onedomain_sce$row <- dlpfc_onedomain@meta.data$row
 dlpfc_onedomain_sce$col <- dlpfc_onedomain@meta.data$col
+dlpfc_onedomain_sce$array_row <- dlpfc_onedomain@meta.data$row
+dlpfc_onedomain_sce$array_col <- dlpfc_onedomain@meta.data$col
 dlpfc_onedomain_sce$spatial1 <- dlpfc_onedomain@meta.data$spatial1
 dlpfc_onedomain_sce$spatial2 <- dlpfc_onedomain@meta.data$spatial2
 
@@ -163,6 +165,8 @@ null_data <- ClusterDE::constructNull(
 null_obj_sce <- SingleCellExperiment::SingleCellExperiment(list(counts = null_data))
 null_obj_sce$row <- dlpfc_onedomain@meta.data$row
 null_obj_sce$col <- dlpfc_onedomain@meta.data$col
+null_obj_sce$array_row <- dlpfc_onedomain@meta.data$row
+null_obj_sce$array_col <- dlpfc_onedomain@meta.data$col
 null_obj_sce$spatial1 <- dlpfc_onedomain@meta.data$spatial1
 null_obj_sce$spatial2 <- dlpfc_onedomain@meta.data$spatial2
 null_obj_sce <- BayesSpace::spatialPreprocess(

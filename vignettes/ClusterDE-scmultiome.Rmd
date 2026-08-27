@@ -1,0 +1,370 @@
+---
+title: "Perform ClusterDE on a single-cell multiome dataset"
+author:
+  - name: Yihui Cen
+    email: ycen@fredhutch.org
+output:
+  BiocStyle::html_document:
+    self_contained: yes
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    code_folding: show
+date: "`r doc_date()`"
+package: "`r pkg_ver('ClusterDE')`"
+vignette: >
+  %\VignetteIndexEntry{ClusterDE-scmultiome-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+tools::R_user_dir("ClusterDE", which = "cache")
+```
+
+# Download data
+
+Here, we load single-cell multiome PBMC dataset done by 10X Genomics, originally from SeuratData. Specifically, we extract the CD4 Naive and CD4 TCM cell types and randomly sampled 500 cells for each cell type. To further save computational time, features with relatively low expression are filtered out.  All the cells are paired in both the RNA and ATAC modalities.
+```{r, results = "hide", message = F}
+data(pbmc_rna, package = "ClusterDE")
+table(Seurat::Idents(pbmc_rna))
+data(pbmc_atac, package = "ClusterDE")
+table(Seurat::Idents(pbmc_atac))
+```
+
+# Generate synthetic null data for the RNA data
+
+We first check on the RNA data. Generate 20 null replicates using ClusterDE stable to eliminate randomness of null generation.
+```{r}
+RNGkind("L'Ecuyer-CMRG")
+seed <- 123
+set.seed(seed)
+null_data <- ClusterDE::constructNull(
+  obj = pbmc_rna,
+  n_rep = 20,
+  seed = seed
+)
+```
+
+Next, we run the seurat pipeline on the null data
+```{r, results = "hide", message = F}
+set.seed(seed)
+
+null_seurat <- lapply(seq_along(null_data), function(i) {
+  obj <- Seurat::CreateSeuratObject(
+    counts = null_data[[i]],
+    assay = "RNA",
+    project = paste0("null_", i)
+  )
+
+  obj <- Seurat::NormalizeData(
+    obj,
+    normalization.method = "LogNormalize",
+    scale.factor = 10000,
+    verbose = FALSE
+  )
+
+  obj <- Seurat::FindVariableFeatures(
+    obj,
+    selection.method = "vst",
+    nfeatures = 3000,
+    verbose = FALSE
+  )
+
+  obj <- Seurat::ScaleData(
+    obj,
+    features = Seurat::VariableFeatures(obj),
+    verbose = FALSE
+  )
+
+  obj <- Seurat::RunPCA(
+    obj,
+    features = Seurat::VariableFeatures(obj),
+    npcs = 50,
+    reduction.name = "pca",
+    reduction.key = "PC_",
+    verbose = FALSE
+  )
+
+  obj <- Seurat::FindNeighbors(
+    obj,
+    reduction = "pca",
+    dims = 1:30,
+    verbose = FALSE
+  )
+  
+  obj <- Seurat::FindClusters(
+    obj,
+    resolution = 0.4
+  )
+
+  obj
+})
+
+names(null_seurat) <- paste0("null_", seq_along(null_seurat))
+```
+
+# Find DEGs on RNA data
+
+To find DEGs with ClusterDE, we first find DEGs with the original data and obtain the target scores.
+```{r}
+original_levels <- levels(
+  droplevels(Seurat::Idents(pbmc_rna))
+)
+
+original_markers <- Seurat::FindMarkers(
+  object = pbmc_rna,
+  assay = "RNA",
+  ident.1 = original_levels[1],
+  ident.2 = original_levels[2],
+  test.use = "wilcox",
+  min.pct = 0,
+  logfc.threshold = 0,
+  only.pos = FALSE
+)
+
+print(paste0("Wilcox found ", sum(p.adjust(original_markers$p_val, method = "BH") < 0.05), " DE"))
+```
+
+Then, we find DEGs for the synthetic null data
+```{r}
+null_markers_list <- lapply(
+  null_seurat,
+  function(null_obj) {
+    null_levels <- levels(
+      droplevels(Seurat::Idents(null_obj))
+    )
+
+    null_markers <- Seurat::FindMarkers(
+      object = null_obj,
+      assay = "RNA",
+      ident.1 = null_levels[1],
+      ident.2 = null_levels[2],
+      test.use = "wilcox",
+      min.pct = 0,
+      logfc.threshold = 0,
+      only.pos = FALSE
+    )
+
+    null_markers$gene <- rownames(null_markers)
+
+    null_markers
+  }
+)
+
+names(null_markers_list) <- names(null_seurat)
+
+nullScores_raw <- lapply(
+  null_markers_list,
+  function(null_markers) {
+
+    scores <- null_markers$p_val
+
+    names(scores) <- rownames(null_markers)
+
+    scores[
+      is.finite(scores)
+    ]
+  }
+)
+```
+
+After that, we use ClusterDE to call DEG results on the RNA data.
+```{r}
+original_markers$gene <- rownames(original_markers)
+targetScores <- original_markers$p_val
+names(targetScores) <- rownames(original_markers)
+
+de <- ClusterDE::callDE(
+  targetScores = targetScores,
+  nullScores = nullScores_raw,
+  FDR = 0.05,
+  correct = TRUE,
+  nlogTrans = TRUE,
+  threshold = "DS"
+)
+
+print(paste0("ClusterDE found ", sum(de$record >= 0.5), " DE"))
+```
+
+# Generate synthetic null data for the ATAC data
+
+Then, since the RNA data shows clear two clusters, we check on the ATAC data for differential accessibility analysis. Here, we generate 20 null replicates using ClusterDE stable to eliminate randomness of null generation.
+```{r}
+null_data_atac <- ClusterDE::constructNull(
+  obj = pbmc_atac,
+  data_type = "scATAC",
+  n_rep = 20,
+  seed = seed
+)
+```
+
+Next, we run the seurat pipeline on the null data
+```{r, results = "hide", message = F}
+set.seed(seed)
+
+null_signac <- lapply(seq_along(null_data_atac), function(i) {
+  atac_assay <- Signac::CreateChromatinAssay(
+    counts = null_data_atac[[i]],
+    sep = c(":", "-"),
+    min.cells = 0,
+    min.features = 0
+  )
+
+  obj <- Seurat::CreateSeuratObject(
+    counts = atac_assay,
+    assay = "ATAC",
+    project = paste0("null_atac_", i)
+  )
+
+  obj <- Signac::RunTFIDF(
+    obj
+  )
+
+  obj <- Signac::FindTopFeatures(
+    obj,
+    min.cutoff = "q0"
+  )
+
+  obj <- Signac::RunSVD(
+    obj,
+    assay = "ATAC",
+    n = 50,
+    reduction.name = "lsi",
+    reduction.key = "LSI_"
+  )
+
+  obj <- Seurat::FindNeighbors(
+    obj,
+    reduction = "lsi",
+    dims = 2:30,
+    verbose = FALSE
+  )
+
+  obj <- Seurat::FindClusters(
+    obj,
+    resolution = 0.7
+  )
+
+  obj
+})
+
+names(null_signac) <- paste0(
+  "null_atac_",
+  seq_along(null_signac)
+)
+```
+
+# Find DE peaks on ATAC data
+
+To find DE peaks with ClusterDE, we first find DE peaks with the original data and obtain the target scores.
+```{r}
+original_levels_atac <- levels(
+  droplevels(Seurat::Idents(pbmc_atac))
+)
+
+original_markers_atac <- Seurat::FindMarkers(
+  object = pbmc_atac,
+  assay = "ATAC",
+  ident.1 = original_levels_atac[1],
+  ident.2 = original_levels_atac[2],
+  test.use = "wilcox",
+  min.pct = 0,
+  logfc.threshold = 0,
+  only.pos = FALSE
+)
+
+print(
+  paste0(
+    "Wilcox found ",
+    sum(
+      p.adjust(
+        original_markers_atac$p_val,
+        method = "BH"
+      ) < 0.05
+    ),
+    " DA peaks"
+  )
+)
+```
+
+Then, we find DE peaks for the synthetic null data
+```{r}
+null_markers_atac_list <- lapply(
+  null_signac,
+  function(null_obj) {
+    null_levels <- levels(
+      droplevels(Seurat::Idents(null_obj))
+    )
+
+    null_markers <- Seurat::FindMarkers(
+      object = null_obj,
+      assay = "ATAC",
+      ident.1 = null_levels[1],
+      ident.2 = null_levels[2],
+      test.use = "wilcox",
+      min.pct = 0,
+      logfc.threshold = 0,
+      only.pos = FALSE
+    )
+
+    null_markers$peak <- rownames(null_markers)
+
+    null_markers
+  }
+)
+
+names(null_markers_atac_list) <- names(null_signac)
+
+nullScores_atac_raw <- lapply(
+  null_markers_atac_list,
+  function(null_markers) {
+
+    scores <- null_markers$p_val
+
+    names(scores) <- rownames(null_markers)
+
+    scores[
+      is.finite(scores)
+    ]
+  }
+)
+```
+
+After that, we use ClusterDE to call DEG results on the ATAC data.
+```{r}
+original_markers_atac$peak <- rownames(
+  original_markers_atac
+)
+
+targetScores_atac <- original_markers_atac$p_val
+
+names(targetScores_atac) <- rownames(
+  original_markers_atac
+)
+
+de_atac <- ClusterDE::callDE(
+  targetScores = targetScores_atac,
+  nullScores = nullScores_atac_raw,
+  FDR = 0.05,
+  nlogTrans = TRUE,
+  threshold = "DS"
+)
+
+print(
+  paste0(
+    "ClusterDE found ",
+    sum(de_atac$record >= 0.5),
+    " DA peaks"
+  )
+)
+```
+
+# Session information
+```{r}
+sessionInfo()
+```
